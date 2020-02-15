@@ -1,3 +1,10 @@
+# Others
+*.zip
+*.mp4
+
+libant-master/
+*.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
