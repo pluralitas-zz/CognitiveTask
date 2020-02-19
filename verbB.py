@@ -91,7 +91,6 @@ class verbB_main(QtCore.QThread):
         
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
-        print(data)
         if self.answerverbB == True:
             self.answerappended = True
             self.answerverbB = False
