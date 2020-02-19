@@ -11,7 +11,7 @@ class spaceA_main(QtCore.QThread):
     def __init__(self):
         super(spaceA_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
-        self.questions = ["SpaceA1.png", "SpaceA2.png","SpaceA3.png","SpaceA4.png","SpaceA5.png","SpaceA6.png","SpaceA7.png","SpaceA8.png","SpaceA9.png","SpaceA10.png"]
+        self.questions = ["SpaceN.png", "SpaceE.png","SpaceS.png","SpaceW.png","SpaceNE.png","SpaceNW.png","SpaceSE.png","SpaceNW.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []

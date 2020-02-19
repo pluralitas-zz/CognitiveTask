@@ -35,15 +35,15 @@ class Ui_root(QtWidgets.QMainWindow):
         #     self.flnk.run_task(self.counter)
         # self.counter=0
         
-        self.cd.run_cd(5)
-        for i in range(1):
-            self.vrb.run_task(self.counter)
-        self.counter=0
+        # self.cd.run_cd(5)
+        # for i in range(1):
+        #     self.vrb.run_task(self.counter)
+        # self.counter=0
         
-        self.cd.run_cd(5)
-        for i in range(1):
-            self.spcA.run_task(self.counter)
-        self.counter=0
+        # self.cd.run_cd(5)
+        # for i in range(1):
+        #     self.spcA.run_task(self.counter)
+        # self.counter=0
 
         self.cd.run_cd(5)
         self.vrbb.run_task(self.counter)

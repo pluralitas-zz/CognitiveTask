@@ -12,7 +12,7 @@ class verbB_main(QtCore.QThread):
         super(verbB_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["VerbAirport.png", "VerbChurch.png","VerbHospital.png","VerbLibrary.png","VerbMarket.png","VerbPharmacy.png","VerbRestaurant.png","VerbSalon.png","VerbSchool.png","VerbStation.png"]
-        self.answers = ["VerbTick.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
+        self.answers = ["VerbTick.png","Blank.png","Blank.png","Blank.png","Blank.png","VerbCross.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []
@@ -44,7 +44,8 @@ class verbB_main(QtCore.QThread):
             showtime = 1000
             self.nval = -1  
             self.level = 1
-        self._level.emit(self.level)
+
+        self._level.emit(self.nval)
         # generate 30 values
         arraylen = 30
         for i in range(arraylen):
@@ -90,6 +91,7 @@ class verbB_main(QtCore.QThread):
         
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
+        print(data)
         if self.answerverbB == True:
             self.answerappended = True
             self.answerverbB = False
@@ -99,13 +101,29 @@ class verbB_main(QtCore.QThread):
             except:
                 self.dispback = self.taskarr[self.dispcount]
 
-            if self.taskarr[self.dispcount] == self.dispback and self.dispcount != 0: #Check if answered correctly or not
-                self.anscount +=1
-                #if self.anscount in (3,6,9,12):
-                #    self.anscount = 0
-                self._counter.emit(1)
-                print("Correct: " + str(self.anscount))
-                
+            if data == "VerbTick.png":
+                if self.taskarr[self.dispcount] == self.dispback and self.dispcount != 0: #Check if answered correctly or not
+                    self.anscount +=1
+                    #if self.anscount in (3,6,9,12):
+                    #    self.anscount = 0
+                    self._counter.emit(1)
+                    print("Correct: " + str(self.anscount))
+                    
+                else:
+                    self._counter.emit(0)
+                    print("Wrong")
+            elif data == "VerbCross.png":
+                if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
+                    self.anscount +=1
+                    #if self.anscount in (3,6,9,12):
+                    #    self.anscount = 0
+                    self._counter.emit(1)
+                    print("Correct: " + str(self.anscount))
+                    
+                else:
+                    self._counter.emit(0)
+                    print("Wrong")
+
             else:
                 self._counter.emit(0)
                 print("Wrong")
