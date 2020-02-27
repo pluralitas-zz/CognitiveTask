@@ -405,7 +405,6 @@ class Ui_root(QtWidgets.QMainWindow):
             keyboard.release('a') 
 
     def initBackendThread(self): #Initialize Signal Slots and Backend Threads
-        
         # Create backend Threads
         self.timebackend=CalTimeThread()
         self.backend = EncorderBackendThread()
@@ -416,7 +415,6 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.timebackend.time.connect(self.TimeDisplay)                     #Pass time to UI label0-1 
         self.backend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
         self.backend.encorderSpeed.connect(self.printSpeed)                 #Pass Speed to controller slot
-        
         self.backend.encorderSpeed.connect(self.videoStartPause)            #Encoder Speed control Start/Pause video
         self.daqbackend._PPGHeartRate.connect(self.HRDisplay)                             #Pass Heart Rate to UI label 3
         self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
