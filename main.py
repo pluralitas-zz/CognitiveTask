@@ -69,6 +69,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.ansdict={}
         self.timecount = 0
 
+        self.pictures = "Pictures" #location of pictures in folder "Pictures"
+        self.picd = os.path.join(os.getcwd(),self.pictures)
+
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
         self.GameBtn.clicked.connect(lambda:self.GameBtnPress())
 
@@ -187,7 +190,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.vidFrame.restartVid()
     
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
-        pixmap = QtGui.QPixmap(os.path.join(os.path.dirname(__file__), data))
+        pixmap = QtGui.QPixmap(os.path.join(os.path.join(self.picd, data)))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
         self.TaskFrame.setPixmap(pixmap)
@@ -203,66 +206,54 @@ class Ui_root(QtWidgets.QMainWindow):
         self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
         
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[0]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[0])))
         self.QuesBtn_A.setIcon(icon)
         self.QuesBtn_A.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[1]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[1])))
         self.QuesBtn_B.setIcon(icon)
         self.QuesBtn_B.setIconSize(QtCore.QSize(200,200))
         
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[2]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[2])))
         self.QuesBtn_X.setIcon(icon)
         self.QuesBtn_X.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[3]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[3])))
         self.QuesBtn_Y.setIcon(icon)
         self.QuesBtn_Y.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[4]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[4])))
         self.QuesBtn_Up.setIcon(icon)
         self.QuesBtn_Up.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[5]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[5])))
         self.QuesBtn_Down.setIcon(icon)
         self.QuesBtn_Down.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[6]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[6])))
         self.QuesBtn_Left.setIcon(icon)
         self.QuesBtn_Left.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[7]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[7])))
         self.QuesBtn_Right.setIcon(icon)
         self.QuesBtn_Right.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[8]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[8])))
         self.QuesBtn_ShldL.setIcon(icon)
         self.QuesBtn_ShldL.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(data[9]))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[9])))
         self.QuesBtn_ShldR.setIcon(icon)
         self.QuesBtn_ShldR.setIconSize(QtCore.QSize(200,200))
-        '''
-        self.QuesBtn_A.setText(data[0])
-        self.QuesBtn_B.setText(data[1])
-        self.QuesBtn_X.setText(data[2])
-        self.QuesBtn_Y.setText(data[3])
-        self.QuesBtn_Up.setText(data[4])
-        self.QuesBtn_Down.setText(data[5])
-        self.QuesBtn_Left.setText(data[6])
-        self.QuesBtn_Right.setText(data[7])
-        self.QuesBtn_ShldL.setText(data[8])
-        self.QuesBtn_ShldR.setText(data[9])
-        '''
 
     def answer(self): #emit answer to task subpy
         sender = self.sender()
