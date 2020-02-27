@@ -54,20 +54,6 @@ class encoder:
 
         return self.speed
         
-    # Threading Use
-    ENCDEG = QtCore.pyqtSignal(float)
-    def degrun(self):
-        enc = encoder()
-        while 1:
-            self.ENCDEG.emit(enc.deg)
-
-    ENCSPD = QtCore.pyqtSignal(int)
-    def spdrun(self):
-        enc = encoder()
-        while 1:
-            self.ENCSPD.emit(enc.spd)
-            
-
 if __name__ == "__main__":
     enc = encoder()
     while 1:

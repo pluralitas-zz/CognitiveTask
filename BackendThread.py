@@ -4,10 +4,12 @@ import numpy
 import sys
 import threading
 import serial
+import numpy as np
 from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime 
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
@@ -57,6 +59,48 @@ class EncorderBackendThread(QThread):
             #Send Encorder speed to slot
             self.encorderSpeed.emit(x)
             time.sleep(1)               #time sleep must be>1s
+
+class DAQBackThread(QThread):
+    global DAQ
+    DAQ = daq()
+
+    samp_rate = 1000 #for DAQ (Hz)
+    samples = 100 #per acquisition
+    HRrange = [60,140] #Range of HR
+    HRxVal = 2.5 #Threshold for edge detection for PPG
+    HRcaltime = 4 #seconds for refreshing HR values, more = more accurate
+
+    HRcalarray = HRcaltime*samp_rate
+    HRarrdaq = np.array(list())
+
+    #determines while loop sampling rate
+    t = time.time()
+    period = 1/samp_rate*samples
+
+    #create signal slots
+    _EMGarray = pyqtSignal(np.ndarray) #EMG signal slot
+    _PPGHeartRate = pyqtSignal(int) #PPG signal slot
+
+    def run(self):
+        while True:
+            self.t+=self.period
+
+            self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
+            self._EMGarray.emit(self.daqarr[:,1:]) #emit all the EMG signal array
+
+            if len(self.HRarrdaq) != self.HRcalarray:
+                self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,0])
+            else:
+                self.HRarrdiff = np.diff(self.HRarrdaq)
+                self.HRperiod = (np.where(self.HRarrdiff>self.HRxVal)[0]+1)/self.samp_rate
+                self.HRperioddiff = np.diff(self.HRperiod)
+                self.HRper_in = self.HRperioddiff[np.all([self.HRperioddiff > (60/self.HRrange[1]), self.HRperioddiff < (60/self.HRrange[0])], axis=0)]
+
+                self.HR = 0 if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
+                self._PPGHeartRate.emit(self.HR)
+                self.HRarrdaq = np.array(list())
+
+            time.sleep(max(0,self.t-time.time()))
 
 class PedalThread(QThread):
     # Create Signal Slot 

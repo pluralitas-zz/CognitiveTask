@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayo
 from EncoderNew import encoder
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
-from BackendThread import CalTimeThread, EncorderBackendThread,PedalThread
+from BackendThread import CalTimeThread, EncorderBackendThread, DAQBackThread, PedalThread
 
 
 _translate = QtCore.QCoreApplication.translate
@@ -311,7 +311,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.timebackend.start()
         self.backend.start()
         self.pedalBackend.start()
-
+        self.daqbackend.start()
         self.timer.start(1000)
 
         self.task_run()
@@ -339,7 +339,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.timebackend.start()
         self.backend.start()
         self.pedalBackend.start()
-
+        self.daqbackend.start()
         self.timer.start(1000)
 
 # HUD Stuff
@@ -348,8 +348,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timecount += 1
         self.HUDValTime.setText("<font color='White'>"+ str(self.timecount) +"</font>")
 
-    def HRDisplay(self):
-        self.HUDValHR.setText("<font color='White'>"+ str(0) +"</font>")
+    def HRDisplay(self,data):
+        self.heartrate = str(data)
+        self.HUDValHR.setText("<font color='White'>"+ self.heartrate +"</font>")
 
     def EncoderDisplay(self, data): # UI Slot to recieve Encoder
         self._speed=str(data)
@@ -409,20 +410,20 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timebackend=CalTimeThread()
         self.backend = EncorderBackendThread()
         self.pedalBackend=PedalThread()
+        self.daqbackend= DAQBackThread()
 
         # Signal connect to Slots for Data
         #self.timebackend.time.connect(self.TimeDisplay)                     #Pass time to UI label0-1 
         self.backend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
         self.backend.encorderSpeed.connect(self.printSpeed)                 #Pass Speed to controller slot
-        #Encoder Speed control Start/Pause video
-        self.backend.encorderSpeed.connect(self.videoStartPause)                          
+        
+        self.backend.encorderSpeed.connect(self.videoStartPause)            #Encoder Speed control Start/Pause video
+        self.daqbackend._PPGHeartRate.connect(self.HRDisplay)                             #Pass Heart Rate to UI label 3
         self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
         self.pedalBackend.pedalAccumPower.connect(self.AccumPower)          #Pass AccumPower to UI label5
         self.pedalBackend.pedalInstantCandence.connect(self.InstantCandence)#Pass InstantCandence to UI label6
         self.pedalBackend.pedalBalance.connect(self.Balance)                #Pass Balance to UI label7 & 6
         #self.pedalBackend.pedalPowerBaseLine.connect(self.PowerBaseLine)    #Pass PowerBaseLine to UI label9
-
-        # Signal connect to slots for 
 
 # Setup UI Stuff
     def setupUi(self, root):
