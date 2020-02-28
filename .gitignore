@@ -1,7 +1,7 @@
 # Others
 *.zip
 *.mp4
-
+*.directory
 
 .vscode/*
 !.vscode/settings.json
