@@ -12,7 +12,7 @@ Hardware:
 1. USB Controller (optional)
 2. Absolute Optical Encoder connected using RS232 Serial port
 3. PowerTap P1 power meter using an ANT+ USB stick
-4. Easy Pulse v1.1 for PPG connected using ai0 on USB-6001 DAQ
+4. Elecrow Easy Pulse v1.1 for PPG connected using DO to ai0 on USB-6001 DAQ
 5. EMG on ai1-4 on USB-6001 DAQ
 
 Currently 4 tasks are implemented:

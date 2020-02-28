@@ -8,7 +8,7 @@ class daq:
 
     def acqdaq(self,rate,sam):
         with nidaqmx.Task() as task:
-            task.ai_channels.add_ai_voltage_chan("Dev2/ai0:4") #ai0 = PPG, ai1:4 = EEG
+            task.ai_channels.add_ai_voltage_chan("Dev2/ai0:4") #ai0 = PPG Digital Out, ai1:4 = EEG
             task.timing.cfg_samp_clk_timing(rate=rate, sample_mode=constants.AcquisitionType.FINITE)
             raw_in = task.read(number_of_samples_per_channel=sam)
         arr_out = np.array(raw_in)

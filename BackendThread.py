@@ -88,6 +88,8 @@ class DAQBackThread(QThread):
             self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
             self._EMGarray.emit(self.daqarr[:,1:]) #emit all the EMG signal array
 
+
+            #PPG calculations (depends on HRaltime, else just append into HRarrdaq)
             if len(self.HRarrdaq) != self.HRcalarray:
                 self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,0])
             else:
