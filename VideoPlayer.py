@@ -11,12 +11,12 @@ import random
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia
 import main
 
-vidFile = ["ToloBay.mp4","Osaka1.mp4","Osaka3.mp4","Singapore1.mp4","Tokyo2.mp4"]
-
 class MainWid(QtWidgets.QWidget):
     def __init__(self,parent):
         self.playstate = 0
-
+        self.videos = "Videos" #location of videos relative to main.py
+        self.vidd = os.path.join(os.getcwd(),self.videos) # actual path of folders
+        self.vidFile = [files for files in os.listdir(vidd) if files.endswith(".mp4")] #find all video files in video folder
         super(MainWid,self).__init__(parent)
 
         self.setupUi(self)
@@ -37,8 +37,7 @@ class MainWid(QtWidgets.QWidget):
         self.vidPlayer.setVideoOutput(self.vidFrame)
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatio)
         
-        
-        file = os.path.join(os.path.dirname(__file__), random.choice(vidFile))
+        file = os.path.join(self.vidd, random.choice(self.vidFile))
         self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.parent = parent
         #self.vidPlayer.stop()
@@ -52,7 +51,7 @@ class MainWid(QtWidgets.QWidget):
 
     def restartVid(self):
         self.vidPlayer.stop()
-        file = os.path.join(os.path.dirname(__file__), random.choice(vidFile))
+        file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
         self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.vidPlayer.play()
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
@@ -66,7 +65,7 @@ class MainWid(QtWidgets.QWidget):
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
         elif self.playstate == 0:
-            file = os.path.join(os.path.dirname(__file__), random.choice(vidFile))
+            file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
             self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)

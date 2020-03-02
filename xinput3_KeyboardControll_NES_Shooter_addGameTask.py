@@ -26,7 +26,6 @@ from itertools import count, starmap
 from pyglet import event
 from pynput.keyboard import Key, Controller
 from pynput.mouse import Button, Controller as Con
-from EncoderTest2 import acqenc, SPD_Call
 from tkinter import *
 from overlay_Tkinter_class import GUI
 #from EncoderTest import acqenc
