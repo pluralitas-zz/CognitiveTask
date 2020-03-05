@@ -16,7 +16,7 @@ class MainWid(QtWidgets.QWidget):
         self.playstate = 0
         self.videos = "Videos" #location of videos relative to main.py
         self.vidd = os.path.join(os.getcwd(),self.videos) # actual path of folders
-        self.vidFile = [files for files in os.listdir(vidd) if files.endswith(".mp4")] #find all video files in video folder
+        self.vidFile = [files for files in os.listdir(self.vidd) if files.endswith(".mp4")] #find all video files in video folder
         super(MainWid,self).__init__(parent)
 
         self.setupUi(self)
