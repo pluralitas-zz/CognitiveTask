@@ -21,3 +21,5 @@ Currently 4 tasks are implemented:
 3. Visual Recall Task
 4. n-back Task
 
+WARNING
+* Modify xinput3_KeyboardControll_NES_Shooter_addGameTask.py for xinput vesion when changing between Win10, Win 8/7 and WinVista

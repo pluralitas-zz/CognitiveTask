@@ -60,12 +60,12 @@ class XINPUT_VIBRATION(ctypes.Structure):
 class XINPUT_BATTERY_INFORMATION(ctypes.Structure):
     _fields_ = [("BatteryType", ctypes.c_ubyte),
                 ("BatteryLevel", ctypes.c_ubyte)]
-
-xinput = ctypes.windll.xinput1_4
-#xinput = ctypes.windll.xinput9_1_0  # this is the Win 8 version ?
+#######################################################
+xinput = ctypes.windll.xinput1_4 # this is for Win10
+#xinput = ctypes.windll.xinput9_1_0  # this is for Win 7/8
 # xinput1_2, xinput1_1 (32-bit Vista SP1)
 # xinput1_3 (64-bit Vista SP1)
-
+########################################################
 
 def struct_dict(struct):
     """

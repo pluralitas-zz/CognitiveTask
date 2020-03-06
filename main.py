@@ -70,6 +70,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timecount = 0
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         self.picd = os.path.join(os.getcwd(),self.pictures)
+        #self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
 
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
@@ -464,9 +465,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskFrame.setText("")
         self.TaskFrame.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskFrame.setObjectName("TaskFrame")
-        #pixmap = QtGui.QPixmap(os.path.join(os.path.dirname(__file__), "Center.png"))
-        #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
-        #self.TaskFrame.setPixmap(pixmap)
 
         font = QtGui.QFont("Gill Sans MT", pointSize = 36, weight = 50)
 
