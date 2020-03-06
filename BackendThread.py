@@ -48,17 +48,46 @@ class EncorderBackendThread(QThread):
     Encoder=encoder()
     # Create Signal Slot 
     encorderSpeed = pyqtSignal(int)
+    encorderEnc = pyqtSignal(float)
+
+    # Variables
+    samp_rate = 10 #sample rate (hz)
+    samp_period = 1 #period to collect signals sec
+    samples = samp_rate*samp_period
+    t = time.time()
+    period = 1/samp_rate*samp_period
+    degold = Encoder.deg
+    degtravelled = []
+    newdiff = 0
 
     # Run function
     def run(self):
         while True:
-            #data = QDateTime.currentDateTime()
-            #currTime = data.toString("yyyy-MM-dd hh:mm:ss")
-            #Read Encoder Speedzz
-            x=Encoder.spd
-            #Send Encorder speed to slot
-            self.encorderSpeed.emit(x)
+            '''
+            x=Encoder.spd #Read Encoder Speed
+            self.encorderSpeed.emit(x)  #Send Encorder speed to slot
             time.sleep(1)               #time sleep must be>1s
+            '''
+            self.t+=self.period
+            time.sleep(max(0,self.t-time.time()))
+            self.degnow = Encoder.deg #Read Encoder Degree
+            self.encorderEnc.emit(self.degnow) #emit Encoder Degree
+            
+            ## check whether encoder is going forward or in reverse
+            if ((self.degold - self.degnow) > 180):
+                self.newdiff = self.degnow - self.degold + 360
+            elif ((self.degold - self.degnow) < -180):
+                self.newdiff = self.degnow - self.degold - 360
+            else:
+                self.newdiff = self.degnow - self.degold
+            self.degold = self.degnow
+            self.degtravelled.append(self.newdiff)
+        
+            ## if appended to size defined by samp_period then calculate speed and emit
+            if len(self.degtravelled) == self.samples:
+                self.speed = int(sum(self.degtravelled)/self.samp_period*60/360) #calculate rpm
+                self.encorderSpeed.emit(self.speed)
+                self.degtravelled=[]       
 
 class DAQBackThread(QThread):
     global DAQ

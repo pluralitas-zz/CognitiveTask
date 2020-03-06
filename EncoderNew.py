@@ -29,32 +29,25 @@ class encoder:
         self.degtravelled = 0
         self.timecheck = time.time()
         self.newdiff=0
+
         for i in range(self.samp_rate*self.samp_period):
             self.timecheck += 1/self.samp_rate
             time.sleep(max(0,self.timecheck-time.time()))
             self.degnow = self.deg
-            #print(str(self.degold) + '   -   ' + str(self.degnow))
             if ((self.degold - self.degnow) > 180):
-                #print("diff+360")
                 self.newdiff = self.degnow - self.degold + 360
-            elif (self.degold == self.degnow):
-                self.newdiff = self.newdiff
             elif ((self.degold - self.degnow) < -180):
-                self.newdiff = self.degnow - self.degold - 360
-            
+                self.newdiff = self.degnow - self.degold - 360  
             else:
-                #print("diff")
                 self.newdiff = self.degnow - self.degold
 
             self.degold = self.degnow
-            #print(self.newdiff)
             self.degtravelled += self.newdiff
-        #print(self.degtravelled)
-        self.speed = int(self.degtravelled/self.samp_period*60/360) #calculate rpm
 
+        self.speed = int(self.degtravelled/self.samp_period*60/360) #calculate rpm
         return self.speed
-        
+
 if __name__ == "__main__":
     enc = encoder()
     while 1:
-        print(str(enc.deg))
+        print(str(enc.spd))
