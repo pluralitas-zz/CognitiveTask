@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayo
 from EncoderNew import encoder
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
-from BackendThread import CalTimeThread, EncorderBackendThread, DAQBackThread, PedalThread
+from BackendThread import EncDAQBackThread, PedalThread
 
 
 class writeout:

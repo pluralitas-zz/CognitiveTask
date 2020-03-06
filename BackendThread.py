@@ -14,34 +14,6 @@ from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
-'''
-class CalTimeThread(QThread):
-    #Initialize time
-    time=pyqtSignal(str,int,int)
-
-    # Run function
-    def run(self):
-        self.cyclingTime_min=0
-        self.cyclingTime_sec=0
-        #start time
-        self.startTime=time.time()
-        while True:
-            #Cycling date
-            data = QDateTime.currentDateTime()
-            self.currTime = data.toString("yyyy-MM-dd hh:mm:ss")
-            #Cycling Time(second)
-            self.cyclingTime=int(round(time.time()-self.startTime))
-            #Convert cycling time to mins+sec
-            if self.cyclingTime>60:
-                self.cyclingTime_min=self.cyclingTime/60
-                self.cyclingTime_sec=self.cyclingTime%60
-            else:
-                self.cyclingTime_min=0
-                self.cyclingTime_sec=self.cyclingTime
-            #Emit data for display function
-            self.time.emit(self.currTime,self.cyclingTime_min,self.cyclingTime_sec)
-            time.sleep(1)
-'''
             
 class EncDAQBackThread(QThread):
     global DAQ
@@ -241,8 +213,7 @@ class Window(QDialog):
     #Initialize Signal Slot
     def initiSignalSlot(self):
         # Create backend Thread
-        self.timebackend=CalTimeThread()
-        self.backend = EncorderBackendThread()
+        self.backend = EncDAQBackThread()
         self.pedalBackend=PedalThread()
         # Signal connect to Slot
         self.timebackend.time.connect(self.TimeDisplay)                     #Pass time to UI label0-1 
@@ -253,7 +224,6 @@ class Window(QDialog):
         self.pedalBackend.pedalInstantCandence.connect(self.InstantCandence)#Pass InstantCandence to UI label6
         self.pedalBackend.pedalBalance.connect(self.Balance)                #Pass Balance to UI label7 & 6
         self.pedalBackend.pedalPowerBaseLine.connect(self.PowerBaseLine)    #Pass PowerBaseLine to UI label9
-        # Start thread (call run() in EncorderBackendThread())
         self.timebackend.start()
         self.backend.start()
         self.pedalBackend.start()
