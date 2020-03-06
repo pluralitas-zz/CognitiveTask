@@ -2,5 +2,5 @@
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.linting.pylamaEnabled": false,
-    "python.pythonPath": "/home/cyau-x240/miniconda3/envs/python360/bin/python"
+    "python.pythonPath": "C:\\Anaconda3\\python.exe"
 }
