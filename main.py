@@ -17,10 +17,9 @@ from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joysti
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia,QtTest
 from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime, Qt 
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
-from EncoderNew import encoder
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
-from BackendThread import CalTimeThread, EncorderBackendThread, DAQBackThread, PedalThread
+from BackendThread import EncDAQBackThread, PedalThread
 
 
 _translate = QtCore.QCoreApplication.translate
@@ -69,8 +68,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.ansdict={}
         self.timecount = 0
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
-        self.picd = os.path.join(os.getcwd(),self.pictures)
-        #self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
+        #self.picd = os.path.join(os.getcwd(),self.pictures)
+        self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
 
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
@@ -191,7 +190,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.vidFrame.restartVid()
     
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
-        pixmap = QtGui.QPixmap(os.path.join(self.picd, data))
+        pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
         self.TaskFrame.setPixmap(pixmap)
@@ -285,7 +284,7 @@ class Ui_root(QtWidgets.QMainWindow):
         else:      
             self.playVid()
 
-# Start Button Stuff                
+# Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
         self.StartBtn.hide()
         self.GameBtn.hide()
@@ -300,8 +299,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
  
         # Start thread(s)
-        #self.timebackend.start()
-        self.backend.start()
         self.pedalBackend.start()
         self.daqbackend.start()
         self.timer.start(1000)
@@ -328,8 +325,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
         
         # Start thread(s)
-        #self.timebackend.start()
-        self.backend.start()
         self.pedalBackend.start()
         self.daqbackend.start()
         self.timer.start(1000)
@@ -398,16 +393,13 @@ class Ui_root(QtWidgets.QMainWindow):
 
     def initBackendThread(self): #Initialize Signal Slots and Backend Threads
         # Create backend Threads
-        self.timebackend=CalTimeThread()
-        self.backend = EncorderBackendThread()
         self.pedalBackend=PedalThread()
-        self.daqbackend= DAQBackThread()
+        self.daqbackend= EncDAQBackThread()
 
         # Signal connect to Slots for Data
-        #self.timebackend.time.connect(self.TimeDisplay)                     #Pass time to UI label0-1 
-        self.backend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
-        self.backend.encorderSpeed.connect(self.printSpeed)                 #Pass Speed to controller slot
-        self.backend.encorderSpeed.connect(self.videoStartPause)            #Encoder Speed control Start/Pause video
+        self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
+        self.daqbackend.encorderSpeed.connect(self.printSpeed)                 #Pass Speed to controller slot
+        self.daqbackend.encorderSpeed.connect(self.videoStartPause)            #Encoder Speed control Start/Pause video
         self.daqbackend._PPGHeartRate.connect(self.HRDisplay)                             #Pass Heart Rate to UI label 3
         self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
         self.pedalBackend.pedalAccumPower.connect(self.AccumPower)          #Pass AccumPower to UI label5

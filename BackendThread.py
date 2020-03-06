@@ -7,14 +7,14 @@ import serial
 import numpy as np
 from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime 
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
 from PyQt5.QtCore import Qt
 from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
-
+'''
 class CalTimeThread(QThread):
     #Initialize time
     time=pyqtSignal(str,int,int)
@@ -41,52 +41,14 @@ class CalTimeThread(QThread):
             #Emit data for display function
             self.time.emit(self.currTime,self.cyclingTime_min,self.cyclingTime_sec)
             time.sleep(1)
-
-class EncorderBackendThread(QThread):
-    #Initialize Encoder
-    global Encoder
-    Encoder=encoder()
-    # Create Signal Slot 
-    encorderSpeed = pyqtSignal(int)
-    encorderEnc = pyqtSignal(float)
-
-    # Variables
-    samp_rate = 10 #sample rate (hz)
-    samp_period = 1 #period to collect signals sec
-    samples = samp_rate*samp_period
-    t = time.time()
-    period = 1/samp_rate*samp_period
-    degold = Encoder.deg
-    degtravelled = []
-    newdiff = 0
-
-    # Run function
-    def run(self):
-        while True:
-            self.t+=self.period
-            time.sleep(max(0,self.t-time.time()))
-            self.degnow = Encoder.deg #Read Encoder Degree
-            self.encorderEnc.emit(self.degnow) #emit Encoder Degree
+'''
             
-            ## check whether encoder is going forward or in reverse
-            if ((self.degold - self.degnow) > 180):
-                self.newdiff = self.degnow - self.degold + 360
-            elif ((self.degold - self.degnow) < -180):
-                self.newdiff = self.degnow - self.degold - 360
-            else:
-                self.newdiff = self.degnow - self.degold
-            self.degold = self.degnow
-            self.degtravelled.append(self.newdiff)
-        
-            ## if appended to size defined by samp_period then calculate speed and emit
-            if len(self.degtravelled) == self.samples:
-                self.speed = int(sum(self.degtravelled)/self.samp_period*60/360) #calculate rpm
-                self.encorderSpeed.emit(self.speed)
-                self.degtravelled=[]       
-
-class DAQBackThread(QThread):
+class EncDAQBackThread(QThread):
     global DAQ
     DAQ = daq()
+    #create signal slots
+    _EMGarray = pyqtSignal(np.ndarray) #EMG signal slot
+    _PPGHeartRate = pyqtSignal(int) #PPG signal slot
 
     samp_rate = 1000 #for DAQ (Hz)
     samples = 100 #per acquisition
@@ -101,17 +63,30 @@ class DAQBackThread(QThread):
     t = time.time()
     period = 1/samp_rate*samples
 
-    #create signal slots
-    _EMGarray = pyqtSignal(np.ndarray) #EMG signal slot
-    _PPGHeartRate = pyqtSignal(int) #PPG signal slot
+
+    #Initialize Encoder
+    global Encoder
+    Encoder=encoder()
+    # Create Signal Slot 
+    encorderSpeed = pyqtSignal(int)
+    encorderEnc = pyqtSignal(float)
+
+    # Variables
+    sam_rate = 10 #sample rate (hz)
+    sam_period = 1 #period to collect signals sec
+    samp = sam_rate*sam_period
+    encperiod = 1/sam_rate*sam_period
+    degold = Encoder.deg
+    degtravelled = []
+    newdiff = 0
 
     def run(self):
         while True:
             self.t+=self.period
 
+            ############################# PPG
             self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
             self._EMGarray.emit(self.daqarr[:,1:]) #emit all the EMG signal array
-
 
             #PPG calculations (depends on HRaltime, else just append into HRarrdaq)
             if len(self.HRarrdaq) != self.HRcalarray:
@@ -125,6 +100,26 @@ class DAQBackThread(QThread):
                 self.HR = 0 if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
                 self._PPGHeartRate.emit(self.HR)
                 self.HRarrdaq = np.array(list())
+
+            ############################# Encoder
+            self.degnow = Encoder.deg #Read Encoder Degree
+            self.encorderEnc.emit(self.degnow) #emit Encoder Degree
+            
+            ## check whether encoder is going forward or in reverse
+            if ((self.degold - self.degnow) > 180):
+                self.newdiff = self.degnow - self.degold + 360
+            elif ((self.degold - self.degnow) < -180):
+                self.newdiff = self.degnow - self.degold - 360
+            else:
+                self.newdiff = self.degnow - self.degold
+            self.degold = self.degnow
+            self.degtravelled.append(self.newdiff)
+        
+            ## if appended to size defined by sam_period then calculate speed and emit
+            if len(self.degtravelled) == self.samp:
+                self.speed = int(sum(self.degtravelled)/self.sam_period*60/360) #calculate rpm
+                self.encorderSpeed.emit(self.speed)
+                self.degtravelled=[]
 
             time.sleep(max(0,self.t-time.time()))
 
