@@ -44,10 +44,10 @@ class EncDAQBackThread(QThread):
     encorderEnc = pyqtSignal(float)
 
     # Variables
-    sam_rate = 10 #sample rate (hz)
+    sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ
     sam_period = 1 #period to collect signals sec
     samp = sam_rate*sam_period
-    encperiod = 1/sam_rate*sam_period
+    encperiod = sam_period/sam_rate
     degold = Encoder.deg
     degtravelled = []
     newdiff = 0
@@ -216,7 +216,6 @@ class Window(QDialog):
         self.backend = EncDAQBackThread()
         self.pedalBackend=PedalThread()
         # Signal connect to Slot
-        self.timebackend.time.connect(self.TimeDisplay)                     #Pass time to UI label0-1 
         self.backend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
         self.backend.encorderSpeed.connect(self.controller.printSpeed)      #Pass Speed to controller slot
         self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
