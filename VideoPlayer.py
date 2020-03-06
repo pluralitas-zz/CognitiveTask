@@ -51,7 +51,7 @@ class MainWid(QtWidgets.QWidget):
 
     def restartVid(self):
         self.vidPlayer.stop()
-        file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
+        file = os.path.join(self.vidd, random.choice(self.vidFile))
         self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.vidPlayer.play()
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
@@ -65,7 +65,7 @@ class MainWid(QtWidgets.QWidget):
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
         elif self.playstate == 0:
-            file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
+            file = os.path.join(self.vidd, random.choice(self.vidFile))
             self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
