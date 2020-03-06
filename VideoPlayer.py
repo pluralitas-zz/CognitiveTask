@@ -17,8 +17,7 @@ class MainWid(QtWidgets.QWidget):
         self.videos = "Videos" #location of videos relative to main.py
         self.vidd = os.path.join(os.getcwd(),self.videos) # actual path of folders
         self.vidFile = [files for files in os.listdir(self.vidd) if files.endswith(".mp4")] #find all video files in video folder
-        print(self.vidFile)
-        super(MainWid,self).__init__(parent)
+        super(MainWid,self).__init__(parent)  
 
         self.setupUi(self)
         self.vidScene = QtWidgets.QGraphicsScene(self)
@@ -52,7 +51,7 @@ class MainWid(QtWidgets.QWidget):
 
     def restartVid(self):
         self.vidPlayer.stop()
-        file = os.path.join(self.vidd, random.choice(self.vidFile))
+        file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
         self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.vidPlayer.play()
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
@@ -66,7 +65,7 @@ class MainWid(QtWidgets.QWidget):
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
         elif self.playstate == 0:
-            file = os.path.join(self.vidd, random.choice(self.vidFile))
+            file = os.path.join(os.path.dirname(__file__), random.choice(self.vidFile))
             self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)

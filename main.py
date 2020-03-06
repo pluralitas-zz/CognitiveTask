@@ -62,16 +62,16 @@ class Ui_root(QtWidgets.QMainWindow):
     def __init__(self):
         #values    
         super(Ui_root,self).__init__()
-        self.setupUi(self)
+
         self.counter = 0 #counter value to change task difficulty
         self.disparr = [] #array to store values for displaying on buttons
         self.previousBalance=50 #default Force Balance Value
         self.ansdict={}
         self.timecount = 0
-
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         self.picd = os.path.join(os.getcwd(),self.pictures)
 
+        self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
         self.GameBtn.clicked.connect(lambda:self.GameBtnPress())
 
@@ -190,7 +190,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.vidFrame.restartVid()
     
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
-        pixmap = QtGui.QPixmap(os.path.join(os.path.join(self.picd, data)))
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
         self.TaskFrame.setPixmap(pixmap)
@@ -450,7 +450,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.setText("")
         self.WarnFrame.setAlignment(QtCore.Qt.AlignCenter)
         self.WarnFrame.setObjectName("TaskFrame")
-        pixmap = QtGui.QPixmap(os.path.join(os.path.dirname(__file__), "Pause.png"))
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, "Pause.png"))
         self.WarnFrame.setPixmap(pixmap)
         self.WarnFrame.hide()
 

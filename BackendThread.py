@@ -63,11 +63,6 @@ class EncorderBackendThread(QThread):
     # Run function
     def run(self):
         while True:
-            '''
-            x=Encoder.spd #Read Encoder Speed
-            self.encorderSpeed.emit(x)  #Send Encorder speed to slot
-            time.sleep(1)               #time sleep must be>1s
-            '''
             self.t+=self.period
             time.sleep(max(0,self.t-time.time()))
             self.degnow = Encoder.deg #Read Encoder Degree
