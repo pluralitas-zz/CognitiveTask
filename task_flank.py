@@ -12,7 +12,7 @@ class flank_main(QtCore.QThread):
         super(flank_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["FlankLCon.png", "FlankRCon.png","FlankLIncon.png","FlankRIncon.png"]
-        self.answers = ["Blank.png","Blank.png","FlankR.png","Blank.png",  "Blank.png","Blank.png","Blank.png","FlankL.png"  ,"Blank.png","Blank.png"]
+        self.answers = ["FlankR.png","Blank.png","Blank.png","Blank.png",  "Blank.png","FlankL.png","Blank.png","Blank.png"  ,"Blank.png","Blank.png"]
         self.taskarr = []
         self.ansarr = []
         self.answerflank = False
@@ -42,6 +42,8 @@ class flank_main(QtCore.QThread):
             self.level = 1
         self._level.emit(self.level)
 
+        self._ansdisp.emit(self.answers) #emit answers into buttons
+
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
@@ -53,12 +55,11 @@ class flank_main(QtCore.QThread):
         self._qnsdisp.emit(self.disp,800,150)
         QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
-        self._ansdisp.emit(self.answers) #emit answers into buttons
+        
 
-        self._qnsshowhide.emit(1) #show the answer buttons
-        QtTest.QTest.qWait(100)
+        QtTest.QTest.qWait(100) # Wait before allowing user to answer
         self.answerflank = True
-
+        self._qnsshowhide.emit(1) #show the answer buttons
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
@@ -77,7 +78,7 @@ class flank_main(QtCore.QThread):
         print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        #self._qnsshowhide.emit(0) #hide the answer buttons
 
         #QtTest.QTest.qWait(10000) #wait between next test after everything is done
 

@@ -11,7 +11,7 @@ import timer
 import numpy
 import serial
 import VideoPlayer, cdown #videos
-import flank, verb, verbB, spaceA #tasks
+import task_flank, task_workmem, task_nback, spaceA #tasks
 import threading
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia,QtTest
@@ -29,24 +29,29 @@ class Ui_root(QtWidgets.QMainWindow):
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
-        # self.cd.run_cd(10)
-        # for i in range(15):
-        #     self.flnk.run_task(self.counter)
+        self.cd.run_cd(10)
+        for i in range(15):
+            self.flnk.run_task(self.counter)
+        self.counter=0
+        
+        # self.cd.run_cd(5)
+        # for i in range(1):
+            # self.wrkVerb.run_task(self.counter)
         # self.counter=0
         
         # self.cd.run_cd(5)
         # for i in range(1):
-        #     self.vrb.run_task(self.counter)
-        # self.counter=0
-        
-        # self.cd.run_cd(5)
-        # for i in range(1):
-        #     self.spcA.run_task(self.counter)
+            # self.wrkSpace.run_task(self.counter)
         # self.counter=0
 
-        self.cd.run_cd(5)
-        self.vrbb.run_task(self.counter)
-        self.counter=0
+        # self.cd.run_cd(5)
+        # self.nbckVerb.run_task(self.counter)
+        # self.counter=0
+
+        
+        # self.cd.run_cd(5)
+        # self.nbckSpace.run_task(self.counter)
+        # self.counter=0
         ###################################################
 
     class Controller(): #Create Controller Class
@@ -89,7 +94,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.cd._qnsdisp.connect(self.disp_qns)
 
         #connect flank task
-        self.flnk = flank.flank_main()
+        self.flnk = task_flank.flank_main()
         self.flnk._qnsdisp.connect(self.disp_qns)
         self.flnk._ansdisp.connect(self.disp_ans)
         self.flnk._counter.connect(self.counter_add)
@@ -97,32 +102,41 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._qnsshowhide.connect(self.showhideAnswers)
         self._answer.connect(self.flnk.append_ans)
 
-        #connect verb task
-        self.vrb = verb.verb_main()
-        self.vrb._qnsdisp.connect(self.disp_qns)
-        self.vrb._ansdisp.connect(self.disp_ans)
-        self.vrb._counter.connect(self.counter_add)
-        self.vrb._level.connect(self.LevelDisplay)
-        self.vrb._qnsshowhide.connect(self.showhideAnswers)
-        self._answer.connect(self.vrb.append_ans)
+        #connect working memory Verbal task
+        self.wrkVerb = task_workmem.workmemVerb_main()
+        self.wrkVerb._qnsdisp.connect(self.disp_qns)
+        self.wrkVerb._ansdisp.connect(self.disp_ans)
+        self.wrkVerb._counter.connect(self.counter_add)
+        self.wrkVerb._level.connect(self.LevelDisplay)
+        self.wrkVerb._qnsshowhide.connect(self.showhideAnswers)
+        self._answer.connect(self.wrkVerb.append_ans)
 
-        #connect verbB task
-        self.vrbb = verbB.verbB_main()
-        self.vrbb._qnsdisp.connect(self.disp_qns)
-        self.vrbb._ansdisp.connect(self.disp_ans)
-        self.vrbb._counter.connect(self.counter_add)
-        self.vrbb._level.connect(self.LevelDisplay)
-        self.vrbb._qnsshowhide.connect(self.showhideAnswers)
-        self._answer.connect(self.vrbb.append_ans)
+        #connect n-back verbal task
+        self.nbckVerb = task_nback.nbackVerb_main()
+        self.nbckVerb._qnsdisp.connect(self.disp_qns)
+        self.nbckVerb._ansdisp.connect(self.disp_ans)
+        self.nbckVerb._counter.connect(self.counter_add)
+        self.nbckVerb._level.connect(self.LevelDisplay)
+        self.nbckVerb._qnsshowhide.connect(self.showhideAnswers)
+        self._answer.connect(self.nbckVerb.append_ans)
+
+        #connect nback task
+        self.nbckSpace = task_nback.nbackSpace_main()
+        self.nbckSpace._qnsdisp.connect(self.disp_qns)
+        self.nbckSpace._ansdisp.connect(self.disp_ans)
+        self.nbckSpace._counter.connect(self.counter_add)
+        self.nbckSpace._level.connect(self.LevelDisplay)
+        self.nbckSpace._qnsshowhide.connect(self.showhideAnswers)
+        self._answer.connect(self.nbckSpace.append_ans)
 
         #connect spaceA task
-        self.spcA = spaceA.spaceA_main()
-        self.spcA._qnsdisp.connect(self.disp_qns)
-        self.spcA._ansdisp.connect(self.disp_ans)
-        self.spcA._counter.connect(self.counter_add)
-        self.spcA._level.connect(self.LevelDisplay)
-        self.spcA._qnsshowhide.connect(self.showhideAnswers)
-        self._answer.connect(self.spcA.append_ans)
+        self.wrkSpace = task_workmem.workmemSpace_main()
+        self.wrkSpace._qnsdisp.connect(self.disp_qns)
+        self.wrkSpace._ansdisp.connect(self.disp_ans)
+        self.wrkSpace._counter.connect(self.counter_add)
+        self.wrkSpace._level.connect(self.LevelDisplay)
+        self.wrkSpace._qnsshowhide.connect(self.showhideAnswers)
+        self._answer.connect(self.wrkSpace.append_ans)
 
         #create shortcut for buttons
         self.QuesBtn_A.setShortcut("c")
