@@ -6,12 +6,9 @@
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.0
 # WARNING! All changes made in this file will be lost!
 import sys, os
-import time
-import timer
-import numpy
-import serial
+import time, timer, numpy, serial
 import VideoPlayer, cdown #videos
-import task_flank, task_workmem, task_nback, spaceA #tasks
+import task_flank, task_workmem, task_nback #tasks
 import threading
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia,QtTest

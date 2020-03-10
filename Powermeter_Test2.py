@@ -14,8 +14,6 @@ import numpy as np
 raw=[0,0,0,0,0]
 fpath = os.path.join(r"C:\Users\ipich\Desktop","testfile.txt") #output file name
 
-
-
 def callback(msg):
     global raw 
     global count
@@ -49,7 +47,6 @@ def callback(msg):
 def eCallback(e):
     print(e) #print "device is closed""
 
-
 # for serial driver
 #with Node(SerialDriver("/dev/ttyUSB0"), 'MyNode') as n:
 # for USB driver
@@ -82,7 +79,7 @@ def main():
 def DAQfunc(avgPower,baseCount):
     global avgPower_baseline, baseLine_count
     global raw 
-    max_count =4;
+    max_count =4
     baseLine_count = baseCount
     avgPower_baseline = avgPower
     output_raw = [[] for _ in range(max_count)]
