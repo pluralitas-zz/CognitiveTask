@@ -11,13 +11,13 @@ import VideoPlayer, cdown #videos
 import task_flank, task_workmem, task_nback #tasks
 import threading
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia,QtTest
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia, QtTest
 from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime, Qt 
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import *
 from BackendThread import EncDAQBackThread, PedalThread
-
+from psychopy import parallel
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -51,6 +51,13 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.counter=0
         ###################################################
 
+    def sham_run(self):
+        ################################################### 
+        ###############     RUN TASKS     #################
+        self.cd.run_cd(10)
+
+        ###################################################
+
     class Controller(): #Create Controller Class
         
         def __init__(self): #intialise controller
@@ -63,7 +70,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def __init__(self):
         #values    
         super(Ui_root,self).__init__()
-
+        self.paraportstat = False
         self.counter = 0 #counter value to change task difficulty
         self.disparr = [] #array to store values for displaying on buttons
         self.previousBalance=50 #default Force Balance Value
@@ -83,6 +90,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.TimeDisplay) #connect QtTimer for Elapsed Time
         #self.vidFrame.startVid() #Start Video
 
+        try: #try to connect to parallel port
+            self.paraport = parallel.ParallelPort(address=0x0E100) #LPT port PCI Express address for EEG PC in ERB 1104
+            self.paraportstat = True
+        except:
+            pass
+
 # Task Stuff
     def initTaskSigSlot(self):
         
@@ -97,7 +110,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._counter.connect(self.counter_add)
         self.flnk._level.connect(self.LevelDisplay)
         self.flnk._qnsshowhide.connect(self.showhideAnswers)
+        self.flnk._paraport(self.paraport_send)
         self._answer.connect(self.flnk.append_ans)
+
 
         #connect working memory Verbal task
         self.wrkVerb = task_workmem.workmemVerb_main()
@@ -106,6 +121,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._counter.connect(self.counter_add)
         self.wrkVerb._level.connect(self.LevelDisplay)
         self.wrkVerb._qnsshowhide.connect(self.showhideAnswers)
+        self.wrkVerb._paraport(self.paraport_send)
         self._answer.connect(self.wrkVerb.append_ans)
 
         #connect n-back verbal task
@@ -115,6 +131,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._counter.connect(self.counter_add)
         self.nbckVerb._level.connect(self.LevelDisplay)
         self.nbckVerb._qnsshowhide.connect(self.showhideAnswers)
+        self.nbckVerb._paraport(self.paraport_send)
         self._answer.connect(self.nbckVerb.append_ans)
 
         #connect nback task
@@ -124,6 +141,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._counter.connect(self.counter_add)
         self.nbckSpace._level.connect(self.LevelDisplay)
         self.nbckSpace._qnsshowhide.connect(self.showhideAnswers)
+        self.nbckSpace._paraport(self.paraport_send)
         self._answer.connect(self.nbckSpace.append_ans)
 
         #connect spaceA task
@@ -133,6 +151,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._counter.connect(self.counter_add)
         self.wrkSpace._level.connect(self.LevelDisplay)
         self.wrkSpace._qnsshowhide.connect(self.showhideAnswers)
+        self.wrkSpace._paraport(self.paraport_send)
         self._answer.connect(self.wrkSpace.append_ans)
 
         #create shortcut for buttons
@@ -200,6 +219,13 @@ class Ui_root(QtWidgets.QMainWindow):
         if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
             self.vidFrame.restartVid()
     
+    def paraport_send(self,data): #EEG send value over LPT PCI Express Parallel port
+        if self.paraportstat == True:
+            self.paraport.setData(0)
+            self.paraport.setData(data)            
+        else:
+            pass
+
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
@@ -319,7 +345,8 @@ class Ui_root(QtWidgets.QMainWindow):
     def GameBtnPress(self): #Start Game mode
         self.StartBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.hide() #Hide Video Frames
+
+        #Hide tasks stuff
         self.TaskFrame.hide()
         self.TaskLabCnt.hide()
         self.TaskValCnt.hide()
@@ -339,6 +366,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.pedalBackend.start()
         self.daqbackend.start()
         self.timer.start(1000)
+
+        self.sham_run()
 
 # HUD Stuff
 
@@ -726,7 +755,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #Start Btn
         self.StartBtn.setText(_translate("root", "Start Task"))
         #Game Btn
-        self.GameBtn.setText(_translate("root", "Start Game"))
+        self.GameBtn.setText(_translate("root", "Start Cycle"))
         self.QuesBtn_Left.setText(_translate("root", "L"))
         self.QuesBtn_Down.setText(_translate("root", "D"))
         self.QuesBtn_Up.setText(_translate("root", "U"))

@@ -7,6 +7,7 @@ class workmemVerb_main(QtCore.QThread):
     _counter = QtCore.pyqtSignal(int)
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
+    _paraport = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(workmemVerb_main, self).__init__()
@@ -111,7 +112,8 @@ class workmemSpace_main(QtCore.QThread):
     _counter = QtCore.pyqtSignal(int)
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
-
+    _paraport = QtCore.pyqtSignal(int)
+    
     def __init__(self):
         super(workmemSpace_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
