@@ -26,7 +26,10 @@ if __name__ == "__main__":
     #print column
     col = arrdaq[:,0]
     print(col)
-    # test = arrdaq[:,1:]
+    test = arrdaq[:,1:]
     # print()
-    # print(test)
+    print(len(test))
+    comb = np.column_stack([test,col])
+    print(comb)
+
 

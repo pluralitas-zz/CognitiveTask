@@ -7,21 +7,22 @@ from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
-from Powermeter_Test2 import *
+from Powermeter_Test2 import main
             
 class EncDAQBackThread(QThread):
     global DAQ
     DAQ = daq()
     #create signal slots
-    _EMGarray = pyqtSignal(np.ndarray) #EMG signal slot
+    _woutBackEndArray = pyqtSignal(np.ndarray) #EMG signal slot
     _PPGHeartRate = pyqtSignal(int) #PPG signal slot
 
     samp_rate = 1000 #for DAQ (Hz)
     samples = 100 #per acquisition
+    samparr = np.ones((samples,1))
     HRrange = [60,140] #Range of HR
     HRxVal = 2.5 #Threshold for edge detection for PPG
     HRcaltime = 4 #seconds for refreshing HR values, more = more accurate
-
+    HR = 0
     HRcalarray = HRcaltime*samp_rate
     HRarrdaq = np.array(list())
 
@@ -35,7 +36,6 @@ class EncDAQBackThread(QThread):
     Encoder=encoder()
     # Create Signal Slot 
     encorderSpeed = pyqtSignal(int)
-    encorderEnc = pyqtSignal(float)
 
     # Variables
     sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ
@@ -45,15 +45,15 @@ class EncDAQBackThread(QThread):
     degold = Encoder.deg
     degtravelled = []
     newdiff = 0
+    speed = 0
 
     def run(self):
         while True:
             self.t+=self.period
 
-            ############################# PPG
+        ############################# PPG
             self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
-            self._EMGarray.emit(self.daqarr[:,1:]) #emit all the EMG signal array
-
+            
             #PPG calculations (depends on HRaltime, else just append into HRarrdaq)
             if len(self.HRarrdaq) != self.HRcalarray:
                 self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,0])
@@ -67,9 +67,8 @@ class EncDAQBackThread(QThread):
                 self._PPGHeartRate.emit(self.HR)
                 self.HRarrdaq = np.array(list())
 
-            ############################# Encoder
+        ############################# Encoder
             self.degnow = Encoder.deg #Read Encoder Degree
-            self.encorderEnc.emit(self.degnow) #emit Encoder Degree
             
             ## check whether encoder is going forward or in reverse
             if ((self.degold - self.degnow) > 180):
@@ -87,6 +86,15 @@ class EncDAQBackThread(QThread):
                 self.encorderSpeed.emit(self.speed)
                 self.degtravelled=[]
 
+        ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
+            self.HRarr = self.samparr * self.HR
+            self.speedarr = self.samparr * self.speed
+            self.degnowarr = self.samparr * self.degnow
+            self.timearr = self.samarr * time.time()
+            
+            self.comb = np.column_stack([self.timearr, self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,1:]]) #stack time, deg, speed, heartrate and EMGs
+            self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
+            
             time.sleep(max(0,self.t-time.time()))
 
 class PedalThread(QThread):
