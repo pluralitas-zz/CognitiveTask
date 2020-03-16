@@ -1,12 +1,7 @@
-import sys, os, csv, time
-import numpy as np
-from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime, Qt 
-
-
+import sys, os, csv, time, numpy as np
+from PyQt5.QtCore import QThread,  pyqtSignal,  QDateTime, Qt 
 
 class writeout:
-
-    _writearray = pyqtSignal(object)
 
     def __init__(self):
         pass
@@ -17,7 +12,6 @@ class writeout:
 
 
 if __name__ == "__main__":
-
 
     filed = os.path.join(os.getcwd()+"out.txt")
     header = ["Time","Elapsed Time", "Speed", "EMG 1", "EMG 2", "EMG 3", "EMG 4","Heart Rate", "Inst. Power", "Accum. Power", "Balance L", "Balance R"]

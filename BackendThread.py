@@ -1,20 +1,18 @@
-import time, threading
-import numpy as np
-from PyQt5.QtCore import QThread ,  pyqtSignal, Qt
-from PyQt5.QtWidgets import QApplication,  QDialog,QLabel, QVBoxLayout
-from PyQt5 import QtCore, QtGui, QtTest
+import time, threading, numpy as np
+from PyQt5.QtWidgets import QApplication, QDialog, QLabel, QVBoxLayout
+from PyQt5 import QtCore, QtGui
 from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
 from Powermeter_Test2 import main
             
-class EncDAQBackThread(QThread):
+class EncDAQBackThread(QtCore.QThread):
     global DAQ
     DAQ = daq()
     #create signal slots
-    _woutBackEndArray = pyqtSignal(np.ndarray) #EMG signal slot
-    _PPGHeartRate = pyqtSignal(int) #PPG signal slot
+    _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
+    _PPGHeartRate = QtCore.pyqtSignal(int) #PPG signal slot
 
     samp_rate = 1000 #for DAQ (Hz)
     samples = 100 #per acquisition
@@ -35,7 +33,7 @@ class EncDAQBackThread(QThread):
     global Encoder
     Encoder=encoder()
     # Create Signal Slot 
-    encorderSpeed = pyqtSignal(int)
+    encorderSpeed = QtCore.pyqtSignal(int)
 
     # Variables
     sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ
@@ -50,7 +48,6 @@ class EncDAQBackThread(QThread):
     def run(self):
         while True:
             self.t+=self.period
-
         ############################# PPG
             self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
             
@@ -94,16 +91,17 @@ class EncDAQBackThread(QThread):
             
             self.comb = np.column_stack([self.timearr, self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,1:]]) #stack time, deg, speed, heartrate and EMGs
             self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
-            
+        
+        #############################    
             time.sleep(max(0,self.t-time.time()))
 
-class PedalThread(QThread):
+class PedalThread(QtCore.QThread):
     # Create Signal Slot 
-    pedalInstantPower=pyqtSignal(object)
-    pedalAccumPower=pyqtSignal(object)
-    pedalInstantCandence=pyqtSignal(object)
-    pedalBalance=pyqtSignal(object)
-    pedalPowerBaseLine=pyqtSignal(object)
+    pedalInstantPower = QtCore.pyqtSignal(object)
+    pedalAccumPower = QtCore.pyqtSignal(object)
+    pedalInstantCandence = QtCore.pyqtSignal(object)
+    pedalBalance = QtCore.pyqtSignal(object)
+    pedalPowerBaseLine = QtCore.pyqtSignal(object)
     #Initlilize Pedal
     global baseline_init
     baseline_init=main()

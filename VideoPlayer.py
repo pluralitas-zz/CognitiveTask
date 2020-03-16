@@ -1,6 +1,7 @@
 import sys, os, random
+import main #custom .py
 from PyQt5 import QtCore, QtWidgets, QtMultimediaWidgets, QtMultimedia
-import main
+
 
 
 class MainWid(QtWidgets.QWidget):

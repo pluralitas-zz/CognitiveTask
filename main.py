@@ -1,14 +1,11 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 # WARNING! All changes made in this file will be lost!
-import sys, os, time, timer, threading
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback #tasks
+import sys, os, threading
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia, QtTest, sip
-from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime, Qt 
-from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
-from Powermeter_Test2 import *
 from BackendThread import EncDAQBackThread, PedalThread
 from psychopy import parallel
 
@@ -162,10 +159,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.QuesBtn_B.setShortcut("v")
         self.QuesBtn_X.setShortcut("d")
         self.QuesBtn_Y.setShortcut("f")
-        self.QuesBtn_Up.setShortcut(Qt.Key_Up)
-        self.QuesBtn_Down.setShortcut(Qt.Key_Down)
-        self.QuesBtn_Left.setShortcut(Qt.Key_Left)
-        self.QuesBtn_Right.setShortcut(Qt.Key_Right)
+        self.QuesBtn_Up.setShortcut(QtCore.Qt.Key_Up)
+        self.QuesBtn_Down.setShortcut(QtCore.Qt.Key_Down)
+        self.QuesBtn_Left.setShortcut(QtCore.Qt.Key_Left)
+        self.QuesBtn_Right.setShortcut(QtCore.Qt.Key_Right)
         self.QuesBtn_ShldL.setShortcut("e")
         self.QuesBtn_ShldR.setShortcut("r")
 
@@ -418,19 +415,16 @@ class Ui_root(QtWidgets.QMainWindow):
         #acceleration
         if self.speed>10:
             keyboard.press('z')            
-            #time.sleep(1)
             QtTest.QTest.qWait(1000)
             #keyboard.release('z')                        
             #deceleration
         elif self.speed<10 and self.speed>=0:
             keyboard.release('z')
             #keyboard.press('a')
-            #time.sleep(1)
             QtTest.QTest.qWait(1000)
              
         elif self.speed<0:
             keyboard.press('a')
-            #time.sleep(1)
             QtTest.QTest.qWait(1000)
             keyboard.release('a') 
 
