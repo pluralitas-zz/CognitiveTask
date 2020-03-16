@@ -1,8 +1,4 @@
-import serial
-import sys
-import time
-from PyQt5  import QtCore
-import binascii as ba
+import serial, time
 
 class encoder:
     #for speed calculation

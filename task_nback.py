@@ -1,5 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, QtTest, QtMultimedia, QtMultimediaWidgets
-import random, sys, time
+from PyQt5 import QtCore, QtTest
+import random
 
 class nbackVerb_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)

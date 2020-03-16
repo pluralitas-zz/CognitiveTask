@@ -1,14 +1,8 @@
-import time
-import timer
-import numpy
-import sys
-import threading
-import serial
+import time, threading
 import numpy as np
-from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime 
-from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
-from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QThread ,  pyqtSignal, Qt
+from PyQt5.QtWidgets import QApplication,  QDialog,QLabel, QVBoxLayout
+from PyQt5 import QtCore, QtGui, QtTest
 from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
@@ -257,6 +251,7 @@ class Window(QDialog):
                 keyboard.release('a') 
 
 if __name__ == '__main__':
+    import sys
     #Initialize Window
     app =QApplication(sys.argv)
     MainWin = Window()

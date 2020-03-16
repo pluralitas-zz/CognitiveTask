@@ -1,17 +1,10 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'task.ui'
-#
-# Created by: PyQt5 UI code generator 5.6
-# Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.0
+# Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
+# Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 # WARNING! All changes made in this file will be lost!
-import sys, os
-import time, timer, numpy, serial
-import VideoPlayer, cdown #videos
-import task_flank, task_workmem, task_nback #tasks
-import threading
+import sys, os, time, timer, threading
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback #tasks
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
-from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia, QtTest
+from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia, QtTest, sip
 from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime, Qt 
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit,QLabel, QVBoxLayout,QMessageBox
 from pynput.keyboard import Key, Controller
@@ -110,7 +103,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._counter.connect(self.counter_add)
         self.flnk._level.connect(self.LevelDisplay)
         self.flnk._qnsshowhide.connect(self.showhideAnswers)
-        self.flnk._paraport(self.paraport_send)
+        try:
+            self.flnk._paraport(self.paraport_send)
+        except:pass
         self._answer.connect(self.flnk.append_ans)
 
 
@@ -121,7 +116,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._counter.connect(self.counter_add)
         self.wrkVerb._level.connect(self.LevelDisplay)
         self.wrkVerb._qnsshowhide.connect(self.showhideAnswers)
-        self.wrkVerb._paraport(self.paraport_send)
+        try:
+            self.wrkVerb._paraport(self.paraport_send)
+        except:pass
         self._answer.connect(self.wrkVerb.append_ans)
 
         #connect n-back verbal task
@@ -131,7 +128,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._counter.connect(self.counter_add)
         self.nbckVerb._level.connect(self.LevelDisplay)
         self.nbckVerb._qnsshowhide.connect(self.showhideAnswers)
-        self.nbckVerb._paraport(self.paraport_send)
+        try:
+            self.nbckVerb._paraport(self.paraport_send)
+        except:pass
         self._answer.connect(self.nbckVerb.append_ans)
 
         #connect nback task
@@ -141,7 +140,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._counter.connect(self.counter_add)
         self.nbckSpace._level.connect(self.LevelDisplay)
         self.nbckSpace._qnsshowhide.connect(self.showhideAnswers)
-        self.nbckSpace._paraport(self.paraport_send)
+        try:
+            self.nbckSpace._paraport(self.paraport_send)
+        except:pass
         self._answer.connect(self.nbckSpace.append_ans)
 
         #connect spaceA task
@@ -151,7 +152,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._counter.connect(self.counter_add)
         self.wrkSpace._level.connect(self.LevelDisplay)
         self.wrkSpace._qnsshowhide.connect(self.showhideAnswers)
-        self.wrkSpace._paraport(self.paraport_send)
+        try:
+            self.wrkSpace._paraport(self.paraport_send)
+        except:pass
         self._answer.connect(self.wrkSpace.append_ans)
 
         #create shortcut for buttons

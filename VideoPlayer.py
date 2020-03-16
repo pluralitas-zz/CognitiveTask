@@ -1,15 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'WidGraphVideoItem.ui'
-#
-# Created by: PyQt5 UI code generator 5.6
-#
-# WARNING! All changes made in this file will be lost!
-import sys
-import os
-import random
-from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimediaWidgets, QtMultimedia
+import sys, os, random
+from PyQt5 import QtCore, QtWidgets, QtMultimediaWidgets, QtMultimedia
 import main
+
 
 class MainWid(QtWidgets.QWidget):
     def __init__(self,parent):
