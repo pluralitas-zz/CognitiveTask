@@ -5,10 +5,9 @@ from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
-from Powermeter_Test2 import main
+from Powermeter_Test2 import main, DAQfunc
             
 class EncDAQBackThread(QtCore.QThread):
-    global DAQ
     DAQ = daq()
     #create signal slots
     _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
@@ -28,9 +27,7 @@ class EncDAQBackThread(QtCore.QThread):
     t = time.time()
     period = 1/samp_rate*samples
 
-
     #Initialize Encoder
-    global Encoder
     Encoder=encoder()
     # Create Signal Slot 
     encorderSpeed = QtCore.pyqtSignal(int)
@@ -49,7 +46,7 @@ class EncDAQBackThread(QtCore.QThread):
         while True:
             self.t+=self.period
         ############################# PPG
-            self.daqarr = DAQ.acqdaq(self.samp_rate,self.samples)
+            self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
             
             #PPG calculations (depends on HRaltime, else just append into HRarrdaq)
             if len(self.HRarrdaq) != self.HRcalarray:
@@ -65,7 +62,7 @@ class EncDAQBackThread(QtCore.QThread):
                 self.HRarrdaq = np.array(list())
 
         ############################# Encoder
-            self.degnow = Encoder.deg #Read Encoder Degree
+            self.degnow = self.Encoder.deg #Read Encoder Degree
             
             ## check whether encoder is going forward or in reverse
             if ((self.degold - self.degnow) > 180):
@@ -87,9 +84,8 @@ class EncDAQBackThread(QtCore.QThread):
             self.HRarr = self.samparr * self.HR
             self.speedarr = self.samparr * self.speed
             self.degnowarr = self.samparr * self.degnow
-            self.timearr = self.samarr * time.time()
             
-            self.comb = np.column_stack([self.timearr, self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,1:]]) #stack time, deg, speed, heartrate and EMGs
+            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,1:]]) #stack deg, speed, heartrate and EMG x 4
             self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
         
         #############################    
@@ -97,27 +93,23 @@ class EncDAQBackThread(QtCore.QThread):
 
 class PedalThread(QtCore.QThread):
     # Create Signal Slot 
-    pedalInstantPower = QtCore.pyqtSignal(object)
-    pedalAccumPower = QtCore.pyqtSignal(object)
-    pedalInstantCandence = QtCore.pyqtSignal(object)
-    pedalBalance = QtCore.pyqtSignal(object)
-    pedalPowerBaseLine = QtCore.pyqtSignal(object)
+    _pedalValue = QtCore.pyqtSignal(list)
+    
     #Initlilize Pedal
-    global baseline_init
     baseline_init=main()
     
     #Run function
     def run(self):      
         while True:       
-            #Read Pedal 
-            pedalRead=DAQfunc(baseline_init[0],baseline_init[1])
-            #print(type(pedalRead[0]))
-            #Send pedal to slot
-            self.pedalInstantPower.emit(pedalRead[0][0])
-            self.pedalAccumPower.emit(pedalRead[0][1])
-            self.pedalInstantCandence.emit(pedalRead[0][2])
-            self.pedalBalance.emit(pedalRead[0][3])
-            self.pedalPowerBaseLine.emit(pedalRead[1])
+            self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
+            '''
+            self.pedalRead[0][0] = Instant Power
+            self.pedalRead[0][1] = Accum. Power
+            self.pedalRead[0][2] = Instance Cadence
+            self.pedalRead[0][3] = Pedal Balance Right
+            self.pedalRead[1] = Power Baseline    
+            ''' #InstPower, AccumPower, InstCadence, pedalBalRight
+            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],self.pedalRead[0][3]]) 
 
 class Window(QDialog):
     def __init__(self):
@@ -223,7 +215,6 @@ class Window(QDialog):
         self.pedalBackend.pedalInstantCandence.connect(self.InstantCandence)#Pass InstantCandence to UI label6
         self.pedalBackend.pedalBalance.connect(self.Balance)                #Pass Balance to UI label7 & 6
         self.pedalBackend.pedalPowerBaseLine.connect(self.PowerBaseLine)    #Pass PowerBaseLine to UI label9
-        self.timebackend.start()
         self.backend.start()
         self.pedalBackend.start()
 

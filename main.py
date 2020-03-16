@@ -1,8 +1,8 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 # WARNING! All changes made in this file will be lost!
-import sys, os, threading
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback #custom .py
+import sys, os, time, threading, numpy as np
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback, writeout #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
@@ -12,7 +12,7 @@ from psychopy import parallel
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
     _answer = QtCore.pyqtSignal(str) #QtSlot for answering questions in task subpy
-
+# Define your task events here
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
@@ -41,11 +41,11 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.counter=0
         ###################################################
 
+# Define your Sham events here
     def sham_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
         self.cd.run_cd(10)
-
         ###################################################
 
     class Controller(): #Create Controller Class
@@ -87,7 +87,7 @@ class Ui_root(QtWidgets.QMainWindow):
             pass
 
 # Task Stuff
-    def initTaskSigSlot(self):
+    def initTaskSigSlot(self): #Initialise Task Stuff
         
         #connect countdown
         self.cd = cdown.countdown_main()
@@ -104,7 +104,6 @@ class Ui_root(QtWidgets.QMainWindow):
             self.flnk._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.flnk.append_ans)
-
 
         #connect working memory Verbal task
         self.wrkVerb = task_workmem.workmemVerb_main()
@@ -142,7 +141,7 @@ class Ui_root(QtWidgets.QMainWindow):
         except:pass
         self._answer.connect(self.nbckSpace.append_ans)
 
-        #connect spaceA task
+        #connect working memory Spatial task
         self.wrkSpace = task_workmem.workmemSpace_main()
         self.wrkSpace._qnsdisp.connect(self.disp_qns)
         self.wrkSpace._ansdisp.connect(self.disp_ans)
@@ -303,6 +302,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def CntDisplay(self):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter) +"</font>")
 
+# Write out to file Stuff
+    def writeout(self,data): #time, elapsed time, deg, speed, heartrate, EMG x 4, InstPower, AccumPower, InstCadence, pedalBalRight
+        self.comb = np.column_stack([np.ones((self.daqbackend.samples,1))*time.time(),np.ones((self.daqbackend.samples,1))*self.timecount,data,self.pedalwoutarr])
+
 # Video Playing Stuff
     def pauseVid(self): #Pause video + Show warning "speed too low"
         self.vidFrame.pauseVid()
@@ -314,11 +317,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
         pausespd = 10 #Pause/Play Threshold Speed
-        #Pause video if speed <pausespd
-        if data < pausespd:
+        if data < pausespd: #Pause video if speed <pausespd
             self.pauseVid()
-        #start video if speed >=pausespd
-        else:      
+        else: #start video if speed >=pausespd
             self.playVid()
 
 # Start Button Stuff
@@ -370,7 +371,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.sham_run()
 
 # HUD Stuff
-
     def TimeDisplay(self):
         self.timecount += 1
         self.HUDValTime.setText("<font color='White'>"+ str(self.timecount) +"</font>")
@@ -384,65 +384,50 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValSpd.setText("<font color='White'>"+ self._speed+"</font>")
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
-    def InstantPower(self, data): # UI Slot to recieve InstantPower
-        self._InstantPower=str(data)
-        self.HUDValInstPwr.setText(_translate("root", "<font color='White'>"+self._InstantPower+"</font>"))
+    def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
+        self.pedalwoutarr[0] = data #append into array for writeout
+        self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
+        self.HUDValAccPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
+        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
 
-    def AccumPower(self, data): # UI Slot to recieve AccumPower
-        self._AccumPower=str(data)
-        self.HUDValAccPwr.setText(_translate("root","<font color='White'>"+ self._AccumPower+"</font>"))
+        if data[3] > 0:
+            self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(int(round(data[3])))+"</font>"))
+            self.HUDValPBalL.setText(_translate("root","<font color='White'>"+ str(int(round(100-data[3])))+"</font>"))
 
-    def InstantCandence(self, data): # UI Slot to recieve InstantCandence
-        self._InstantCandence=str(data)
-        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+self._InstantCandence+"</font>"))
-
-    def Balance(self, data): # UI Slot to recieve Balance
-        if data>0:
-            self.previousBalance=data
-            self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(int(round(data)))+"</font>"))
-            self.HUDValPBalL.setText(_translate("root","<font color='White'>"+ str(int(round(100-data)))))
-
-        else:
-            self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(int(round(self.previousBalance)))+"</font>"))
-            self.HUDValPBalL.setText(_translate("root","<font color='White'>"+ str(int(round(100-self.previousBalance)))+"</font>"))
-
-    def printSpeed(self,data): #Controller Slot to recieve Encoder Speed and translate to button inputs
+# Game Stuff
+    def Controller_Game(self,data): #Controller Slot to recieve Encoder Speed and translate to button inputs
         self.speed=data
-        #print(data)
         keyboard = Controller()
-        #while 1:
-        #read speed
-        #acceleration
-        if self.speed>10:
+        
+        if self.speed>30: #acceleration, pressed
             keyboard.press('z')            
+            QtTest.QTest.qWait(1000)                  
+        elif 30>=self.speed>10: #acceleration, tapping
+            keyboard.press('z')
             QtTest.QTest.qWait(1000)
-            #keyboard.release('z')                        
-            #deceleration
-        elif self.speed<10 and self.speed>=0:
             keyboard.release('z')
-            #keyboard.press('a')
+        elif 10>=self.speed>=0: #deceleration, not pressed
+            keyboard.release('z')
             QtTest.QTest.qWait(1000)
-             
         elif self.speed<0:
             keyboard.press('a')
             QtTest.QTest.qWait(1000)
             keyboard.release('a') 
-
-    def initBackendThread(self): #Initialize Signal Slots and Backend Threads
+    
+# Initialize Signal Slots for Backend Threads
+    def initBackendThread(self): 
         # Create backend Threads
         self.pedalBackend=PedalThread()
         self.daqbackend= EncDAQBackThread()
+        self.pedalwoutarr = np.ones((self.daqbackend.samples,4)) #for use with writeout
 
         # Signal connect to Slots for Data
-        self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
-        self.daqbackend.encorderSpeed.connect(self.printSpeed)                 #Pass Speed to controller slot
-        self.daqbackend.encorderSpeed.connect(self.videoStartPause)            #Encoder Speed control Start/Pause video
-        self.daqbackend._PPGHeartRate.connect(self.HRDisplay)                             #Pass Heart Rate to UI label 3
-        self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
-        self.pedalBackend.pedalAccumPower.connect(self.AccumPower)          #Pass AccumPower to UI label5
-        self.pedalBackend.pedalInstantCandence.connect(self.InstantCandence)#Pass InstantCandence to UI label6
-        self.pedalBackend.pedalBalance.connect(self.Balance)                #Pass Balance to UI label7 & 6
-        #self.pedalBackend.pedalPowerBaseLine.connect(self.PowerBaseLine)    #Pass PowerBaseLine to UI label9
+        self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 
+        self.daqbackend.encorderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot
+        self.daqbackend.encorderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
+        self.daqbackend._PPGHeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
+        self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
+        self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
 
 # Setup UI Stuff
     def setupUi(self, root):
