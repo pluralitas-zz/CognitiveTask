@@ -1,10 +1,10 @@
 # CognitiveTask
  Cognitive Cycling ITF project
 
-* Uses Python 3.6 (Anaconda 4.3.0) on Windows 10
+* Uses Python 3.6.10 (Anaconda 4.3.0) on Windows 10
 * Needs video codec to play videos, recommends k-lite codec pack basic https://codecguide.com/download_k-lite_codec_pack_basic.htm
 * Requires installation of libant-master/libant-master/setup.py by typing "python setup.py install" into anaconda prompt
-* Other bits and bobs to install see error when running it; pyserial, pyglet, pynput, nidaqmx, psychopy
+* Other bits and bobs to install see error when running it; pyserial, pyglet, pynput, nidaqmx, psychopy --no-deps
 * Videos not included in commit, in .mp4 format under the \Videos folder.
 * Usage with controller/keyboard/touchscreen/mouse
 
@@ -17,8 +17,8 @@ Hardware:
 
 Currently 4 tasks are implemented:
 1. Erikssen Flanker Task
-2. Verbal Recall Task
-3. Visual Recall Task
+2. Verbal Recall Task (Visuospatial, Verbal)
+3. Visual Recall Task (Visuospatial, Verbal)
 4. n-back Task
 
 WARNING

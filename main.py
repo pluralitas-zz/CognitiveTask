@@ -1,6 +1,5 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
-# WARNING! All changes made in this file will be lost!
 import sys, os, time, threading, numpy as np
 import VideoPlayer, cdown, task_flank, task_workmem, task_nback, writeout #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
