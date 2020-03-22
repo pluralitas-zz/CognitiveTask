@@ -1,7 +1,7 @@
 # CognitiveTask
  Cognitive Cycling ITF project
 
-* Uses Python 3.6.10 (Anaconda 4.3.0) on Windows 10
+* Uses Python 3.6.10 (Anaconda 4.3.0) on Windows 10 64bit
 * Needs video codec to play videos, recommends k-lite codec pack basic https://codecguide.com/download_k-lite_codec_pack_basic.htm
 * Requires installation of libant-master/libant-master/setup.py by typing "python setup.py install" into anaconda prompt
 * Other bits and bobs to install see error when running it; pyserial, pyglet, pynput, nidaqmx, psychopy --no-deps
