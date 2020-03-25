@@ -313,8 +313,8 @@ def determine_optimal_sample_rate(joystick=None):
 
     j = joystick
 
-    print("Move the joystick or generate button events characteristic of your app")
-    print("Hit Ctrl-C or press button 6 (<, Back) to quit.")
+    # print("Move the joystick or generate button events characteristic of your app")
+    # print("Hit Ctrl-C or press button 6 (<, Back) to quit.")
 
     # here I use the joystick object to store some state data that
     #  would otherwise not be in scope in the event handlers
@@ -331,7 +331,7 @@ def determine_optimal_sample_rate(joystick=None):
 
     @j.event
     def on_missed_packet(number):
-        print('missed %(number)d packets' % vars())
+        # print('missed %(number)d packets' % vars())
         total = j.received_packets + j.missed_packets
         reliability = j.received_packets / float(total)
         if reliability < j.target_reliability:
@@ -341,7 +341,7 @@ def determine_optimal_sample_rate(joystick=None):
     while not j.quit:
         j.dispatch_events()
         time.sleep(1.0 / j.probe_frequency)
-    print("final probe frequency was %s Hz" % j.probe_frequency)
+    # print("final probe frequency was %s Hz" % j.probe_frequency)
 
 
 def sample_first_joystick():
@@ -361,7 +361,7 @@ def sample_first_joystick():
     print('using %d' % j.device_number)
 
     battery = j.get_battery_information()
-    print(battery)
+    # print(battery)
     
     # When the controller button is pressed, it will activate this event and show the Button No. and pressed == 1, if not pressed, pressed == 0
     @j.event
@@ -423,7 +423,7 @@ def sample_first_joystick():
         left_speed = 0
         right_speed = 0
 
-        print('axis', axis, value)
+        # print('axis', axis, value)
         if axis == "left_trigger":
             left_speed = value
         elif axis == "right_trigger":

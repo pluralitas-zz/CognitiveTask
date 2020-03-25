@@ -73,6 +73,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.TimeDisplay) #connect QtTimer for Elapsed Time
         #self.vidFrame.startVid() #Start Video
 
+        
         try: #try to connect to parallel port
             self.paraport = parallel.ParallelPort(address=0x0E100) #LPT port PCI Express address for EEG PC in ERB 1104
             self.paraportstat = True
@@ -455,6 +456,8 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top, for Games only
         root.setAttribute(QtCore.Qt.WA_TranslucentBackground,on=True)
 
+        root.closeEvent = self.closeEvent
+
         # Define Video Task as centralwidget
         self.vidFrame = VideoPlayer.MainWid(self)
         self.setCentralWidget(self.vidFrame)
@@ -771,8 +774,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.pedalBackend.terminate()
         self.daqbackend.terminate()
-
         event.accept()
+        sys.exit()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
