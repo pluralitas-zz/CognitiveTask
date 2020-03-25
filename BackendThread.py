@@ -99,7 +99,7 @@ class PedalThread(QtCore.QThread):
     baseline_init=main()
     
     #Run function
-    def run(self):      
+    def run(self):
         while True:       
             self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
             '''

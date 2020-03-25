@@ -40,13 +40,6 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.counter=0
         ###################################################
 
-# Define your Sham events here
-    def sham_run(self):
-        ################################################### 
-        ###############     RUN TASKS     #################
-        self.cd.run_cd(10)
-        ###################################################
-
     class Controller(): #Create Controller Class
         
         def __init__(self): #intialise controller
@@ -71,7 +64,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
-        self.GameBtn.clicked.connect(lambda:self.GameBtnPress())
+        self.GameBtn.clicked.connect(lambda:self.NoHWButton())
+        #self.GameBtn.clicked.connect(lambda:self.Gamebutton()) #Change 2nd Start button to Game Mode
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
@@ -321,16 +315,11 @@ class Ui_root(QtWidgets.QMainWindow):
         else: #start video if speed >=pausespd
             self.playVid()
 
-# Start Button Stuff
+# Start Task Button Stuff & Game Start Button
     def StartBtnPress(self): #Start Video/Task Mode
         self.StartBtn.hide()
         self.GameBtn.hide()
         self.vidFrame.startVid() #Start video 
-
-        #Initialize Controller
-        self.controller=self.Controller()        
-        th_Controller=threading.Thread(target=self.controller.thread_Controller, args=(),daemon=True)
-        th_Controller.start()
 
         #start Backend signal slot connection
         self.initBackendThread()
@@ -342,7 +331,37 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.task_run()
 
-    def GameBtnPress(self): #Start Game mode
+    def NoHWButton(self): #Start No Hardware Task mode
+        self.StartBtn.hide()
+        self.GameBtn.hide()
+        self.vidFrame.startVid() #Start video
+
+        #Hide HUD Frame
+        self.HUDValAccPwr.hide()
+        #self.HUDValHR.hide()
+        self.HUDValInstCad.hide()
+        self.HUDValInstPwr.hide()
+        self.HUDValPBalL.hide()
+        self.HUDValPBalR.hide()
+        self.HUDValSpd.hide()
+        
+        self.HUDLabAccPwr.hide()
+        #self.HUDLabHR.hide()
+        self.HUDLabInstCad.hide()
+        self.HUDLabInstPwr.hide()
+        self.HUDLabPedBal.hide()
+        self.HUDLabPedBalSpr.hide()
+        self.HUDLabSpd.hide()
+
+        #start Backend signal slot connection
+        self.initBackendThread()
+        
+        # Start thread(s)
+        self.timer.start(1000)
+
+        self.task_run()
+
+    def Gamebutton(self): #Start Game mode
         self.StartBtn.hide()
         self.GameBtn.hide()
 
@@ -353,21 +372,15 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskLabLevel.hide()
         self.TaskValLevel.hide()
         #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint) #make window transparent
-        
-        #Initialize Controller
-        self.controller=self.Controller()        
-        th_Controller=threading.Thread(target=self.controller.thread_Controller, args=(),daemon=True)
-        th_Controller.start()
 
         #start Backend signal slot connection
         self.initBackendThread()
-        
+        self.daqbackend.encorderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
+
         # Start thread(s)
         self.pedalBackend.start()
         self.daqbackend.start()
         self.timer.start(1000)
-
-        self.sham_run()
 
 # HUD Stuff
     def TimeDisplay(self):
@@ -420,9 +433,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.daqbackend= EncDAQBackThread()
         self.pedalwoutarr = np.ones((self.daqbackend.samples,4)) #for use with writeout
 
+        #Initialize Controller
+        self.controller=self.Controller()        
+        self.th_Controller=threading.Thread(target=self.controller.thread_Controller, args=(),daemon=True)
+        self.th_Controller.start()
+
         # Signal connect to Slots for Data
         self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 
-        self.daqbackend.encorderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot
+        
         self.daqbackend.encorderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.daqbackend._PPGHeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
@@ -434,7 +452,7 @@ class Ui_root(QtWidgets.QMainWindow):
         root.resize(1600, 900)
         root.setMinimumSize(QtCore.QSize(1600, 900))
         root.setMaximumSize(QtCore.QSize(1600, 900))
-        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top, for Games only
         root.setAttribute(QtCore.Qt.WA_TranslucentBackground,on=True)
 
         # Define Video Task as centralwidget
@@ -734,9 +752,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabSpd.setText(_translate("root", "<font color='White'>Speed (RPM)</font>"))
         self.HUDLabAccPwr.setText(_translate("root", "<font color='White'>Accum. Power (W)</font>"))
         #Start Btn
-        self.StartBtn.setText(_translate("root", "Start Task"))
+        self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Game Btn
-        self.GameBtn.setText(_translate("root", "Start Cycle"))
+        self.GameBtn.setText(_translate("root", "Task Only"))
         self.QuesBtn_Left.setText(_translate("root", "L"))
         self.QuesBtn_Down.setText(_translate("root", "D"))
         self.QuesBtn_Up.setText(_translate("root", "U"))
@@ -747,6 +765,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.QuesBtn_A.setText(_translate("root", "A"))
         self.QuesBtn_ShldL.setText(_translate("root", "L1"))
         self.QuesBtn_ShldR.setText(_translate("root", "R1"))
+
+# Close Program Stuff
+    def closeEvent(self, event):
+
+        self.pedalBackend.terminate()
+        self.daqbackend.terminate()
+
+        event.accept()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

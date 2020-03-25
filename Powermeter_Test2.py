@@ -97,7 +97,9 @@ def DAQfunc(avgPower,baseCount):
             #print(type(output_raw))
     return [np.median(np.array(output_raw),axis=0),avgPower_baseline,baseLine_count]
 
-if __name__ == "__main__":  
+if __name__ == "__main__": 
     y=main()
-    #print(y)
+    while 1:
+        pedalRead=DAQfunc(y[0],y[1])
+        print(pedalRead)
          

@@ -2,18 +2,26 @@ import serial, time
 
 class encoder:
     #for speed calculation
-    enc = serial.Serial(port='COM6',baudrate=38400,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS,rtscts=True) #Optical Encoder config E1090BK25 chang chun hua te guang dian   
-    spddegold = 0
+    def __init__(self):
+        self.encfound = True
+        try:
+            self.enc = serial.Serial(port='COM6',baudrate=38400,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS,rtscts=True) #Optical Encoder config E1090BK25 chang chun hua te guang dian   
+        except:
+            self.encfound = False
 
     @property
     def deg(self):
-        self.enc.flushInput()
-        self.encraw=self.enc.readline(5) # read 5 btyes of data {1: 0xff, 2: 0x81, 3: 2bits high [4pos], 4: 8bits low [255pos]}
-        self.enc.flushInput()
-            
-        self.enchigh = int.from_bytes(self.encraw[2:3], byteorder='big')
-        self.enclow = int.from_bytes(self.encraw[3:4], byteorder='big')
-        self.encdeg = (self.enchigh*90) + round((self.enclow*90/256),1)
+        if self.encfound == True:
+            self.enc.flushInput()
+            self.encraw=self.enc.readline(5) # read 5 btyes of data {1: 0xff, 2: 0x81, 3: 2bits high [4pos], 4: 8bits low [255pos]}
+            self.enc.flushInput()
+                
+            self.enchigh = int.from_bytes(self.encraw[2:3], byteorder='big')
+            self.enclow = int.from_bytes(self.encraw[3:4], byteorder='big')
+            self.encdeg = (self.enchigh*90) + round((self.enclow*90/256),1)
+        else:
+            self.encdeg = 0
+
         return self.encdeg
 
 
