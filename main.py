@@ -1,16 +1,21 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback, writeout #custom .py
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
 from BackendThread import EncDAQBackThread, PedalThread
+from writeout import wrtout
 from psychopy import parallel
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
     _answer = QtCore.pyqtSignal(str) #QtSlot for answering questions in task subpy
+
+# Define your USER ID/NAME HERE
+    UserIDNAME = "Test"
+
 # Define your task events here
     def task_run(self):
         ################################################### 
@@ -299,6 +304,7 @@ class Ui_root(QtWidgets.QMainWindow):
 # Write out to file Stuff
     def writeout(self,data): #time, elapsed time, deg, speed, heartrate, EMG x 4, InstPower, AccumPower, InstCadence, pedalBalRight
         self.comb = np.column_stack([np.ones((self.daqbackend.samples,1))*time.time(),np.ones((self.daqbackend.samples,1))*self.timecount,data,self.pedalwoutarr])
+        self.writefile.appendfile(self.comb) #write data to file
 
 # Video Playing Stuff
     def pauseVid(self): #Pause video + Show warning "speed too low"
@@ -439,9 +445,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.th_Controller=threading.Thread(target=self.controller.thread_Controller, args=(),daemon=True)
         self.th_Controller.start()
 
+        #Initialise and create Writeout file with username
+        self.writefile=wrtout(self.UserIDNAME)
+
         # Signal connect to Slots for Data
         self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 
-        
         self.daqbackend.encorderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.daqbackend._PPGHeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout

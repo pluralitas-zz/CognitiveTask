@@ -2,8 +2,6 @@ import sys, os, random
 import main #custom .py
 from PyQt5 import QtCore, QtWidgets, QtMultimediaWidgets, QtMultimedia
 
-
-
 class MainWid(QtWidgets.QWidget):
     def __init__(self,parent):
         self.playstate = 0
