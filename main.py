@@ -438,7 +438,7 @@ class Ui_root(QtWidgets.QMainWindow):
         # Create backend Threads
         self.pedalBackend=PedalThread()
         self.daqbackend= EncDAQBackThread()
-        self.pedalwoutarr = np.ones((self.daqbackend.samples,4)) #for use with writeout
+        self.pedalwoutarr = np.ones((self.daqbackend.samples,4))*np.nan #for use with writeout
 
         #Initialize Controller
         self.controller=self.Controller()        
