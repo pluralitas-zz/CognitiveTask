@@ -14,7 +14,7 @@ class daq:
     def acqdaq(self,rate,sam):
         if self.daqfound == True:
             with nidaqmx.Task() as task:
-                task.ai_channels.add_ai_voltage_chan("Dev1/ai0:4") #ai0 = PPG Digital Out, ai1:4 = EMG
+                task.ai_channels.add_ai_voltage_chan("Dev1/ai0:4") #ai0 = PPG Digital Out, ai1:4 = QC Left, HS Left, QC Right, HS Right
                 task.timing.cfg_samp_clk_timing(rate=rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE)
                 raw_in = task.read(number_of_samples_per_channel=sam)
             arr_out = np.array(raw_in)

@@ -81,6 +81,7 @@ class EncDAQBackThread(QtCore.QThread):
                 self.degtravelled=[]
 
         ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
+            # pad signal to equal sample size of EMG for DAQ
             self.HRarr = self.samparr * self.HR
             self.speedarr = self.samparr * self.speed
             self.degnowarr = self.samparr * self.degnow
