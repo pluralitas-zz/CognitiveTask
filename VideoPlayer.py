@@ -5,9 +5,11 @@ from PyQt5 import QtCore, QtWidgets, QtMultimediaWidgets, QtMultimedia
 class MainWid(QtWidgets.QWidget):
     def __init__(self,parent):
         self.playstate = 0
+        self.vidpath = "C:\Data"
         self.videos = "Videos" #location of videos relative to main.py
-        self.vidd = os.path.join(os.getcwd(),self.videos) # actual path of folders
         #self.vidd = os.path.join(os.path.dirname(__file__),self.videos)
+        #self.vidd = os.path.join(os.getcwd(),self.videos) # using Videos folder in the CognitiveTask folder
+        self.vidd = os.path.join(self.vidpath, self.videos) # using C:\Data\Videos folder 
         self.vidFile = [files for files in os.listdir(self.vidd) if files.endswith(".mp4")] #find all video files in video folder
         super(MainWid,self).__init__(parent)  
 

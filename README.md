@@ -5,7 +5,7 @@
 * Needs video codec to play videos; recommends k-lite codec pack basic https://codecguide.com/download_k-lite_codec_pack_basic.htm
 * Requires installation of libant-master/libant-master/setup.py, go to folder and type "python setup.py install" into anaconda prompt with admin permissions
 * Other bits and bobs to install see error when running it; pyserial, pyglet, pynput, nidaqmx, "psychopy --no-deps"
-* Videos not included in commit, in .mp4 format under the \Videos folder.
+* Videos not included in commit, in .mp4 format under the \Videos folder or C:\Data\Videos; change it in VideoPlayer.py
 * Usage with controller/keyboard/touchscreen/mouse; controller recommended
 * DAQ, Encoder and Pedal data saves out to C:\Data folder as .csv file.[DAQ at 1000Hz for 100 samples, Encoder slaved to DAQ at 10Hz, and Pedal Data at 1Hz]
 
