@@ -18,6 +18,8 @@ class flank_main(QtCore.QThread):
         self.ansarr = []
         self.answerflank = False
         self.level = 0
+        self.speed = 0
+        self.pausespd = 10
 
     def run_task(self,count):
         self.ansarr.clear()     #clear array
@@ -49,10 +51,15 @@ class flank_main(QtCore.QThread):
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
+        # hold task in while loop while user isnt cycling
+        while self.speed < self.pausespd: 
+            QtTest.QTest.qWait(100)
+
         #Randomise and display the answer
         self.disp = random.choice(self.questions2)
         self.taskarr.append(self.disp[:6])
         #print(self.taskarr)
+
         self._qnsdisp.emit(self.disp,800,150)
         QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
@@ -89,3 +96,6 @@ class flank_main(QtCore.QThread):
             self.ansarr.append(data[:6])
             #print(self.ansarr)
 
+    def current_speed(self,data,data2):
+        self.speed = data
+        self.pausespd = data2

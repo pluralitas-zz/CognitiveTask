@@ -12,6 +12,8 @@ from psychopy import parallel
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
     _answer = QtCore.pyqtSignal(str) #QtSlot for answering questions in task subpy
+    _speed = QtCore.pyqtSignal(int,int) #QtSlot for speed
+    
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
@@ -61,12 +63,13 @@ class Ui_root(QtWidgets.QMainWindow):
         self.counter = 0 #counter value to change task difficulty
         self.disparr = [] #array to store values for displaying on buttons
         self.previousBalance=50 #default Force Balance Value
+        self.pausespd = 10 #Pause/Play Threshold Speed
         self.ansdict={}
         self.timecount = 0
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         #self.picd = os.path.join(os.getcwd(),self.pictures)
         self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
-
+        
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
         self.GameBtn.clicked.connect(lambda:self.NoHWButton())
@@ -103,6 +106,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.flnk._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.flnk.append_ans)
+        self._speed.connect(self.flnk.current_speed)
 
         #connect working memory Verbal task
         self.wrkVerb = task_workmem.workmemVerb_main()
@@ -115,6 +119,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.wrkVerb._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.wrkVerb.append_ans)
+        self._speed.connect(self.wrkVerb.current_speed)
 
         #connect n-back verbal task
         self.nbckVerb = task_nback.nbackVerb_main()
@@ -127,6 +132,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckVerb._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.nbckVerb.append_ans)
+        self._speed.connect(self.nbckVerb.current_speed)
 
         #connect nback task
         self.nbckSpace = task_nback.nbackSpace_main()
@@ -139,6 +145,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckSpace._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.nbckSpace.append_ans)
+        self._speed.connect(self.nbckSpace.current_speed)
 
         #connect working memory Spatial task
         self.wrkSpace = task_workmem.workmemSpace_main()
@@ -151,6 +158,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.wrkSpace._paraport(self.paraport_send)
         except:pass
         self._answer.connect(self.wrkSpace.append_ans)
+        self._speed.connect(self.wrkSpace.current_speed)
 
         #create shortcut for buttons
         self.QuesBtn_A.setShortcut("c")
@@ -316,8 +324,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.hide()
 
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
-        pausespd = 10 #Pause/Play Threshold Speed
-        if data < pausespd: #Pause video if speed <pausespd
+        if data < self.pausespd: #Pause video if speed <pausespd
             self.pauseVid()
         else: #start video if speed >=pausespd
             self.playVid()
@@ -399,8 +406,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValHR.setText("<font color='White'>"+ self.heartrate +"</font>")
 
     def EncoderDisplay(self, data): # UI Slot to recieve Encoder
-        self._speed=str(data)
-        self.HUDValSpd.setText("<font color='White'>"+ self._speed+"</font>")
+        self.speed=str(data)
+        self._speed.emit(data,self.pausespd)
+        self.HUDValSpd.setText("<font color='White'>"+ self.speed+"</font>")
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight

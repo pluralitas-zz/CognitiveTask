@@ -22,6 +22,8 @@ class nbackVerb_main(QtCore.QThread):
         self.answernbackVerb = False
         self.answerappended = True
         self.level = 0
+        self.speed = 0
+        self.pausespd = 10
         
     def run_task(self,count):
         self.taskarr.clear()    #clear array
@@ -72,6 +74,10 @@ class nbackVerb_main(QtCore.QThread):
 
         for i in range(len(self.taskarr)):
             self.answerappended = False
+
+            while self.speed < self.pausespd: #hold task in while loop while user isnt cycling
+                QtTest.QTest.qWait(100)
+
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],800,150)
             QtTest.QTest.qWait(100)
@@ -127,6 +133,10 @@ class nbackVerb_main(QtCore.QThread):
             else:
                 self._counter.emit(0)
                 print("Wrong")
+    
+    def current_speed(self,data,data2):
+        self.speed = data
+        self.pausespd = data2
 
 class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
@@ -149,7 +159,9 @@ class nbackSpace_main(QtCore.QThread):
         self.answernbackSpace = False
         self.answerappended = True
         self.level = 0
-        
+        self.speed = 0
+        self.pausespd = 10
+
     def run_task(self,count):
         self.taskarr.clear()    #clear array
 
@@ -193,15 +205,19 @@ class nbackSpace_main(QtCore.QThread):
         self._ansdisp.emit(self.answers)
         self._qnsshowhide.emit(1) #show the answer buttons
 
-        #Delay before questions start showing on screen
+        # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):
             self.answerappended = False
+
+            #hold task in while loop while user isnt cycling
+            while self.speed < self.pausespd: 
+                QtTest.QTest.qWait(100)
+
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],600,600)
-
             QtTest.QTest.qWait(100) #wait before user can answer
             self.answernbackSpace = True
 
@@ -256,3 +272,7 @@ class nbackSpace_main(QtCore.QThread):
             else:
                 self._counter.emit(0)
                 print("Wrong")
+    
+    def current_speed(self,data,data2):
+        self.speed = data
+        self.pausespd = data2

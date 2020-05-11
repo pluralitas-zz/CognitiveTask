@@ -20,6 +20,8 @@ class workmemVerb_main(QtCore.QThread):
         self.ansarr = []
         self.answerworkmemVerb = False
         self.level = 0
+        self.speed = 0
+        self.pausespd = 10
 
     def run_task(self,count):
         self.ansarr.clear()     #clear array
@@ -46,10 +48,15 @@ class workmemVerb_main(QtCore.QThread):
             self.anscount = 5
             self.dispcount = 3
             self.level = 1
-        self._level.emit(self.level)        
-        #Delay before questions start showing on screen
+        self._level.emit(self.level) 
+
+        # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
+
+        # hold task in while loop while user isnt cycling
+        while self.speed < self.pausespd: 
+            QtTest.QTest.qWait(100)
         
         # generate correct answers
         for i in range(self.dispcount):
@@ -106,6 +113,10 @@ class workmemVerb_main(QtCore.QThread):
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
 
+    def current_speed(self,data,data2):
+        self.speed = data
+        self.pausespd = data2
+
 class workmemSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -125,6 +136,8 @@ class workmemSpace_main(QtCore.QThread):
         self.ansarr = []
         self.answerworkmemSpace = False
         self.level = 0
+        self.speed = 0
+        self.pausespd = 10
         
     def run_task(self,count):
         self.ansarr.clear()     #clear array
@@ -152,9 +165,14 @@ class workmemSpace_main(QtCore.QThread):
             self.dispcount = 2
             self.level = 1
         self._level.emit(self.level)
-        #Delay before questions start showing on screen
+        
+        # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
+
+        # hold task in while loop while user isnt cycling
+        while self.speed < self.pausespd: 
+            QtTest.QTest.qWait(100)
         
         # generate correct answers
         for i in range(self.dispcount):
@@ -210,3 +228,7 @@ class workmemSpace_main(QtCore.QThread):
             self.answerworkmemSpace = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
+
+    def current_speed(self,data,data2):
+        self.speed = data
+        self.pausespd = data2
