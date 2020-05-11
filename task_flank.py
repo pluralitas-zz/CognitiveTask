@@ -45,7 +45,7 @@ class flank_main(QtCore.QThread):
             self.level = 1
         self._level.emit(self.level)
 
-        self._ansdisp.emit(self.answers) #emit answers into buttons
+
 
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -54,6 +54,8 @@ class flank_main(QtCore.QThread):
         # hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
             QtTest.QTest.qWait(100)
+
+        self._ansdisp.emit(self.answers) #emit answers into buttons
 
         #Randomise and display the answer
         self.disp = random.choice(self.questions2)
