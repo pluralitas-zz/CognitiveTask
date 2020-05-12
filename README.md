@@ -1,6 +1,6 @@
 # CognitiveTask
 
-Cognitive Cycling ITF project:
+## Cognitive Cycling ITF project:
 
 * Uses Python 3.6.10 (Anaconda 3 4.4.0) on Windows 10 64-bit
 * Needs video codec to play videos; recommends [K-Lite Codec Pack Basic](https://codecguide.com/download_k-lite_codec_pack_basic.htm)
@@ -10,7 +10,7 @@ Cognitive Cycling ITF project:
 * Usage with controller/keyboard/touchscreen/mouse; controller recommended
 * DAQ, Encoder and Pedal data saves out to C:\Data folder as .csv file.[DAQ at 1000Hz for 100 samples, Encoder slaved to DAQ at 10Hz, and Pedal Data at 1Hz]
 
-Hardware:
+## Hardware:
 
 1. Dell Optiplex 7060
 2. TP-Link UH700 USB 3.0 7-Port USB Hub
@@ -21,7 +21,7 @@ Hardware:
 7. EMG on ai1-4 on USB-6001 DAQ (Dev1)
 8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library
 
-Currently 4 tasks are implemented:
+## Currently 4 tasks are implemented:
 
 1. Erikssen Flanker Task
 2. Verbal Recall Task (Visuospatial)
@@ -29,8 +29,9 @@ Currently 4 tasks are implemented:
 4. Visual Recall Task (Visuospatial)
 5. Visual Recall Task (Verbal)
 6. n-back Task
+7. Divided Attention Task (Visual)
 
-Steps to install anaconda and python
+## Steps to install anaconda and python
 
 1. Install [Anaconda 3 4.4.0 64-bit](https://repo.anaconda.com/archive/Anaconda3-4.4.0-Windows-x86_64.exe)
 2. `conda update conda -y`
@@ -50,6 +51,10 @@ Steps to install anaconda and python
     3. `pip install PyQt5-sip`
     4. `pip install PyQt5`
 
-WARNING
+## Troubleshooting
+* ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n' ```
+    * unplug and replug the ANT+ USB stick
+
+## WARNING
 
 * Modify xinput3_KeyboardControll_NES_Shooter_addGameTask.py for xinput vesion when changing between Win10, Win 8/7 and WinVista

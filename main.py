@@ -1,7 +1,7 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback #custom .py
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
@@ -22,11 +22,16 @@ class Ui_root(QtWidgets.QMainWindow):
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
+        # self.cd.run_cd(10)
+        # for i in range(15):
+        #     self.flnk.run_task(self.counter)
+        # self.counter=0
+        
         self.cd.run_cd(10)
         for i in range(15):
-            self.flnk.run_task(self.counter)
+            self.divattn.run_task(self.counter)
         self.counter=0
-        
+
         # self.cd.run_cd(5)
         # for i in range(1):
             # self.wrkVerb.run_task(self.counter)
@@ -69,7 +74,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         #self.picd = os.path.join(os.getcwd(),self.pictures)
         self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
-        
+
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
         self.GameBtn.clicked.connect(lambda:self.NoHWButton())
@@ -94,6 +99,18 @@ class Ui_root(QtWidgets.QMainWindow):
         #connect countdown
         self.cd = cdown.countdown_main()
         self.cd._qnsdisp.connect(self.disp_qns)
+
+        #connect divided attention task
+        self.divattn = task_divAttn.divattn_main()
+        self.divattn._qnsdisp.connect(self.disp_qns)
+        self.divattn._ansdisp.connect(self.disp_ans)
+        self.divattn._counter.connect(self.counter_add)
+        self.divattn._qnsshowhide.connect(self.showhideAnswers)
+        try:
+            self.divattn._paraport(self.paraport_send)
+        except:pass
+        self._answer.connect(self.divattn.append_ans)
+        self._speed.connect(self.divattn.current_speed)
 
         #connect flank task
         self.flnk = task_flank.flank_main()
@@ -245,7 +262,7 @@ class Ui_root(QtWidgets.QMainWindow):
             for i in range(pad_len):
                 data.append('Blank.png')
                 #data.append('Blank.png')
-
+        
         self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
         
         icon = QtGui.QIcon()

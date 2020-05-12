@@ -11,8 +11,7 @@ class divattn_main(QtCore.QThread):
 
     def __init__(self):
         super(divattn_main, self).__init__()
-        self.question = "DivAttenDot.png"
-        self.answers = ["Blank.png","Blank.png","Blank.png","Blank.png",  "Blank.png","Blank.png","Blank.png","Blank.png"  ,"Blank.png","Blank.png"]
+        self.question = "Divattn.png"
         self.taskarr = []
         self.ansarr = []
         self.answerdivattn = False
@@ -22,34 +21,43 @@ class divattn_main(QtCore.QThread):
 
     def run_task(self,count):
         self.ansarr.clear()     #clear array
-        self.taskarr.clear()    #clear array
+        self.taskarr.clear()
 
         # randomise where the self.question image is going to show on self.answers
         qnsloc = random.randrange(0,9)
-        self.answers2[qnsloc] = self.question
+        self.answers = []
+        for i in range(10):
+            self.answers.append('Blank.png')
+        
+        self.answers[qnsloc] = self.question
+        self.taskarr.append(self.question)
 
         ##Determine difficulty
         if count >= 10:
-            showtime = 500
+            waittime = 200
         else:
-            showtime = 1000
+            waittime = 500
 
+        #Delay before questions start showing on screen
+        QtTest.QTest.qWait(100)
         self._level.emit(99)
 
-        self._ansdisp.emit(self.answers2) #emit answers into buttons
+        self._ansdisp.emit(self.answers) #emit answers into buttons
+        QtTest.QTest.qWait(100)
+        
         self.answerdivattn = True
         self._qnsshowhide.emit(1) #show the answer buttons
 
-
-        while len(self.ansarr) < len(self.question): #While loop to hold code till answered or time passes
+        timeCount = 0
+        while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
             if timeCount == 100:
                 break
 
-        self.answerflank = False
+        self.answerdivattn = False
 
-        if self.ansarr == self.question: #Check if answered correctly or not
+        if self.ansarr == self.taskarr: #Check if answered correctly or not
             print("Correct")
             self._counter.emit(1)
         else:
@@ -59,12 +67,13 @@ class divattn_main(QtCore.QThread):
         print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
+        self._qnsshowhide.emit(0)
 
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
         if self.answerdivattn == True:
-            self.ansarr.append(data[:6])
-            #print(self.ansarr)
+            self.ansarr.append(data)
+            # print(self.ansarr)
 
     def current_speed(self,data,data2):
         self.speed = data

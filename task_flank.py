@@ -26,7 +26,7 @@ class flank_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Show center point
-        self._qnsdisp.emit("Center.png",800,150) 
+        self._qnsdisp.emit("Center.png",800,150)
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
@@ -88,7 +88,7 @@ class flank_main(QtCore.QThread):
         print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
-        #self._qnsshowhide.emit(0) #hide the answer buttons
+        self._qnsshowhide.emit(0) #hide the answer buttons
 
         #QtTest.QTest.qWait(10000) #wait between next test after everything is done
 
