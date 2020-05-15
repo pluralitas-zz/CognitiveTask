@@ -26,10 +26,11 @@ class Ui_root(QtWidgets.QMainWindow):
         # for i in range(15):
         #     self.flnk.run_task(self.counter)
         # self.counter=0
-        
+        divattn = ['flank', 'nback-verbal', 'nback-visual', 'working-verbal', 'working-visual']
+        tsktype = random.choice(divattn)
         self.cd.run_cd(10)
         for i in range(15):
-            self.divattn.run_task(self.counter)
+            self.divattn.run_task(self.counter,task=tsktype)
         self.counter=0
 
         # self.cd.run_cd(5)
