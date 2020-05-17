@@ -18,6 +18,9 @@ class Ui_root(QtWidgets.QMainWindow):
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
 
+# Define TRAINING TIME HERE 
+    traintime = QtCore.QTime(0,30,0) #(hours, minutes, seconds)
+
 # Define your task events here
     def task_run(self):
         ################################################### 
@@ -416,8 +419,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # HUD Stuff
     def TimeDisplay(self):
-        self.timecount += 1
-        self.HUDValTime.setText("<font color='White'>"+ str(self.timecount) +"</font>")
+        #self.timecount += 1
+        self.timeleft = self.traintime.addSecs(-1)
+        self.timedisp = self.timeleft.toString()
+        self.HUDValTime.setText("<font color='White'>"+ str(self.timeleft) +"</font>")
 
     def HRDisplay(self,data):
         self.heartrate = str(data)

@@ -21,7 +21,7 @@
 7. EMG on ai1-4 on USB-6001 DAQ (Dev1)
 8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library
 
-## Currently 4 tasks are implemented:
+## Currently 5 tasks are implemented:
 
 1. Erikssen Flanker Task
 2. Verbal Recall Task (Visuospatial)
@@ -29,7 +29,7 @@
 4. Visual Recall Task (Visuospatial)
 5. Visual Recall Task (Verbal)
 6. n-back Task
-7. Divided Attention Task (Visual)
+7. Divided Attention Task (able to fake other tasks)
 
 ## Steps to install anaconda and python
 
