@@ -1,7 +1,7 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
-import sys, os, time, threading, numpy as np
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn #custom .py
+import sys, os, time, threading, numpy as np, random
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn, trngComplete #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
@@ -13,13 +13,13 @@ _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
     _answer = QtCore.pyqtSignal(str) #QtSlot for answering questions in task subpy
     _speed = QtCore.pyqtSignal(int,int) #QtSlot for speed
-    
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
 
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,30,0) #(hours, minutes, seconds)
+    trainsec = QtCore.QTime(0,0,0).secsTo(traintime)
 
 # Define your task events here
     def task_run(self):
@@ -29,31 +29,41 @@ class Ui_root(QtWidgets.QMainWindow):
         # for i in range(15):
         #     self.flnk.run_task(self.counter)
         # self.counter=0
-        divattn = ['flank', 'nback-verbal', 'nback-visual', 'working-verbal', 'working-visual']
-        tsktype = random.choice(divattn)
-        self.cd.run_cd(10)
-        for i in range(15):
-            self.divattn.run_task(self.counter,task=tsktype)
-        self.counter=0
+        self.counter = 0
+        while self.timecount > -self.trainsec:
+            QtTest.QTest.qWait(1000)
+            # if self.timecount > -300: # 5 mins
+            #     self.cd.run_cd(60) #seconds
+            #     for i in range(20):
+            #         self.flnk.run_task(self.counter)
+            
+            # elif -300 >= self.timecount > -600:
+            #     self.cd.run_cd(60)
+            #     for i in range(5):
+            #         self.wrkVerb.run_task(self.counter)
 
-        # self.cd.run_cd(5)
-        # for i in range(1):
-            # self.wrkVerb.run_task(self.counter)
-        # self.counter=0
-        
-        # self.cd.run_cd(5)
-        # for i in range(1):
-            # self.wrkSpace.run_task(self.counter)
+            # elif self.timecount > -900:
+            #     self.cd.run_cd(60)
+            #     for i in range(5):
+            #         self.wrkSpace.run_task(self.counter)
+
+            # elif -900 >= self.timecount > -1200:
+            #     self.cd.run_cd(60)
+            #     self.nbckVerb.run_task(self.counter)
+
+            # elif -1200 >= self.timecount > -1500:
+            #     self.cd.run_cd(60)
+            #     self.nbckSpace.run_task(self.counter)
+
+        self.complet.run_com(1)
+
+        # divattn = ['flank', 'nback-verbal', 'nback-visual', 'working-verbal', 'working-visual']
+        # tsktype = random.choice(divattn)
+        # self.cd.run_cd(10)
+        # for i in range(15):
+        #     self.divattn.run_task(self.counter,task=tsktype)
         # self.counter=0
 
-        # self.cd.run_cd(5)
-        # self.nbckVerb.run_task(self.counter)
-        # self.counter=0
-
-        
-        # self.cd.run_cd(5)
-        # self.nbckSpace.run_task(self.counter)
-        # self.counter=0
         ###################################################
 
     class Controller(): #Create Controller Class
@@ -103,6 +113,10 @@ class Ui_root(QtWidgets.QMainWindow):
         #connect countdown
         self.cd = cdown.countdown_main()
         self.cd._qnsdisp.connect(self.disp_qns)
+
+        #connect training complete screen
+        self.complet = trngComplete.trngCom_main()
+        self.complet._qnsdisp.connect(self.disp_qns)
 
         #connect divided attention task
         self.divattn = task_divAttn.divattn_main()
@@ -244,7 +258,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.CntDisplay()
 
         if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
-            self.vidFrame.restartVid()
+            #self.vidFrame.restartVid()
+            pass
     
     def paraport_send(self,data): #EEG send value over LPT PCI Express Parallel port
         if self.paraportstat == True:
@@ -419,10 +434,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # HUD Stuff
     def TimeDisplay(self):
-        #self.timecount += 1
-        self.timeleft = self.traintime.addSecs(-1)
+        self.timecount -= 1
+        self.timeleft = self.traintime.addSecs(self.timecount)
         self.timedisp = self.timeleft.toString()
-        self.HUDValTime.setText("<font color='White'>"+ str(self.timeleft) +"</font>")
+        self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
 
     def HRDisplay(self,data):
         self.heartrate = str(data)

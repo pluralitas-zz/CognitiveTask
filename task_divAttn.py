@@ -73,7 +73,7 @@ class divattn_main(QtCore.QThread):
             self._qnsdisp.emit("Blank.png",800,150) 
 
         #Delay before questions start showing on screen
-        QtTest.QTest.qWait(100)
+        QtTest.QTest.qWait(500)
         
 
         self._ansdisp.emit(self.answers) #emit answers into buttons
@@ -86,7 +86,7 @@ class divattn_main(QtCore.QThread):
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
-            if timeCount == 100:
+            if timeCount == waittime/10:
                 break
 
         self.answerdivattn = False
