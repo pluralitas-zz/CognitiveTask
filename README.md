@@ -17,8 +17,8 @@
 3. USB Controller (optional but recommended)
 4. Absolute Optical Encoder connected using RS232 Serial port (COM6)
 5. PowerTap P1 power meter using an ANT+ USB stick
-6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai0 on USB-6001 DAQ (Dev1)
-7. EMG on ai1-4 on USB-6001 DAQ (Dev1)
+6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai4 on USB-6001 DAQ (Dev1)
+7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
 8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library
 
 ## Currently 5 tasks are implemented:

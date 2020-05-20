@@ -50,7 +50,7 @@ class EncDAQBackThread(QtCore.QThread):
             
             #PPG calculations (depends on HRaltime, else just append into HRarrdaq)
             if len(self.HRarrdaq) != self.HRcalarray:
-                self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,0])
+                self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,4])
             else:
                 self.HRarrdiff = np.diff(self.HRarrdaq)
                 self.HRperiod = (np.where(self.HRarrdiff>self.HRxVal)[0]+1)/self.samp_rate
@@ -86,7 +86,7 @@ class EncDAQBackThread(QtCore.QThread):
             self.speedarr = self.samparr * self.speed
             self.degnowarr = self.samparr * self.degnow
             
-            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,1:]]) #stack deg, speed, heartrate and EMG x 4
+            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
             self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
         
         #############################    
