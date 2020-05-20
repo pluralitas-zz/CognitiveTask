@@ -26,10 +26,9 @@
 1. Erikssen Flanker Task
 2. Verbal Recall Task (Visuospatial)
 3. Verbal Recall Task (Verbal)
-4. Visual Recall Task (Visuospatial)
-5. Visual Recall Task (Verbal)
-6. n-back Task
-7. Divided Attention Task (able to fake other tasks)
+4. n-back Task (Visuospatial)
+5. n-back Task (Verbal)
+6. Divided Attention Task (able to fake other tasks)
 
 ## Steps to install anaconda and python
 
@@ -54,6 +53,9 @@
 ## Troubleshooting
 * ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n' ```
     * unplug and replug the ANT+ USB stick
+
+* ```unsupported operand type(s) for -: 'str' and 'int'```
+    * yet to solve
 
 ## WARNING
 
