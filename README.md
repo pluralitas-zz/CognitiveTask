@@ -14,8 +14,8 @@
 
 1. Dell Optiplex 7060
 2. TP-Link UH700 USB 3.0 7-Port USB Hub
-3. USB Controller (optional but recommended)
-4. Absolute Optical Encoder connected using RS232 Serial port (COM6)
+3. USB Gaming Controller (optional but recommended)
+4. Absolute Optical Encoder connected using RS232 Serial port (COM5)
 5. PowerTap P1 power meter using an ANT+ USB stick
 6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai4 on USB-6001 DAQ (Dev1)
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)

@@ -5,7 +5,7 @@ class encoder:
     def __init__(self):
         self.encfound = True
         try:
-            self.enc = serial.Serial(port='COM6',baudrate=38400,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS,rtscts=True) #Optical Encoder config E1090BK25 chang chun hua te guang dian   
+            self.enc = serial.Serial(port='COM5',baudrate=38400,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,bytesize=serial.EIGHTBITS,rtscts=True) #Optical Encoder config E1090BK25 chang chun hua te guang dian   
         except:
             self.encfound = False
 
@@ -54,4 +54,4 @@ class encoder:
 if __name__ == "__main__":
     enc = encoder()
     while 1:
-        print(str(enc.spd))
+        print(str(enc.deg))

@@ -11,17 +11,6 @@
 		<Property Name="server.vi.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="specify.custom.address" Type="Bool">false</Property>
 		<Item Name="HWTestMain.vi" Type="VI" URL="../HWTestMain.vi"/>
-		<Item Name="ProjectVoltageChannel" Type="NI-DAQmx Channel">
-			<Property Name="AI.Max" Type="Str">10</Property>
-			<Property Name="AI.MeasType" Type="Str">Voltage</Property>
-			<Property Name="AI.Min" Type="Str">-10</Property>
-			<Property Name="AI.TermCfg" Type="Str">Differential</Property>
-			<Property Name="AI.Voltage.Units" Type="Str">Volts</Property>
-			<Property Name="ChanType" Type="Str">Analog Input</Property>
-			<Property Name="Descr" Type="Str"></Property>
-			<Property Name="Name" Type="Str">ProjectVoltageChannel</Property>
-			<Property Name="PhysicalChanName" Type="Str">Dev1/ai0</Property>
-		</Item>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="DAQmx Clear Task.vi" Type="VI" URL="/&lt;vilib&gt;/DAQmx/configure/task.llb/DAQmx Clear Task.vi"/>
@@ -226,15 +215,76 @@
 				<Item Name="DWDT Uncompress Digital.vi" Type="VI" URL="/&lt;vilib&gt;/Waveform/DWDTOps.llb/DWDT Uncompress Digital.vi"/>
 				<Item Name="NI_AALBase.lvlib" Type="Library" URL="/&lt;vilib&gt;/Analysis/NI_AALBase.lvlib"/>
 				<Item Name="NI_AALPro.lvlib" Type="Library" URL="/&lt;vilib&gt;/Analysis/NI_AALPro.lvlib"/>
-				<Item Name="VISA Configure Serial Port" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port"/>
-				<Item Name="VISA Configure Serial Port (Instr).vi" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port (Instr).vi"/>
-				<Item Name="VISA Configure Serial Port (Serial Instr).vi" Type="VI" URL="/&lt;vilib&gt;/Instr/_visa.llb/VISA Configure Serial Port (Serial Instr).vi"/>
 			</Item>
 			<Item Name="lvanlys.dll" Type="Document" URL="/&lt;resource&gt;/lvanlys.dll"/>
 			<Item Name="nilvaiu.dll" Type="Document" URL="nilvaiu.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
 			</Item>
 		</Item>
-		<Item Name="Build Specifications" Type="Build"/>
+		<Item Name="Build Specifications" Type="Build">
+			<Item Name="CogCycHWTest" Type="EXE">
+				<Property Name="App_copyErrors" Type="Bool">true</Property>
+				<Property Name="App_INI_aliasGUID" Type="Str">{F357F52B-8B91-4985-AEC3-878E03E12E92}</Property>
+				<Property Name="App_INI_GUID" Type="Str">{F5AC16FD-1F22-4E89-96F0-B43113E4D8B1}</Property>
+				<Property Name="App_serverConfig.httpPort" Type="Int">8002</Property>
+				<Property Name="Bld_buildCacheID" Type="Str">{E861025D-C335-4C12-8049-ED1189594762}</Property>
+				<Property Name="Bld_buildSpecName" Type="Str">CogCycHWTest</Property>
+				<Property Name="Bld_excludeInlineSubVIs" Type="Bool">true</Property>
+				<Property Name="Bld_excludeLibraryItems" Type="Bool">true</Property>
+				<Property Name="Bld_excludePolymorphicVIs" Type="Bool">true</Property>
+				<Property Name="Bld_localDestDir" Type="Path">../builds/NI_AB_PROJECTNAME</Property>
+				<Property Name="Bld_localDestDirType" Type="Str">relativeToProject</Property>
+				<Property Name="Bld_modifyLibraryFile" Type="Bool">true</Property>
+				<Property Name="Bld_previewCacheID" Type="Str">{276E77E7-8A7E-4C24-8077-9E1023D3E631}</Property>
+				<Property Name="Bld_version.build" Type="Int">2</Property>
+				<Property Name="Bld_version.major" Type="Int">1</Property>
+				<Property Name="Destination[0].destName" Type="Str">CognitiveHWTest.exe</Property>
+				<Property Name="Destination[0].path" Type="Path">../builds/NI_AB_PROJECTNAME/CognitiveHWTest.exe</Property>
+				<Property Name="Destination[0].path.type" Type="Str">relativeToProject</Property>
+				<Property Name="Destination[0].preserveHierarchy" Type="Bool">true</Property>
+				<Property Name="Destination[0].type" Type="Str">App</Property>
+				<Property Name="Destination[1].destName" Type="Str">Support Directory</Property>
+				<Property Name="Destination[1].path" Type="Path">../builds/NI_AB_PROJECTNAME/data</Property>
+				<Property Name="Destination[1].path.type" Type="Str">relativeToProject</Property>
+				<Property Name="DestinationCount" Type="Int">2</Property>
+				<Property Name="Source[0].itemID" Type="Str">{A827727D-A87C-4BF8-89B1-1AFCBBE2F803}</Property>
+				<Property Name="Source[0].type" Type="Str">Container</Property>
+				<Property Name="Source[1].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[1].itemID" Type="Ref">/My Computer/HWTestMain.vi</Property>
+				<Property Name="Source[1].properties[0].type" Type="Str">Show menu bar</Property>
+				<Property Name="Source[1].properties[0].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[1].type" Type="Str">Show vertical scroll bar</Property>
+				<Property Name="Source[1].properties[1].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[10].type" Type="Str">Allow debugging</Property>
+				<Property Name="Source[1].properties[10].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[2].type" Type="Str">Show horizontal scroll bar</Property>
+				<Property Name="Source[1].properties[2].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[3].type" Type="Str">Show toolbar</Property>
+				<Property Name="Source[1].properties[3].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[4].type" Type="Str">Show Abort button</Property>
+				<Property Name="Source[1].properties[4].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[5].type" Type="Str">Window has title bar</Property>
+				<Property Name="Source[1].properties[5].value" Type="Bool">true</Property>
+				<Property Name="Source[1].properties[6].type" Type="Str">Show fp when called</Property>
+				<Property Name="Source[1].properties[6].value" Type="Bool">false</Property>
+				<Property Name="Source[1].properties[7].type" Type="Str">Window behavior</Property>
+				<Property Name="Source[1].properties[7].value" Type="Str">Default</Property>
+				<Property Name="Source[1].properties[8].type" Type="Str">Allow user to close window</Property>
+				<Property Name="Source[1].properties[8].value" Type="Bool">true</Property>
+				<Property Name="Source[1].properties[9].type" Type="Str">Window run-time position</Property>
+				<Property Name="Source[1].properties[9].value" Type="Str">Centered</Property>
+				<Property Name="Source[1].propertiesCount" Type="Int">11</Property>
+				<Property Name="Source[1].sourceInclusion" Type="Str">TopLevel</Property>
+				<Property Name="Source[1].type" Type="Str">VI</Property>
+				<Property Name="SourceCount" Type="Int">2</Property>
+				<Property Name="TgtF_companyName" Type="Str">The Chinese University of Hong Kong</Property>
+				<Property Name="TgtF_fileDescription" Type="Str">CogCycHWTest</Property>
+				<Property Name="TgtF_internalName" Type="Str">CogCycHWTest</Property>
+				<Property Name="TgtF_legalCopyright" Type="Str">Copyright 2020 The Chinese University of Hong Kong</Property>
+				<Property Name="TgtF_productName" Type="Str">CogCycHWTest</Property>
+				<Property Name="TgtF_targetfileGUID" Type="Str">{29B91A9A-4078-4C94-8F3A-58A8E8CE0C24}</Property>
+				<Property Name="TgtF_targetfileName" Type="Str">CognitiveHWTest.exe</Property>
+			</Item>
+		</Item>
 	</Item>
 </Project>
