@@ -5,9 +5,9 @@ import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn, t
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
-from BackendThread import EncDAQBackThread, PedalThread
+from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
 from writeout import wrtout
-from psychopy import parallel
+# from psychopy import parallel #for usage with Parallel Port DB25 LPT communication with EEG machine
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -101,11 +101,11 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.vidFrame.startVid() #Start Video
 
         
-        try: #try to connect to parallel port
-            self.paraport = parallel.ParallelPort(address=0x0E100) #LPT port PCI Express address for EEG PC in ERB 1104
-            self.paraportstat = True
-        except:
-            pass
+        # try: #try to connect to parallel port
+        #     self.paraport = parallel.ParallelPort(address=0x0E100) #LPT port PCI Express address for EEG PC in ERB 1104
+        #     self.paraportstat = True
+        # except:
+        #     pass
 
 # Task Stuff
     def initTaskSigSlot(self): #Initialise Task Stuff
@@ -124,9 +124,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.divattn._ansdisp.connect(self.disp_ans)
         self.divattn._counter.connect(self.counter_add)
         self.divattn._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.divattn._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.divattn._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.divattn.append_ans)
         self._speed.connect(self.divattn.current_speed)
 
@@ -137,9 +137,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._counter.connect(self.counter_add)
         self.flnk._level.connect(self.LevelDisplay)
         self.flnk._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.flnk._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.flnk._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.flnk.append_ans)
         self._speed.connect(self.flnk.current_speed)
 
@@ -150,9 +150,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._counter.connect(self.counter_add)
         self.wrkVerb._level.connect(self.LevelDisplay)
         self.wrkVerb._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.wrkVerb._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.wrkVerb._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.wrkVerb.append_ans)
         self._speed.connect(self.wrkVerb.current_speed)
 
@@ -163,9 +163,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._counter.connect(self.counter_add)
         self.nbckVerb._level.connect(self.LevelDisplay)
         self.nbckVerb._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.nbckVerb._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.nbckVerb._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.nbckVerb.append_ans)
         self._speed.connect(self.nbckVerb.current_speed)
 
@@ -176,9 +176,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._counter.connect(self.counter_add)
         self.nbckSpace._level.connect(self.LevelDisplay)
         self.nbckSpace._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.nbckSpace._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.nbckSpace._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.nbckSpace.append_ans)
         self._speed.connect(self.nbckSpace.current_speed)
 
@@ -189,9 +189,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._counter.connect(self.counter_add)
         self.wrkSpace._level.connect(self.LevelDisplay)
         self.wrkSpace._qnsshowhide.connect(self.showhideAnswers)
-        try:
-            self.wrkSpace._paraport(self.paraport_send)
-        except:pass
+        # try:
+        #     self.wrkSpace._paraport(self.paraport_send)
+        # except:pass
         self._answer.connect(self.wrkSpace.append_ans)
         self._speed.connect(self.wrkSpace.current_speed)
 
@@ -261,12 +261,12 @@ class Ui_root(QtWidgets.QMainWindow):
             #self.vidFrame.restartVid()
             pass
     
-    def paraport_send(self,data): #EEG send value over LPT PCI Express Parallel port
-        if self.paraportstat == True:
-            self.paraport.setData(0)
-            self.paraport.setData(data)            
-        else:
-            pass
+    # def paraport_send(self,data): #EEG send value over LPT PCI Express Parallel port
+    #     if self.paraportstat == True:
+    #         self.paraport.setData(0)
+    #         self.paraport.setData(data)            
+    #     else:
+    #         pass
 
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))

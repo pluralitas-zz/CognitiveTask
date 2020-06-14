@@ -36,11 +36,11 @@ class nbackVerb_main(QtCore.QThread):
         # Determine difficulty
         blanktime = 1000
         if count >= 10:
-            showtime = 300
+            showtime = 700
             self.nval = -2
             self.level = 3
         elif count >= 5:
-            showtime = 500
+            showtime = 1000
             self.nval = -2
             self.level = 2
         else:
@@ -80,10 +80,12 @@ class nbackVerb_main(QtCore.QThread):
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],800,150)
-            QtTest.QTest.qWait(100)
             self.answernbackVerb = True
-            QtTest.QTest.qWait(showtime-100)
+
+            QtTest.QTest.qWait(showtime)
             self._qnsdisp.emit("Blank.png",800,150)
+            QtTest.QTest.qWait(blanktime)
+
             timeCount = 0
             while timeCount < (blanktime/100):
                 QtTest.QTest.qWait(100)
@@ -173,11 +175,11 @@ class nbackSpace_main(QtCore.QThread):
         # Determine difficulty
         blanktime = 1000
         if count >= 10:
-            showtime = 300
+            showtime = 700
             self.nval = -2
             self.level = 3
         elif count >= 5:
-            showtime = 500
+            showtime = 1000
             self.nval = -2
             self.level = 2
         else:
@@ -205,23 +207,23 @@ class nbackSpace_main(QtCore.QThread):
         self._ansdisp.emit(self.answers)
         self._qnsshowhide.emit(1) #show the answer buttons
 
-        # Delay before questions start showing on screen
+        #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):
             self.answerappended = False
 
-            #hold task in while loop while user isnt cycling
-            while self.speed < self.pausespd: 
+            while self.speed < self.pausespd: #hold task in while loop while user isnt cycling
                 QtTest.QTest.qWait(100)
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],600,600)
-            QtTest.QTest.qWait(100) #wait before user can answer
             self.answernbackSpace = True
 
-            QtTest.QTest.qWait(showtime-100)
+            QtTest.QTest.qWait(showtime)
+            self._qnsdisp.emit("Blank.png",800,150)
+            QtTest.QTest.qWait(blanktime)
 
             timeCount = 0
             while timeCount < (blanktime/100):

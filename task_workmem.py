@@ -34,20 +34,22 @@ class workmemVerb_main(QtCore.QThread):
         self._qnsdisp.emit("Blank.png",800,150)
         
         # Determine difficulty
-        showtime = 1000
         blanktime = 1000
         if count >= 10:
             self.anscount = 10
-            self.dispcount = 5
+            self.dispcount = 2
             self.level = 3
+            showtime = 700
         elif count >= 5:
             self.anscount = 7
-            self.dispcount = 4
+            self.dispcount = 2
             self.level = 2
+            showtime = 1000
         else:
             self.anscount = 5
-            self.dispcount = 3
+            self.dispcount = 2
             self.level = 1
+            showtime = 1500
         self._level.emit(self.level) 
 
         # Delay before questions start showing on screen
@@ -108,8 +110,8 @@ class workmemVerb_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answerworkmemVerb == True:
             self.ansarr.append(data)
-            self.answerworkmemVerb = False
             #print(self.ansarr)
+            self.answerworkmemVerb = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
 
@@ -147,23 +149,25 @@ class workmemSpace_main(QtCore.QThread):
         # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
         QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,800)
+        self._qnsdisp.emit("Blank.png",800,150)
         
-        # Determine difficulty
-        showtime = 1000
+        # Determine difficulty            
         blanktime = 1000
         if count >= 10:
             self.anscount = 10
             self.dispcount = 2
             self.level = 3
+            showtime = 700
         elif count >= 5:
             self.anscount = 7
             self.dispcount = 2
             self.level = 2
+            showtime = 1000
         else:
             self.anscount = 5
             self.dispcount = 2
             self.level = 1
+            showtime = 1500
         self._level.emit(self.level)
         
         # Delay before questions start showing on screen
@@ -180,7 +184,7 @@ class workmemSpace_main(QtCore.QThread):
             self.taskarr.append(self.disp)
             self._qnsdisp.emit(self.disp,600,600)
             QtTest.QTest.qWait(showtime)
-            self._qnsdisp.emit("Blank.png",800,800)
+            self._qnsdisp.emit("Blank.png",800,150)
             QtTest.QTest.qWait(blanktime)
 
         self._qnsshowhide.emit(1) #show the answer buttons
