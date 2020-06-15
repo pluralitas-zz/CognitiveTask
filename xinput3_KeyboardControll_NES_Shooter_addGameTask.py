@@ -404,7 +404,7 @@ def sample_first_joystick():
                 keyboard.press('e')            
                 time.sleep(1)
                 keyboard.release('e') 
-            elif button == 8:  #Right Shoulder REQUIRE VERIFICATION
+            elif button == 10:  #Right Shoulder
                 keyboard.press('r')            
                 time.sleep(1)
                 keyboard.release('r') 

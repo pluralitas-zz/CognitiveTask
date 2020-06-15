@@ -18,52 +18,55 @@ class Ui_root(QtWidgets.QMainWindow):
     UserIDNAME = "Test"
 
 # Define TRAINING TIME HERE 
-    traintime = QtCore.QTime(0,30,0) #(hours, minutes, seconds)
-    trainsec = QtCore.QTime(0,0,0).secsTo(traintime)
+    traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
+    traintimemax = QtCore.QTime(1,15,0)
+    trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax)
 
 # Define your task events here
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
-        # self.cd.run_cd(10)
-        # for i in range(15):
-        #     self.flnk.run_task(self.counter)
-        # self.counter=0
+
+        ############## TYPES OF TASKS ################
+                # self.flnk.run_task(self.counter)
+                # self.wrkVerb.run_task(self.counter)
+                # self.wrkSpace.run_task(self.counter)
+                # self.nbckVerb.run_task(self.counter)
+                # self.nbckSpace.run_task(self.counter)
+
         self.counter = 0
-        while self.timecount > -self.trainsec:
+        while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
-            # if self.timecount > -300: # 5 mins
-            #     self.cd.run_cd(60) #seconds
-            #     for i in range(20):
-            #         self.flnk.run_task(self.counter)
+            self.counter = 0
+
+            if 1200 >= self.timecount > 300: #in seconds
+                self.cd.run_cd(5) #5 seconds count down
+                for i in range(30): #run flanker tasks 30 times
+                    self.flnk.run_task(self.counter)
+
+            elif 1500 >= self.timecount > 1200:
+                self.counter = 0
+                QtTest.QTest.qWait(1000)
             
-            # elif -300 >= self.timecount > -600:
-            #     self.cd.run_cd(60)
-            #     for i in range(5):
-            #         self.wrkVerb.run_task(self.counter)
+            elif 2400 >= self.timecount > 1500:
+                self.cd.run_cd(5) #5 seconds count down
+                for i in range(5):
+                    self.wrkVerb.run_task(self.counter)
 
-            # elif self.timecount > -900:
-            #     self.cd.run_cd(60)
-            #     for i in range(5):
-            #         self.wrkSpace.run_task(self.counter)
+            elif 2700 >= self.timecount > 2400:
+                self.counter = 0
+                QtTest.QTest.qWait(1000)
 
-            # elif -900 >= self.timecount > -1200:
-            #     self.cd.run_cd(60)
-            #     self.nbckVerb.run_task(self.counter)
+            elif 3600 >= self.timecount > 2700:
+                self.cd.run_cd(5) #5 seconds count down
+                for i in range(5):
+                    self.wrkSpace.run_task(self.counter)
 
-            # elif -1200 >= self.timecount > -1500:
-            #     self.cd.run_cd(60)
-            #     self.nbckSpace.run_task(self.counter)
+            else:
+                QtTest.QTest.qWait(1000)
+
 
         self.complet.run_com(1)
-
-        # divattn = ['flank', 'nback-verbal', 'nback-visual', 'working-verbal', 'working-visual']
-        # tsktype = random.choice(divattn)
-        # self.cd.run_cd(10)
-        # for i in range(15):
-        #     self.divattn.run_task(self.counter,task=tsktype)
-        # self.counter=0
-
         ###################################################
 
     class Controller(): #Create Controller Class
@@ -434,7 +437,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # HUD Stuff
     def TimeDisplay(self):
-        self.timecount -= 1
+        self.timecount += 1
         self.timeleft = self.traintime.addSecs(self.timecount)
         self.timedisp = self.timeleft.toString()
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")

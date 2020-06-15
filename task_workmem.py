@@ -216,7 +216,9 @@ class workmemSpace_main(QtCore.QThread):
         
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
-            if self.ran_disp not in self.anspadarr: #check for recurring values
+            if len(self.anspadarr) <= len(self.questions) and self.ran_disp not in self.anspadarr: #check if more than no. of available question variations
+                    self.anspadarr.append(self.ran_disp)
+            else:
                 self.anspadarr.append(self.ran_disp)
 
         random.shuffle(self.anspadarr) #shuffle array around

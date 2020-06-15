@@ -10,4 +10,3 @@ class trngCom_main(QtCore.QThread):
     def run_com(self,time):
         # Show center point
         self._qnsdisp.emit("Complete.png",800,400)
-        QtTest.QTest.qWait(60000) 
