@@ -35,13 +35,17 @@ class nbackVerb_main(QtCore.QThread):
         
         # Determine difficulty
         blanktime = 1000
-        if count >= 10:
+        if count >= 20:
+            showtime = 500
+            self.nval = -2
+            self.level = 4
+        elif count >= 10:
             showtime = 700
             self.nval = -2
             self.level = 3
         elif count >= 5:
-            showtime = 1000
-            self.nval = -2
+            showtime = 700
+            self.nval = -1
             self.level = 2
         else:
             showtime = 1000
@@ -174,7 +178,11 @@ class nbackSpace_main(QtCore.QThread):
         
         # Determine difficulty
         blanktime = 1000
-        if count >= 10:
+        if count >= 20:
+            showtime = 500
+            self.nval = -2
+            self.level = 4
+        elif count >= 10:
             showtime = 700
             self.nval = -2
             self.level = 3

@@ -36,17 +36,22 @@ class workmemVerb_main(QtCore.QThread):
         # Determine difficulty
         blanktime = 1000
         if count >= 10:
-            self.anscount = 10
-            self.dispcount = 2
-            self.level = 3
+            self.anscount = 8
+            self.dispcount = 3
+            self.level = 4
             showtime = 700
+        elif count >= 10:
+            self.anscount = 4
+            self.dispcount = 3
+            self.level = 3
+            showtime = 1000
         elif count >= 5:
-            self.anscount = 7
+            self.anscount = 4
             self.dispcount = 2
             self.level = 2
             showtime = 1000
         else:
-            self.anscount = 5
+            self.anscount = 4
             self.dispcount = 2
             self.level = 1
             showtime = 1500
@@ -154,17 +159,22 @@ class workmemSpace_main(QtCore.QThread):
         # Determine difficulty            
         blanktime = 1000
         if count >= 10:
-            self.anscount = 10
-            self.dispcount = 2
-            self.level = 3
+            self.anscount = 8
+            self.dispcount = 3
+            self.level = 4
             showtime = 700
+        elif count >= 10:
+            self.anscount = 4
+            self.dispcount = 3
+            self.level = 3
+            showtime = 1000
         elif count >= 5:
-            self.anscount = 7
+            self.anscount = 4
             self.dispcount = 2
             self.level = 2
             showtime = 1000
         else:
-            self.anscount = 5
+            self.anscount = 4
             self.dispcount = 2
             self.level = 1
             showtime = 1500

@@ -31,21 +31,27 @@ class flank_main(QtCore.QThread):
         self._qnsdisp.emit("Blank.png",800,150)
 
         ##Determine difficulty
-        if count >= 10: 
+        if count >= 20: 
+            showtime = 300
+            self.questions2 = self.questions
+            self.level = 4
+            self.cutofftime = 30 #multiplies of 100ms
+        elif count >= 10: 
             showtime = 500
             self.questions2 = self.questions
             self.level = 3
+            self.cutofftime = 50 #multiplies of 100ms
         elif count >=5:
-            showtime = 500
+            showtime = 700
             self.questions2 = self.questions[:2]
             self.level = 2
+            self.cutofftime = 70 #multiplies of 100ms
         else:
             showtime = 1000
             self.questions2 = self.questions[:2]
             self.level = 1
+            self.cutofftime = 100 #multiplies of 100ms
         self._level.emit(self.level)
-
-
 
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -74,7 +80,7 @@ class flank_main(QtCore.QThread):
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
-            if timeCount == 100:
+            if timeCount == self.cutofftime:
                 break
         
         self.answerflank = False

@@ -22,17 +22,32 @@ class Ui_root(QtWidgets.QMainWindow):
     traintimemax = QtCore.QTime(1,15,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax)
 
+# Define ALL YOUR TASKS FUNCTION HERE
+
+    def tasks(numb):
+        if numb is 0:
+            for i in range(30): #run flanker tasks 30 times
+                self.flnk.run_task(self.counter)
+        elif numb is 1:
+            for i in range(5): #run wrkVerb 5 times
+                self.wrkVerb.run_task(self.counter)
+        elif numb is 2:
+            for i in range(5): #run wrkSpace 5 times
+                    self.wrkSpace.run_task(self.counter)
+        elif numb is 3:
+            self.nbckVerb.run_task(self.counter)
+        elif numb is 4:
+            self.nbckSpace.run_task(self.counter)
+        else:
+            pass()
+
+                            
+
 # Define your task events here
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
-
-        ############## TYPES OF TASKS ################
-                # self.flnk.run_task(self.counter)
-                # self.wrkVerb.run_task(self.counter)
-                # self.wrkSpace.run_task(self.counter)
-                # self.nbckVerb.run_task(self.counter)
-                # self.nbckSpace.run_task(self.counter)
+        self.tasksnum = random.sample(range(0, 4), 3) # randomise tasks
 
         self.counter = 0
         while self.timecount < self.trainsec:
@@ -41,17 +56,16 @@ class Ui_root(QtWidgets.QMainWindow):
 
             if 1200 >= self.timecount > 300: #in seconds
                 self.cd.run_cd(5) #5 seconds count down
-                for i in range(30): #run flanker tasks 30 times
-                    self.flnk.run_task(self.counter)
-
+                self.tasks(self.tasksnum[0])
+                
             elif 1500 >= self.timecount > 1200:
                 self.counter = 0
                 QtTest.QTest.qWait(1000)
             
             elif 2400 >= self.timecount > 1500:
                 self.cd.run_cd(5) #5 seconds count down
-                for i in range(5):
-                    self.wrkVerb.run_task(self.counter)
+                self.tasks(self.tasksnum[1])
+                
 
             elif 2700 >= self.timecount > 2400:
                 self.counter = 0
@@ -59,8 +73,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
             elif 3600 >= self.timecount > 2700:
                 self.cd.run_cd(5) #5 seconds count down
-                for i in range(5):
-                    self.wrkSpace.run_task(self.counter)
+                self.tasks(self.tasksnum[2])
 
             else:
                 QtTest.QTest.qWait(1000)
