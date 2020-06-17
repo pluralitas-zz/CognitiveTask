@@ -35,7 +35,37 @@ class workmemVerb_main(QtCore.QThread):
         
         # Determine difficulty
         blanktime = 1000
-        if count >= 10:
+        if count >= 80:
+            self.anscount = 10
+            self.dispcount = 7
+            self.level = 10
+            showtime = 500
+        elif count >= 70:
+            self.anscount = 10
+            self.dispcount = 7
+            self.level = 9
+            showtime = 700
+        elif count >= 60:
+            self.anscount = 10
+            self.dispcount = 6
+            self.level = 8
+            showtime = 700
+        elif count >= 50:
+            self.anscount = 10
+            self.dispcount = 5
+            self.level = 7
+            showtime = 700
+        elif count >= 40:
+            self.anscount = 10
+            self.dispcount = 4
+            self.level = 6
+            showtime = 700
+        elif count >= 30:
+            self.anscount = 8
+            self.dispcount = 4
+            self.level = 5
+            showtime = 700
+        elif count >= 20:
             self.anscount = 8
             self.dispcount = 3
             self.level = 4
@@ -158,7 +188,37 @@ class workmemSpace_main(QtCore.QThread):
         
         # Determine difficulty            
         blanktime = 1000
-        if count >= 10:
+        if count >= 80:
+            self.anscount = 10
+            self.dispcount = 7
+            self.level = 10
+            showtime = 500
+        elif count >= 70:
+            self.anscount = 10
+            self.dispcount = 7
+            self.level = 9
+            showtime = 700
+        elif count >= 60:
+            self.anscount = 10
+            self.dispcount = 6
+            self.level = 8
+            showtime = 700
+        elif count >= 50:
+            self.anscount = 10
+            self.dispcount = 5
+            self.level = 7
+            showtime = 700
+        elif count >= 40:
+            self.anscount = 10
+            self.dispcount = 4
+            self.level = 6
+            showtime = 700
+        elif count >= 30:
+            self.anscount = 8
+            self.dispcount = 4
+            self.level = 5
+            showtime = 700
+        elif count >= 20:
             self.anscount = 8
             self.dispcount = 3
             self.level = 4
@@ -179,7 +239,6 @@ class workmemSpace_main(QtCore.QThread):
             self.level = 1
             showtime = 1500
         self._level.emit(self.level)
-        
         # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)

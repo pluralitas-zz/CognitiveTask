@@ -30,13 +30,18 @@ class flank_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        ##Determine difficulty
-        if count >= 20: 
+        # Determine difficulty
+        if count >= 20:
+            showtime = 300
+            self.questions2 = self.questions
+            self.level = 5
+            self.cutofftime = 20 #multiplies of 100ms
+        elif count >= 20:
             showtime = 300
             self.questions2 = self.questions
             self.level = 4
             self.cutofftime = 30 #multiplies of 100ms
-        elif count >= 10: 
+        elif count >= 10:
             showtime = 500
             self.questions2 = self.questions
             self.level = 3
@@ -57,7 +62,7 @@ class flank_main(QtCore.QThread):
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
-        # hold task in while loop while user isnt cycling
+        #Hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
             QtTest.QTest.qWait(100)
 

@@ -19,11 +19,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
-    traintimemax = QtCore.QTime(1,15,0)
+    traintimemax = QtCore.QTime(0,25,0) #1,15,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax)
 
 # Define ALL YOUR TASKS FUNCTION HERE
-
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter)
@@ -50,7 +49,7 @@ class Ui_root(QtWidgets.QMainWindow):
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
             
-            if 1200 >= self.timecount > 300: #1200 300 in seconds
+            if 480 >= self.timecount > 180: #1200 300 in seconds
                 if self.firsttaskone is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -58,9 +57,8 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.cd.run_cd(5) #5 seconds count down
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
-                
 
-            elif 2400 >= self.timecount > 1500: #2400 1500
+            elif 900 >= self.timecount > 600: #2400 1500
                 if self.firsttasktwo is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -69,7 +67,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
 
-            elif 3600 >= self.timecount > 2700: #3600 2700
+            elif 1320 >= self.timecount > 1020: #3600 2700
                 if self.firsttaskthree is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -80,7 +78,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
             else:
                 QtTest.QTest.qWait(3000)
-
 
         self.complet.run_com(1)
         ###################################################
