@@ -6,7 +6,7 @@ from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joysti
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
 from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
-from writeout import wrtout
+from writeout import wrtout, wrttask
 # from psychopy import parallel #for usage with Parallel Port DB25 LPT communication with EEG machine
 
 _translate = QtCore.QCoreApplication.translate
@@ -24,59 +24,62 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define ALL YOUR TASKS FUNCTION HERE
 
-    def tasks(numb):
+    def tasks(self,numb):
         if numb is 0:
-            for i in range(30): #run flanker tasks 30 times
-                self.flnk.run_task(self.counter)
+            self.flnk.run_task(self.counter)
         elif numb is 1:
-            for i in range(5): #run wrkVerb 5 times
-                self.wrkVerb.run_task(self.counter)
+            self.wrkVerb.run_task(self.counter)
         elif numb is 2:
-            for i in range(5): #run wrkSpace 5 times
-                    self.wrkSpace.run_task(self.counter)
+            self.wrkSpace.run_task(self.counter)
         elif numb is 3:
             self.nbckVerb.run_task(self.counter)
         elif numb is 4:
             self.nbckSpace.run_task(self.counter)
         else:
-            pass()
-
-                            
+            pass
 
 # Define your task events here
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
         self.tasksnum = random.sample(range(0, 4), 3) # randomise tasks
+        self.firsttaskone = True
+        self.firsttasktwo = True
+        self.firsttaskthree = True
 
-        self.counter = 0
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
-            self.counter = 0
-
-            if 1200 >= self.timecount > 300: #in seconds
-                self.cd.run_cd(5) #5 seconds count down
+            
+            if 1200 >= self.timecount > 300: #1200 300 in seconds
+                if self.firsttaskone is True:
+                    self.counter = 0
+                    self.CntDisplay()
+                    self.firsttaskone = False
+                    self.cd.run_cd(5) #5 seconds count down
+                self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
                 
-            elif 1500 >= self.timecount > 1200:
-                self.counter = 0
-                QtTest.QTest.qWait(1000)
-            
-            elif 2400 >= self.timecount > 1500:
-                self.cd.run_cd(5) #5 seconds count down
+
+            elif 2400 >= self.timecount > 1500: #2400 1500
+                if self.firsttasktwo is True:
+                    self.counter = 0
+                    self.CntDisplay()
+                    self.firsttasktwo = False
+                    self.cd.run_cd(5) #5 seconds count down
+                self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
-                
 
-            elif 2700 >= self.timecount > 2400:
-                self.counter = 0
-                QtTest.QTest.qWait(1000)
-
-            elif 3600 >= self.timecount > 2700:
-                self.cd.run_cd(5) #5 seconds count down
+            elif 3600 >= self.timecount > 2700: #3600 2700
+                if self.firsttaskthree is True:
+                    self.counter = 0
+                    self.CntDisplay()
+                    self.firsttaskthree = False
+                    self.cd.run_cd(5) #5 seconds count down
+                self.wouttask("Do Task " + str(self.tasksnum[2]))
                 self.tasks(self.tasksnum[2])
 
             else:
-                QtTest.QTest.qWait(1000)
+                QtTest.QTest.qWait(3000)
 
 
         self.complet.run_com(1)
@@ -268,9 +271,11 @@ class Ui_root(QtWidgets.QMainWindow):
     def counter_add(self,boo): #Add/minus to counter
         if boo == 1:
             self.counter += 1
+            self.wouttask("Answered Correct")
         else:
             #if self.counter > 0:
             self.counter -=1
+            self.wouttask("Answered Wrong")
         self.CntDisplay()
 
         if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
@@ -288,6 +293,7 @@ class Ui_root(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
+        self.wouttask("Question Shown")
         self.TaskFrame.setPixmap(pixmap)
 
     def disp_ans(self,data): #Display Answers in relevant buttons
@@ -353,6 +359,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def answer(self): #emit answer to task subpy
         sender = self.sender()
         ans = self.ansdict[sender.text()] #check dict in disp_ans for correct value
+        self.wouttask("User Answered")
         self._answer.emit(ans)
 
     def LevelDisplay(self, data):
@@ -365,6 +372,11 @@ class Ui_root(QtWidgets.QMainWindow):
     def writeout(self,data): #time, elapsed time, deg, speed, heartrate, EMG x 4, InstPower, AccumPower, InstCadence, pedalBalRight
         self.comb = np.column_stack([np.ones((self.daqbackend.samples,1))*time.time(),np.ones((self.daqbackend.samples,1))*self.timecount,data,self.pedalwoutarr])
         self.writefile.appendfile(self.comb) #write data to file
+    
+    def wouttask(self,data):
+        self.timenow = str(np.datetime64('now')).replace(":","")
+        self.taskcomb = [self.timenow, str(data)] #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
 
 # Video Playing Stuff
     def pauseVid(self): #Pause video + Show warning "speed too low"
@@ -452,7 +464,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def TimeDisplay(self):
         self.timecount += 1
         self.timeleft = self.traintime.addSecs(self.timecount)
-        self.timedisp = self.timeleft.toString()
+        self.timedisp = self.timeleft.toString()  
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
 
     def HRDisplay(self,data):
@@ -509,6 +521,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #Initialise and create Writeout file with username
         self.writefile=wrtout(self.UserIDNAME)
+        self.writetask=wrttask(self.UserIDNAME)
 
         # Signal connect to Slots for Data
         self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 

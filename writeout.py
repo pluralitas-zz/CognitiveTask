@@ -35,7 +35,7 @@ class wrttask:
 if __name__ == "__main__":
 
     test = wrttask("test")
-    wans = "Hellow World"
+    wans = "Hello World"
     
     for i in range(100):
         test.appendfile(wans)
