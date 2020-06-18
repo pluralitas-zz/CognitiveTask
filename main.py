@@ -300,22 +300,37 @@ class Ui_root(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
+
         if data == "Blank.png" or data =="Center.png":
             pass
         else:
             self.wouttask("Question Shown")
+
         self.TaskFrame.setPixmap(pixmap)
 
     def disp_ans(self,data): #Display Answers in relevant buttons
         
-        if len(data) != 10: #append to fit the list of buttons if list of values are not enough
-            pad_len = 10 - len(data)
-            for i in range(pad_len):
-                data.append('Blank.png')
-                #data.append('Blank.png')
-        
-        self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-        
+        if len(data) == 2: #if value is 2, allow all left 4(arrows) and right 4(ABXY) buttons to do the same thing
+            [data.insert(1,data[0]) for i in range(3)]
+            [data.insert(5,data[4]) for i in range(3)]
+            [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
+
+            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+            for i in range(3):
+                data[i+1] = 'Blank.png'
+                data[i+5] = 'Blank.png'
+
+        elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
+            [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
+            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+
+        elif len(data) > 10:
+            data = random.sample(data,10)
+            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+
+        else:
+            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[0])))
         self.QuesBtn_A.setIcon(icon)

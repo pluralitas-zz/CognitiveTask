@@ -13,7 +13,7 @@ class nbackVerb_main(QtCore.QThread):
         super(nbackVerb_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["VerbAirport.png", "VerbChurch.png","VerbHospital.png","VerbLibrary.png","VerbMarket.png","VerbPharmacy.png","VerbRestaurant.png","VerbSalon.png","VerbSchool.png","VerbStation.png"]
-        self.answers = ["VerbTick.png","Blank.png","Blank.png","Blank.png","Blank.png","VerbCross.png","Blank.png","Blank.png","Blank.png","Blank.png"]
+        self.answers = ["VerbTick.png","VerbCross.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []
@@ -164,7 +164,7 @@ class nbackSpace_main(QtCore.QThread):
         super(nbackSpace_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["SpaceN.png", "SpaceE.png","SpaceS.png","SpaceW.png","SpaceNE.png","SpaceNW.png","SpaceSE.png","SpaceNW.png"]
-        self.answers = ["VerbTick.png","Blank.png","Blank.png","Blank.png","Blank.png","VerbCross.png","Blank.png","Blank.png","Blank.png","Blank.png"]
+        self.answers = ["VerbTick.png","VerbCross.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []

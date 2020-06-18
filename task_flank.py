@@ -13,7 +13,7 @@ class flank_main(QtCore.QThread):
         super(flank_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["FlankLCon.png", "FlankRCon.png","FlankLIncon.png","FlankRIncon.png"]
-        self.answers = ["FlankR.png","Blank.png","Blank.png","Blank.png",  "Blank.png","FlankL.png","Blank.png","Blank.png"  ,"Blank.png","Blank.png"]
+        self.answers = ["FlankR.png","FlankL.png"]
         self.taskarr = []
         self.ansarr = []
         self.answerflank = False
