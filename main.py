@@ -290,7 +290,10 @@ class Ui_root(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
-        self.wouttask("Question Shown")
+        if data == "Blank.png" or data =="Center.png":
+            pass
+        else:
+            self.wouttask("Question Shown")
         self.TaskFrame.setPixmap(pixmap)
 
     def disp_ans(self,data): #Display Answers in relevant buttons
@@ -372,7 +375,7 @@ class Ui_root(QtWidgets.QMainWindow):
     
     def wouttask(self,data):
         self.timenow = str(np.datetime64('now')).replace(":","")
-        self.taskcomb = [self.timenow, str(data)] #time, data value
+        self.taskcomb = np.column_stack([self.timenow, str(data)]) #time, data value
         self.writetask.appendfile(self.taskcomb) #write task data to file
 
 # Video Playing Stuff
