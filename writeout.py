@@ -26,11 +26,11 @@ class wrttask:
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
         self.fname = filename + "_task_" + self.timenow + ".csv" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
-        np.savetxt(self.fpath, self.init, delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
+        np.savetxt(self.fpath, self.init, fmt="%s", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
     
     def appendfile(self, data):
         with open(self.fpath, 'a') as filpath:
-            np.savetxt(filpath, data, delimiter=',')
+            np.savetxt(filpath, data, delimiter=',',fmt="%s")
 
 if __name__ == "__main__":
 

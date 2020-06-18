@@ -41,15 +41,16 @@ class Ui_root(QtWidgets.QMainWindow):
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
-        self.tasksnum = random.sample(range(0, 4), 3) # randomise tasks
+        self.tasksnum = random.sample(range(0, 4), 4) # randomise tasks
         self.firsttaskone = True
         self.firsttasktwo = True
         self.firsttaskthree = True
+        self.firsttaskfour = True
 
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
             
-            if 480 >= self.timecount > 180: #1200 300 in seconds
+            if 420 >= self.timecount > 120: #1200 300 in seconds
                 if self.firsttaskone is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -58,7 +59,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
 
-            elif 900 >= self.timecount > 600: #2400 1500
+            elif 840 >= self.timecount > 540: #2400 1500
                 if self.firsttasktwo is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -67,7 +68,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
 
-            elif 1320 >= self.timecount > 1020: #3600 2700
+            elif 1260 >= self.timecount > 960: #3600 2700
                 if self.firsttaskthree is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -76,8 +77,17 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[2]))
                 self.tasks(self.tasksnum[2])
 
+            elif 1680 >= self.timecount > 1380: #3600 2700
+                if self.firsttaskfour is True:
+                    self.counter = 0
+                    self.CntDisplay()
+                    self.firsttaskfour = False
+                    self.cd.run_cd(5) #5 seconds count down
+                self.wouttask("Do Task " + str(self.tasksnum[3]))
+                self.tasks(self.tasksnum[3])
+
             else:
-                QtTest.QTest.qWait(3000)
+                QtTest.QTest.qWait(1000)
 
         self.complet.run_com(1)
         ###################################################
