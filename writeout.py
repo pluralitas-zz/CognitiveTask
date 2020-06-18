@@ -13,7 +13,7 @@ class wrtout:
         np.savetxt(self.fpath, self.init, fmt="%1.3f", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
 
     def appendfile(self, data):
-        with open(self.fpath, 'a') as filpath:
+        with open(self.fpath, 'ab') as filpath: #'ab' for append, binary mode
             np.savetxt(filpath, data, fmt="%1.3f", delimiter=',')
 
 class wrttask:
@@ -29,13 +29,14 @@ class wrttask:
         np.savetxt(self.fpath, self.init, fmt="%s", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
     
     def appendfile(self, data):
-        with open(self.fpath, 'a') as filpath:
+        with open(self.fpath, 'ab') as filpath: #'ab' for append, binary mode
             np.savetxt(filpath, data, delimiter=',',fmt="%s")
 
 if __name__ == "__main__":
 
     test = wrttask("test")
     wans = "Hello World"
-    
+    timenow = str(np.datetime64('now')).replace(":","")
+    out = np.column_stack([timenow, str(wans)])
     for i in range(100):
-        test.appendfile(wans)
+        test.appendfile(out)
