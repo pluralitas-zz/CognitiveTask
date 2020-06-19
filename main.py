@@ -316,9 +316,9 @@ class Ui_root(QtWidgets.QMainWindow):
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
 
             self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-            for i in range(3):
+            for i in range(4):
                 data[i+1] = 'Blank.png'
-                data[i+5] = 'Blank.png'
+                data[i+6] = 'Blank.png'
 
         elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
