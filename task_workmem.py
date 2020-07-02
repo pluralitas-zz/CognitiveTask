@@ -339,7 +339,7 @@ class workmemSpace_main(QtCore.QThread):
         self.speed = data
         self.pausespd = data2
 
-   def diffdisp(self,numb):
+    def diffdisp(self,numb):
         numb = abs(numb)
         if numb is 1:
             self._qnsdisp.emit("cd1.png",800,150)
