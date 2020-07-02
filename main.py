@@ -55,7 +55,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskone = False
-                    self.cd.run_cd(5) #5 seconds count down
+                    self.cd.run_cd() #5 seconds count down
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
 
@@ -64,7 +64,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttasktwo = False
-                    self.cd.run_cd(5) #5 seconds count down
+                    self.cd.run_cd() #5 seconds count down
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
 
@@ -73,7 +73,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskthree = False
-                    self.cd.run_cd(5) #5 seconds count down
+                    self.cd.run_cd() #5 seconds count down
                 self.wouttask("Do Task " + str(self.tasksnum[2]))
                 self.tasks(self.tasksnum[2])
 
@@ -82,7 +82,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskfour = False
-                    self.cd.run_cd(5) #5 seconds count down
+                    self.cd.run_cd() #5 seconds count down
                 self.wouttask("Do Task " + str(self.tasksnum[3]))
                 self.tasks(self.tasksnum[3])
 

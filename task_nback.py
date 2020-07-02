@@ -62,13 +62,13 @@ class nbackVerb_main(QtCore.QThread):
 
         self._level.emit(self.nval)
         # generate 30 values
-        arraylen = 30
+        arraylen = 20
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 5
+        correctval = 4
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
