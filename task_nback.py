@@ -156,17 +156,12 @@ class nbackVerb_main(QtCore.QThread):
         self.pausespd = data2
 
     def diffdisp(self,numb):
-        numb = abs(numb)
-        if numb is 1:
-            self._qnsdisp.emit("cd1.png",800,150)
-        elif numb is 2:
-            self._qnsdisp.emit("cd2.png",800,150)
-        elif numb is 3:
-            self._qnsdisp.emit("cd3.png",800,150)
-        elif numb is 4:
-            self._qnsdisp.emit("cd3.png",800,150)
-        elif numb is 5:
-            self._qnsdisp.emit("cd3.png",800,150)
+        if numb is -1:
+            self._qnsdisp.emit("neg1.png",800,150)
+        elif numb is -2:
+            self._qnsdisp.emit("neg2.png",800,150)
+        elif numb is -3:
+            self._qnsdisp.emit("neg3.png",800,150)
         else:
             pass
 
@@ -328,16 +323,11 @@ class nbackSpace_main(QtCore.QThread):
         self.pausespd = data2
 
     def diffdisp(self,numb):
-        numb = abs(numb)
-        if numb is 1:
-            self._qnsdisp.emit("cd1.png",800,150)
-        elif numb is 2:
-            self._qnsdisp.emit("cd2.png",800,150)
-        elif numb is 3:
-            self._qnsdisp.emit("cd3.png",800,150)
-        elif numb is 4:
-            self._qnsdisp.emit("cd3.png",800,150)
-        elif numb is 5:
-            self._qnsdisp.emit("cd3.png",800,150)
+        if numb is -1:
+            self._qnsdisp.emit("neg1.png",800,150)
+        elif numb is -2:
+            self._qnsdisp.emit("neg2.png",800,150)
+        elif numb is -3:
+            self._qnsdisp.emit("neg3.png",800,150)
         else:
             pass

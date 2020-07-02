@@ -125,8 +125,8 @@ class flank_main(QtCore.QThread):
         elif numb is 3:
             self._qnsdisp.emit("cd3.png",800,150)
         elif numb is 4:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd4.png",800,150)
         elif numb is 5:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd5.png",800,150)
         else:
             pass

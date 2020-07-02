@@ -166,19 +166,19 @@ class workmemVerb_main(QtCore.QThread):
         elif numb is 3:
             self._qnsdisp.emit("cd3.png",800,150)
         elif numb is 4:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd4.png",800,150)
         elif numb is 5:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd5.png",800,150)
         elif numb is 6:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd6.png",800,150)
         elif numb is 7:
-            self._qnsdisp.emit("cd3.png",800,150)  
+            self._qnsdisp.emit("cd7.png",800,150)  
         elif numb is 8:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd8.png",800,150)
         elif numb is 9:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd9.png",800,150)
         elif numb is 10:
-            self._qnsdisp.emit("cd3.png",800,150)              
+            self._qnsdisp.emit("cd10.png",800,150)              
         else:
             pass   
 
@@ -348,18 +348,18 @@ class workmemSpace_main(QtCore.QThread):
         elif numb is 3:
             self._qnsdisp.emit("cd3.png",800,150)
         elif numb is 4:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd4.png",800,150)
         elif numb is 5:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd5.png",800,150)
         elif numb is 6:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd6.png",800,150)
         elif numb is 7:
-            self._qnsdisp.emit("cd3.png",800,150)  
+            self._qnsdisp.emit("cd7.png",800,150)  
         elif numb is 8:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd8.png",800,150)
         elif numb is 9:
-            self._qnsdisp.emit("cd3.png",800,150)
+            self._qnsdisp.emit("cd9.png",800,150)
         elif numb is 10:
-            self._qnsdisp.emit("cd3.png",800,150)              
+            self._qnsdisp.emit("cd10.png",800,150)              
         else:
             pass  
