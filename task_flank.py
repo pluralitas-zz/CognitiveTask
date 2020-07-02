@@ -25,11 +25,6 @@ class flank_main(QtCore.QThread):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
 
-        # Show center point
-        self._qnsdisp.emit("Center.png",800,150)
-        QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,150)
-
         # Determine difficulty
         if count >= 20:
             showtime = 300
@@ -56,7 +51,16 @@ class flank_main(QtCore.QThread):
             self.questions2 = self.questions[:2]
             self.level = 1
             self.cutofftime = 100 #multiplies of 100ms
+
+        # Show Difficulty
+        self.diffdisp(self.level)
         self._level.emit(self.level)
+        QtTest.QTest.qWait(2000)
+        
+        # Show center point
+        self._qnsdisp.emit("Center.png",800,150)
+        QtTest.QTest.qWait(500)
+        self._qnsdisp.emit("Blank.png",800,150)
 
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -112,3 +116,17 @@ class flank_main(QtCore.QThread):
     def current_speed(self,data,data2):
         self.speed = data
         self.pausespd = data2
+
+    def diffdisp(self,numb):
+        if numb is 1:
+            self._qnsdisp.emit("cd1.png",800,150)
+        elif numb is 2:
+            self._qnsdisp.emit("cd2.png",800,150)
+        elif numb is 3:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 4:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 5:
+            self._qnsdisp.emit("cd3.png",800,150)
+        else:
+            pass

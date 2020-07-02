@@ -10,13 +10,13 @@ class countdown_main(QtCore.QThread):
 
     def run_cd(self,*inst):
         # Show center point
-        if "Inst" in inst and ".png" in inst:
-            self.dispfile = inst
+        if ".png" in inst:
+            self._qnsdisp.emit(inst,800,400)
         else:
-            self.dispfile = "Center.png"
 
-        self._qnsdisp.emit(self.dispfile,800,150)
-        QtTest.QTest.qWait(7000)
+        QtTest.QTest.qWait(4000)
+        self._qnsdisp.emit("Center.png",800,150)
+        QtTest.QTest.qWait(2000)
         self._qnsdisp.emit("Blank.png",800,150)
         QtTest.QTest.qWait(1000)
         self._qnsdisp.emit(self.timedisp[2],800,150)

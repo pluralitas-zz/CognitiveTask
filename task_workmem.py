@@ -27,11 +27,6 @@ class workmemVerb_main(QtCore.QThread):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
-
-        # Show center point
-        self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,150)
         
         # Determine difficulty
         blanktime = 1000
@@ -85,7 +80,15 @@ class workmemVerb_main(QtCore.QThread):
             self.dispcount = 2
             self.level = 1
             showtime = 1500
+
         self._level.emit(self.level) 
+        self.diffdisp(self.level)
+        QtTest.QTest.qWait(2000)
+
+        # Show center point
+        self._qnsdisp.emit("Center.png",800,150) 
+        QtTest.QTest.qWait(500)
+        self._qnsdisp.emit("Blank.png",800,150)
 
         # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -154,6 +157,31 @@ class workmemVerb_main(QtCore.QThread):
         self.speed = data
         self.pausespd = data2
 
+    def diffdisp(self,numb):
+        numb = abs(numb)
+        if numb is 1:
+            self._qnsdisp.emit("cd1.png",800,150)
+        elif numb is 2:
+            self._qnsdisp.emit("cd2.png",800,150)
+        elif numb is 3:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 4:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 5:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 6:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 7:
+            self._qnsdisp.emit("cd3.png",800,150)  
+        elif numb is 8:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 9:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 10:
+            self._qnsdisp.emit("cd3.png",800,150)              
+        else:
+            pass   
+
 class workmemSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -181,11 +209,6 @@ class workmemSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
 
-        # Show center point
-        self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,150)
-        
         # Determine difficulty            
         blanktime = 1000
         if count >= 80:
@@ -239,6 +262,14 @@ class workmemSpace_main(QtCore.QThread):
             self.level = 1
             showtime = 1500
         self._level.emit(self.level)
+        self.diffdisp(self.level)
+        QtTest.QTest.qWait(2000)
+
+        # Show center point
+        self._qnsdisp.emit("Center.png",800,150) 
+        QtTest.QTest.qWait(500)
+        self._qnsdisp.emit("Blank.png",800,150)
+        
         # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
@@ -307,3 +338,28 @@ class workmemSpace_main(QtCore.QThread):
     def current_speed(self,data,data2):
         self.speed = data
         self.pausespd = data2
+
+   def diffdisp(self,numb):
+        numb = abs(numb)
+        if numb is 1:
+            self._qnsdisp.emit("cd1.png",800,150)
+        elif numb is 2:
+            self._qnsdisp.emit("cd2.png",800,150)
+        elif numb is 3:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 4:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 5:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 6:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 7:
+            self._qnsdisp.emit("cd3.png",800,150)  
+        elif numb is 8:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 9:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 10:
+            self._qnsdisp.emit("cd3.png",800,150)              
+        else:
+            pass  

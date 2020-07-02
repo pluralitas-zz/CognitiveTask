@@ -57,7 +57,7 @@ class EncDAQBackThread(QtCore.QThread):
                 self.HRperioddiff = np.diff(self.HRperiod)
                 self.HRper_in = self.HRperioddiff[np.all([self.HRperioddiff > (60/self.HRrange[1]), self.HRperioddiff < (60/self.HRrange[0])], axis=0)]
 
-                self.HR = 0 if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
+                self.HR = self.HR if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
                 self._PPGHeartRate.emit(self.HR)
                 self.HRarrdaq = np.array(list())
 

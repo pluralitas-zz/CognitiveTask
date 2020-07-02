@@ -19,7 +19,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
-    traintimemax = QtCore.QTime(0,25,0) #1,15,0)
+    traintimemax = QtCore.QTime(0,30,0) #1,15,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax)
 
 # Define ALL YOUR TASKS FUNCTION HERE
@@ -34,6 +34,20 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckVerb.run_task(self.counter)
         elif numb is 4:
             self.nbckSpace.run_task(self.counter)
+        else:
+            pass
+
+    def tasknameshow(self,numb): #show task names before the task begin
+        if numb is 0:
+            self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
+        elif numb is 1:
+            self.cd.run_cd("NameWrkMemVerb.png") #10 seconds count down, 7 secs show task name
+        elif numb is 2:
+            self.cd.run_cd("NameWrkMemVisual.png") #10 seconds count down, 7 secs show task name
+        elif numb is 3:
+            self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
+        elif numb is 4:
+            self.cd.run_cd("NameNbackVisual.png") #10 seconds count down, 7 secs show task name
         else:
             pass
 
@@ -55,7 +69,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskone = False
-                    self.cd.run_cd() #5 seconds count down
+                    self.tasknameshow(self.tasksnum[0])
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
 
@@ -64,7 +78,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttasktwo = False
-                    self.cd.run_cd() #5 seconds count down
+                    self.tasknameshow(self.tasksnum[1])
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
 
@@ -73,7 +87,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskthree = False
-                    self.cd.run_cd() #5 seconds count down
+                    self.tasknameshow(self.tasksnum[2])
                 self.wouttask("Do Task " + str(self.tasksnum[2]))
                 self.tasks(self.tasksnum[2])
 
@@ -82,7 +96,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.counter = 0
                     self.CntDisplay()
                     self.firsttaskfour = False
-                    self.cd.run_cd() #5 seconds count down
+                    self.tasknameshow(self.tasksnum[3])
                 self.wouttask("Do Task " + str(self.tasksnum[3]))
                 self.tasks(self.tasksnum[3])
 

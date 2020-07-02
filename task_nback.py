@@ -27,11 +27,6 @@ class nbackVerb_main(QtCore.QThread):
         
     def run_task(self,count):
         self.taskarr.clear()    #clear array
-
-        # Show center point
-        self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,150)
         
         # Determine difficulty
         blanktime = 1000
@@ -61,6 +56,14 @@ class nbackVerb_main(QtCore.QThread):
             self.level = 1
 
         self._level.emit(self.nval)
+        self.diffdisp(self.nval)
+        QtTest.QTest.qWait(2000)
+
+        # Show center point
+        self._qnsdisp.emit("Center.png",800,150) 
+        QtTest.QTest.qWait(500)
+        self._qnsdisp.emit("Blank.png",800,150)
+
         # generate 30 values
         arraylen = 20
         for i in range(arraylen):
@@ -152,6 +155,22 @@ class nbackVerb_main(QtCore.QThread):
         self.speed = data
         self.pausespd = data2
 
+    def diffdisp(self,numb):
+        numb = abs(numb)
+        if numb is 1:
+            self._qnsdisp.emit("cd1.png",800,150)
+        elif numb is 2:
+            self._qnsdisp.emit("cd2.png",800,150)
+        elif numb is 3:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 4:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 5:
+            self._qnsdisp.emit("cd3.png",800,150)
+        else:
+            pass
+
+
 class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -179,10 +198,7 @@ class nbackSpace_main(QtCore.QThread):
     def run_task(self,count):
         self.taskarr.clear()    #clear array
 
-        # Show center point
-        self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
-        self._qnsdisp.emit("Blank.png",800,150)
+
         
         # Determine difficulty
         blanktime = 1000
@@ -212,6 +228,14 @@ class nbackSpace_main(QtCore.QThread):
             self.level = 1
 
         self._level.emit(self.nval)
+        self.diffdisp(self.nval)
+        QtTest.QTest.qWait(2000)
+
+        # Show center point
+        self._qnsdisp.emit("Center.png",800,150) 
+        QtTest.QTest.qWait(500)
+        self._qnsdisp.emit("Blank.png",800,150)
+
         # generate 30 values
         arraylen = 30
         for i in range(arraylen):
@@ -302,3 +326,18 @@ class nbackSpace_main(QtCore.QThread):
     def current_speed(self,data,data2):
         self.speed = data
         self.pausespd = data2
+
+    def diffdisp(self,numb):
+        numb = abs(numb)
+        if numb is 1:
+            self._qnsdisp.emit("cd1.png",800,150)
+        elif numb is 2:
+            self._qnsdisp.emit("cd2.png",800,150)
+        elif numb is 3:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 4:
+            self._qnsdisp.emit("cd3.png",800,150)
+        elif numb is 5:
+            self._qnsdisp.emit("cd3.png",800,150)
+        else:
+            pass
