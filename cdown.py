@@ -10,7 +10,7 @@ class countdown_main(QtCore.QThread):
 
     def run_cd(self,*inst):
         # Show center point
-        if len(inst) < 1:
+        if len(inst) > 0:
             self._qnsdisp.emit(inst[0],800,400)
         else:
             pass
