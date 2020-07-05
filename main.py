@@ -315,7 +315,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
 
-        if data == "Blank.png" or data =="Center.png":
+        if data == "Blank.png" or data =="Center.png" or data = "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
             self.wouttask("Question Shown")

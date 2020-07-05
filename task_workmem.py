@@ -82,7 +82,7 @@ class workmemVerb_main(QtCore.QThread):
             showtime = 1500
 
         self._level.emit(self.level) 
-        self.diffdisp(self.level)
+        #self.diffdisp(self.level)
         QtTest.QTest.qWait(2000)
 
         # Show center point
@@ -262,7 +262,7 @@ class workmemSpace_main(QtCore.QThread):
             self.level = 1
             showtime = 1500
         self._level.emit(self.level)
-        self.diffdisp(self.level)
+        #self.diffdisp(self.level)
         QtTest.QTest.qWait(2000)
 
         # Show center point

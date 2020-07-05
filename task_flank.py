@@ -53,7 +53,7 @@ class flank_main(QtCore.QThread):
             self.cutofftime = 100 #multiplies of 100ms
 
         # Show Difficulty
-        self.diffdisp(self.level)
+        #self.diffdisp(self.level)
         self._level.emit(self.level)
         QtTest.QTest.qWait(2000)
         
