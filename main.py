@@ -19,8 +19,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
-    traintimemax = QtCore.QTime(0,30,0) #1,15,0)
-    trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax)
+    traintimemax = QtCore.QTime(0,30,0)
+    trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
 
 # Define ALL YOUR TASKS FUNCTION HERE
     def tasks(self,numb):
@@ -64,7 +64,7 @@ class Ui_root(QtWidgets.QMainWindow):
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
             
-            if 420 >= self.timecount > 120: #1200 300 in seconds
+            if 420 >= self.timecount > 120: #in seconds
                 if self.firsttaskone is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -73,7 +73,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
                 self.tasks(self.tasksnum[0])
 
-            elif 840 >= self.timecount > 540: #2400 1500
+            elif 840 >= self.timecount > 540:
                 if self.firsttasktwo is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -82,7 +82,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
                 self.tasks(self.tasksnum[1])
 
-            elif 1260 >= self.timecount > 960: #3600 2700
+            elif 1260 >= self.timecount > 960:
                 if self.firsttaskthree is True:
                     self.counter = 0
                     self.CntDisplay()
@@ -91,7 +91,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasksnum[2]))
                 self.tasks(self.tasksnum[2])
 
-            elif 1680 >= self.timecount > 1380: #3600 2700
+            elif 1680 >= self.timecount > 1380:
                 if self.firsttaskfour is True:
                     self.counter = 0
                     self.CntDisplay()
