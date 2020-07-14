@@ -19,7 +19,7 @@
 5. PowerTap P1 power meter using an ANT+ USB stick
 6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai4 on USB-6001 DAQ (Dev1)
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
-8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library
+8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library using USB2LPT. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
 
 ## Currently 5 tasks are implemented:
 
@@ -49,6 +49,9 @@
     2. `pip uninstall PyQt5-sip`
     3. `pip install PyQt5-sip`
     4. `pip install PyQt5`
+9. Download the [USB2LPT converter driver](https://www-user.tu-chemnitz.de/~heha/basteln/PC/USB2LPT/index.en.htm), direct the unknown device in device manager to the downloaded file and under the `/en` folder
+10. In order to use Parallel port to communicate, you require the inpout**.dll(Windows version dependent) files in the same folder as your .py files. Link to .dll binaries [here](http://www.highrez.co.uk/downloads/inpout32/)
+
 
 ## Troubleshooting
 * ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n' ```
@@ -56,6 +59,9 @@
 
 * ```unsupported operand type(s) for -: 'str' and 'int'```
     * yet to solve
+
+* ```TypeError: 'NoneType' object is not callable``` when initialising parallel port
+    * See 9. in "Steps to install anaconda and python"
 
 ## WARNING
 
