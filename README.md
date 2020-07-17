@@ -19,7 +19,7 @@
 5. PowerTap P1 power meter using an ANT+ USB stick
 6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai4 on USB-6001 DAQ (Dev1)
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
-8. Ability to connect to EEG PC using DB25 Parallel port type using psychopy.parallel library using USB2LPT. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
+8. Ability to connect to EEG PC using DB25 USB2LPT Parallel Port converter using psychopy. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
 
 ## Currently 5 tasks are implemented:
 
@@ -30,7 +30,7 @@
 5. n-back Task (Verbal)
 6. Divided Attention Task (able to fake other tasks)
 
-## Steps to install anaconda and python
+## Steps to install
 
 1. Install [Anaconda 3 4.4.0 64-bit](https://repo.anaconda.com/archive/Anaconda3-4.4.0-Windows-x86_64.exe)
 2. `conda update conda -y`
@@ -50,8 +50,17 @@
     3. `pip install PyQt5-sip`
     4. `pip install PyQt5`
 9. Download the [USB2LPT converter driver](https://www-user.tu-chemnitz.de/~heha/basteln/PC/USB2LPT/index.en.htm), direct the unknown device in device manager to the downloaded file and under the `/en` folder
-10. In order to use Parallel port to communicate, you require the inpout**.dll(Windows version dependent) files in the same folder as your .py files. Link to .dll binaries [here](http://www.highrez.co.uk/downloads/inpout32/)
-
+10. In order to use Parallel port to communicate, you require the `inpout**.dll(Windows version dependent)` files in the same folder as your .py files. Link to .dll binaries [here](http://www.highrez.co.uk/downloads/inpout32/)
+11. Find `h#s USB to LPT converter` in Device Manager. Ensures:
+* Emulation Tab:
+    * Emulated port address: `378h(888, LPT1)`
+    * LPT enchancement mode: `SPP`
+    * Select `Debug register trap`
+* Port Settings Tab:
+    * Select `Never use an interrupt`
+    * Select `Enable legacy Plug and Play dection`
+    * LPT Port Number: `LPT1`
+12. Ensure that the `h#s USB to LPT converter` in Device Manager is `LPT1`
 
 ## Troubleshooting
 * ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n' ```
@@ -61,7 +70,7 @@
     * yet to solve
 
 * ```TypeError: 'NoneType' object is not callable``` when initialising parallel port
-    * See 9. in "Steps to install anaconda and python"
+    * See 9-11. in "Steps to install anaconda and python"
 
 ## WARNING
 

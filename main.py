@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
