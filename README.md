@@ -53,14 +53,14 @@
 10. In order to use Parallel port to communicate, you require the `inpout**.dll(Windows version dependent)` files in the same folder as your .py files. Link to .dll binaries [here](http://www.highrez.co.uk/downloads/inpout32/)
 11. Find `h#s USB to LPT converter` in Device Manager. Ensures:
 * Emulation Tab:
-    * Emulated port address: `378h(888, LPT1)`
+    * Emulated port address: `278h(632,LPT2)`
     * LPT enchancement mode: `SPP`
     * Select `Debug register trap`
 * Port Settings Tab:
     * Select `Never use an interrupt`
     * Select `Enable legacy Plug and Play dection`
-    * LPT Port Number: `LPT1`
-12. Ensure that the `h#s USB to LPT converter` in Device Manager is `LPT1`
+    * LPT Port Number: `LPT2`
+1.  Ensure that the `h#s USB to LPT converter` in Device Manager is `LPT2`
 
 ## Troubleshooting
 * ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n' ```
@@ -75,3 +75,15 @@
 ## WARNING
 
 * Modify xinput3_KeyboardControll_NES_Shooter_addGameTask.py for xinput vesion when changing between Win10, Win 8/7 and WinVista
+
+## Parallel Port output command legend (0-255)
+
+| Name             |Number  |
+|------------------|--------|
+|"Do Task `#`"     |0`#`    |
+|"Question Shown"  |10      |
+|"User Answered"   |15      |
+|"Answered Correct"|21      |
+|"Answered Wrong"  |20      |
+
+* `#` is the task number

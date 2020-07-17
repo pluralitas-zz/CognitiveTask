@@ -7,8 +7,8 @@ from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joysti
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
 from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
-from writeout import wrtout, wrttask
-# from psychopy import parallel #for usage with Parallel Port DB25 LPT communication with EEG machine
+from writeout import wrtout, wrttask, paraout
+from psychopy import parallel #f or usage with Parallel Port DB25 LPT communication with EEG machine
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -72,6 +72,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.firsttaskone = False
                     self.tasknameshow(self.tasksnum[0])
                 self.wouttask("Do Task " + str(self.tasksnum[0]))
+                self.para.parawrite(self.tasksnum[0])
                 self.tasks(self.tasksnum[0])
 
             elif 840 >= self.timecount > 540:
@@ -81,6 +82,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.firsttasktwo = False
                     self.tasknameshow(self.tasksnum[1])
                 self.wouttask("Do Task " + str(self.tasksnum[1]))
+                self.para.parawrite(self.tasksnum[1])
                 self.tasks(self.tasksnum[1])
 
             elif 1260 >= self.timecount > 960:
@@ -90,6 +92,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.firsttaskthree = False
                     self.tasknameshow(self.tasksnum[2])
                 self.wouttask("Do Task " + str(self.tasksnum[2]))
+                self.para.parawrite(self.tasksnum[2])
                 self.tasks(self.tasksnum[2])
 
             elif 1680 >= self.timecount > 1380:
@@ -99,6 +102,7 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.firsttaskfour = False
                     self.tasknameshow(self.tasksnum[3])
                 self.wouttask("Do Task " + str(self.tasksnum[3]))
+                self.para.parawrite(self.tasksnum[3])
                 self.tasks(self.tasksnum[3])
 
             else:
@@ -294,10 +298,12 @@ class Ui_root(QtWidgets.QMainWindow):
         if boo == 1:
             self.counter += 1
             self.wouttask("Answered Correct")
+            self.para.parawrite(21)
         else:
             #if self.counter > 0:
             self.counter -=1
             self.wouttask("Answered Wrong")
+            self.para.parawrite(20)
         self.CntDisplay()
 
         if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
@@ -320,6 +326,7 @@ class Ui_root(QtWidgets.QMainWindow):
             pass
         else:
             self.wouttask("Question Shown")
+            self.para.parawrite(10)
 
         self.TaskFrame.setPixmap(pixmap)
 
@@ -400,6 +407,7 @@ class Ui_root(QtWidgets.QMainWindow):
         sender = self.sender()
         ans = self.ansdict[sender.text()] #check dict in disp_ans for correct value
         self.wouttask("User Answered")
+        self.para.parawrite(15)
         self._answer.emit(ans)
 
     def LevelDisplay(self, data):
@@ -562,6 +570,9 @@ class Ui_root(QtWidgets.QMainWindow):
         #Initialise and create Writeout file with username
         self.writefile=wrtout(self.UserIDNAME)
         self.writetask=wrttask(self.UserIDNAME)
+
+        #Initialise and start Parallel port write to LPT
+        self.para=paraout()
 
         # Signal connect to Slots for Data
         self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 

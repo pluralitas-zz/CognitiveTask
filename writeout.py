@@ -40,3 +40,13 @@ if __name__ == "__main__":
     out = np.column_stack([timenow, str(wans)])
     for i in range(100):
         test.appendfile(out)
+
+class paraout:
+    def __init__(self):
+        #LPT1 = 0x378, LPT2=0x278, LPT3=0x3BC
+        port = parallel.ParallelPort(address=0x0278)
+        port.setData(0)
+
+    def parawrite(self,data):
+        port.setData(data)
+        port.setData(0)
