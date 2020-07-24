@@ -72,25 +72,33 @@ class Ui_root(QtWidgets.QMainWindow):
             QtTest.QTest.qWait(1000)
             
             if 420 >= self.timecount > 120: #in seconds
-                self.tasknumset(0)
+                if self.firsttaskone == True:
+                    self.tasknumset(0)
+                    self.firsttaskone = False
                 self.wouttask("Do Task " + str(self.tasksnum[self.tasknumnow]))
                 self.para.parawrite(self.tasksnum[self.tasknumnow])
                 self.tasks(self.tasksnum[self.tasknumnow])
 
             elif 840 >= self.timecount > 540:
-                self.tasknumset(1)
+                if self.firsttasktwo == True:
+                    self.tasknumset(1)
+                    self.firsttasktwo = False
                 self.wouttask("Do Task " + str(self.tasksnum[self.tasknumnow]))
                 self.para.parawrite(self.tasksnum[self.tasknumnow])
                 self.tasks(self.tasksnum[self.tasknumnow])
 
-            elif 1260 >= self.timecount > 960:
-                self.tasknumset(2)
+            elif 1260 >= self.timecount > 960:                
+                if self.firsttaskthree == True:
+                    self.tasknumset(2)
+                    self.firsttaskthree = False
                 self.wouttask("Do Task " + str(self.tasksnum[self.tasknumnow]))
                 self.para.parawrite(self.tasksnum[self.tasknumnow])
                 self.tasks(self.tasksnum[self.tasknumnow])
 
             elif 1680 >= self.timecount > 1380:
-                self.tasknumset(3)
+                if self.firsttaskfour == True:
+                    self.tasknumset(3)
+                    self.firsttaskfour = False
                 self.wouttask("Do Task " + str(self.tasksnum[self.tasknumnow]))
                 self.para.parawrite(self.tasksnum[self.tasknumnow])
                 self.tasks(self.tasksnum[self.tasknumnow])
@@ -255,6 +263,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
             self.QuesBtn_ShldL.show()
             self.QuesBtn_ShldR.show()
+                        self.para.parawrite(12)
+            self.wouttask("Answers Shown")
         else:
             pass
 
@@ -270,16 +280,16 @@ class Ui_root(QtWidgets.QMainWindow):
             self.para.parawrite(20)
         self.CntDisplay()
 
-        if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
-            #self.vidFrame.restartVid()
-            pass
+        # if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
+        #     #self.vidFrame.restartVid()
+        #     pass
 
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
 
-        if data == "Blank.png" or data =="Center.png" or data = "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
+        if data == "Blank.png" or data =="Center.png" or data == "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
             self.wouttask("Question Shown")
