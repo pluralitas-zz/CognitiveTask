@@ -3,7 +3,7 @@ from psychopy import parallel
 
 class wrtout:
     savepath = "C:\\Data" #data savepath
-    head = 'Time,Elapsed Time,Deg,Speed,Heart Rate,QC Left,HS Left,QC Right,HS Right,Inst. Power,Accum. Power,Inst. Cad,Balance R' #header
+    head = 'Time,Elapsed Time,Deg,Speed,Heart Rate,QC Left,HS Left,QC Right,HS Right,Accum. Power,Inst. Power,Inst. Cad,Balance R' #header
     init = np.zeros([1,13])
     comms = "1000Hz, 100samples from DAQ; HR and EMG(s)\r\nEncoder angle w.r.t. LEFT crank is synchronised to DAQ once every 100 samples\r\nPedal Data at 1 Hz\r\n" #comments
 

@@ -501,8 +501,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
 
         if data[3] > 0:
-            self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(int(round(data[3])))+"</font>"))
-            self.HUDValPBalL.setText(_translate("root","<font color='White'>"+ str(int(round(100-data[3])))+"</font>"))
+            self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(data[3])+"</font>"))
+            self.HUDValPBalL.setText(_translate("root","<font color='White'>"+ str(100-data[3])+"</font>"))
 
 # Game Stuff
     def Controller_Game(self,data): #Controller Slot to recieve Encoder Speed and translate to button inputs
