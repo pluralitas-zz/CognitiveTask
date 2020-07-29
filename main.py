@@ -8,7 +8,6 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
 from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
 from writeout import wrtout, wrttask, paraout
-from psychopy import parallel #f or usage with Parallel Port DB25 LPT communication with EEG machine
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -18,11 +17,15 @@ class Ui_root(QtWidgets.QMainWindow):
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
 
+# Define your Counter scores HERE
+    counter = np.array([0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace
+
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
     traintimemax = QtCore.QTime(0,30,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
+    tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
     def tasks(self,numb):
@@ -53,8 +56,8 @@ class Ui_root(QtWidgets.QMainWindow):
         else:
             pass
 
-    def tasknumset(self,tasknum):
-        self.tasknumnow = tasknum
+    def tasknumset(self,num):
+        self.tasknumnow = self.tasksnum(num)
         self.CntDisplay()
         self.tasknameshow(self.tasksnum[self.tasknumnow])
 
@@ -121,7 +124,6 @@ class Ui_root(QtWidgets.QMainWindow):
     def __init__(self):
         #values    
         super(Ui_root,self).__init__()
-        self.counter = np.zeros(5) #counter value to change task difficulty
         self.disparr = [] #array to store values for displaying on buttons
         self.previousBalance=50 #default Force Balance Value
         self.pausespd = 10 #Pause/Play Threshold Speed
@@ -263,7 +265,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
             self.QuesBtn_ShldL.show()
             self.QuesBtn_ShldR.show()
-                        self.para.parawrite(12)
+            self.para.parawrite(12)
             self.wouttask("Answers Shown")
         else:
             pass

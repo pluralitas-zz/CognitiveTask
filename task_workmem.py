@@ -17,12 +17,13 @@ class workmemVerb_main(QtCore.QThread):
         self.anscount = 0
         self.taskarr = []
         self.anspadarr =[]
+        self.anstimelim = 10
         self.ansarr = []
         self.answerworkmemVerb = False
         self.level = 0
         self.speed = 0
         self.pausespd = 10
-
+        
     def run_task(self,count):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
@@ -34,51 +35,61 @@ class workmemVerb_main(QtCore.QThread):
             self.anscount = 10
             self.dispcount = 7
             self.level = 10
+            self.anstimelim = 20
             showtime = 500
         elif count >= 70:
             self.anscount = 10
             self.dispcount = 7
             self.level = 9
+            self.anstimelim = 20
             showtime = 700
         elif count >= 60:
             self.anscount = 10
             self.dispcount = 6
             self.level = 8
+            self.anstimelim = 20
             showtime = 700
         elif count >= 50:
             self.anscount = 10
             self.dispcount = 5
             self.level = 7
+            self.anstimelim = 20
             showtime = 700
         elif count >= 40:
             self.anscount = 10
             self.dispcount = 4
             self.level = 6
+            self.anstimelim = 15
             showtime = 700
         elif count >= 30:
             self.anscount = 8
             self.dispcount = 4
             self.level = 5
+            self.anstimelim = 15
             showtime = 700
         elif count >= 20:
             self.anscount = 8
             self.dispcount = 3
             self.level = 4
+            self.anstimelim = 15
             showtime = 700
         elif count >= 10:
             self.anscount = 4
             self.dispcount = 3
             self.level = 3
+            self.anstimelim = 10
             showtime = 1000
         elif count >= 5:
             self.anscount = 4
             self.dispcount = 2
             self.level = 2
+            self.anstimelim = 10
             showtime = 1000
         else:
             self.anscount = 4
             self.dispcount = 2
             self.level = 1
+            self.anstimelim = 10
             showtime = 1500
 
         self._level.emit(self.level) 
@@ -114,7 +125,7 @@ class workmemVerb_main(QtCore.QThread):
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
-            if timeCount == 100:
+            if timeCount == (self.anstimelim*10):
                 break
             
         self.answerworkmemVerb = False
@@ -141,6 +152,7 @@ class workmemVerb_main(QtCore.QThread):
 
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
+        self._qnsshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemVerb = True
 
@@ -199,6 +211,7 @@ class workmemSpace_main(QtCore.QThread):
         self.taskarr = []
         self.anspadarr =[]
         self.ansarr = []
+        self.anstimelim = 10
         self.answerworkmemSpace = False
         self.level = 0
         self.speed = 0
@@ -215,51 +228,61 @@ class workmemSpace_main(QtCore.QThread):
             self.anscount = 10
             self.dispcount = 7
             self.level = 10
+            self.anstimelim = 20
             showtime = 500
         elif count >= 70:
             self.anscount = 10
             self.dispcount = 7
             self.level = 9
+            self.anstimelim = 20
             showtime = 700
         elif count >= 60:
             self.anscount = 10
             self.dispcount = 6
             self.level = 8
+            self.anstimelim = 20
             showtime = 700
         elif count >= 50:
             self.anscount = 10
             self.dispcount = 5
             self.level = 7
+            self.anstimelim = 20
             showtime = 700
         elif count >= 40:
             self.anscount = 10
             self.dispcount = 4
             self.level = 6
+            self.anstimelim = 15
             showtime = 700
         elif count >= 30:
             self.anscount = 8
             self.dispcount = 4
             self.level = 5
+            self.anstimelim = 15
             showtime = 700
         elif count >= 20:
             self.anscount = 8
             self.dispcount = 3
             self.level = 4
+            self.anstimelim = 15
             showtime = 700
         elif count >= 10:
             self.anscount = 4
             self.dispcount = 3
             self.level = 3
+            self.anstimelim = 10
             showtime = 1000
         elif count >= 5:
             self.anscount = 4
             self.dispcount = 2
             self.level = 2
+            self.anstimelim = 10
             showtime = 1000
         else:
             self.anscount = 4
             self.dispcount = 2
             self.level = 1
+            self.anstimelim = 10
             showtime = 1500
         self._level.emit(self.level)
         #self.diffdisp(self.level)
@@ -294,7 +317,7 @@ class workmemSpace_main(QtCore.QThread):
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
-            if timeCount == 100:
+            if timeCount == (self.anstimelim*10):
                 break
 
         self.answerworkmemSpace = False
@@ -323,6 +346,7 @@ class workmemSpace_main(QtCore.QThread):
 
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
+        self._qnsshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemSpace = True
 

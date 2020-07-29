@@ -82,6 +82,7 @@
 |------------------|--------|
 |"Do Task `#`"     |0`#`    |
 |"Question Shown"  |10      |
+|"Answers Shown:   |12      |
 |"User Answered"   |15      |
 |"Answered Correct"|21      |
 |"Answered Wrong"  |20      |

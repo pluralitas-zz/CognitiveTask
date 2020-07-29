@@ -33,15 +33,6 @@ class wrttask:
         with open(self.fpath, 'ab') as filpath: #'ab' for append, binary mode
             np.savetxt(filpath, data, delimiter=',',fmt="%s")
 
-if __name__ == "__main__":
-
-    test = wrttask("test")
-    wans = "Hello World"
-    timenow = str(np.datetime64('now')).replace(":","")
-    out = np.column_stack([timenow, str(wans)])
-    for i in range(100):
-        test.appendfile(out)
-
 class paraout:
     def __init__(self):
         #LPT1 = 0x378, LPT2=0x278, LPT3=0x3BC
@@ -51,3 +42,12 @@ class paraout:
     def parawrite(self,data):
         self.prt.setData(data)
         self.prt.setData(0)
+
+if __name__ == "__main__":
+
+    test = wrttask("test")
+    wans = "Hello World"
+    timenow = str(np.datetime64('now')).replace(":","")
+    out = np.column_stack([timenow, str(wans)])
+    for i in range(100):
+        test.appendfile(out)
