@@ -125,8 +125,8 @@ class PedalThread(QtCore.QThread):
             self.pedalRead[0][1] = Instant Power
             self.pedalRead[0][2] = Instant Cadence
             self.pedalRead[0][3] = Pedal Balance Right
-            self.pedalRead[1] = Power Baseline    
-            ''' #InstPower, AccumPower, InstCadence, pedalBalRight
+            self.pedalRead[1] = Power Baseline
+            ''' #AccumPower, InstPower, InstCadence, pedalBalRight
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
 
             time.sleep(max(0,self.t-time.time()))

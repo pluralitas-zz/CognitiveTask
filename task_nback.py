@@ -8,6 +8,7 @@ class nbackVerb_main(QtCore.QThread):
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
+    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(nbackVerb_main, self).__init__()
@@ -64,7 +65,7 @@ class nbackVerb_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 30 values
+        # generate 20 values
         arraylen = 20
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
@@ -74,7 +75,7 @@ class nbackVerb_main(QtCore.QThread):
         correctval = 4
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
-        
+
         # correcting the answers
         for i in range(len(self.correctarr)):
             if self.correctarr[i]+self.nval >= 0:
@@ -95,7 +96,19 @@ class nbackVerb_main(QtCore.QThread):
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],800,150)
+            try:
+                self.dispback = self.taskarr[self.dispcount+self.nval]
+            except:
+                self.dispback = self.taskarr[self.dispcount]
+
+            if self.taskarr[self.dispcount] == self.dispback and self.dispcount !=0:
+                self._wouttask.emit("Question Shown-True")
+                self._paraport.emit(49)
+            else:
+                self._wouttask.emit("Question Shown-False")
+                self._paraport.emit(48)
             self.answernbackVerb = True
+            
 
             QtTest.QTest.qWait(showtime)
             self._qnsdisp.emit("Blank.png",800,150)
@@ -119,10 +132,10 @@ class nbackVerb_main(QtCore.QThread):
             self.answerappended = True
             self.answernbackVerb = False
 
-            try:
-                self.dispback = self.taskarr[self.dispcount+self.nval]
-            except:
-                self.dispback = self.taskarr[self.dispcount]
+            # try:
+            #     self.dispback = self.taskarr[self.dispcount+self.nval]
+            # except:
+            #     self.dispback = self.taskarr[self.dispcount]
 
             if data == "VerbTick.png":
                 if self.taskarr[self.dispcount] == self.dispback and self.dispcount != 0: #Check if answered correctly or not
@@ -135,6 +148,7 @@ class nbackVerb_main(QtCore.QThread):
                 else:
                     self._counter.emit(0)
                     print("Wrong")
+
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
@@ -158,13 +172,18 @@ class nbackVerb_main(QtCore.QThread):
     def diffdisp(self,numb):
         if numb is -1:
             self._qnsdisp.emit("neg1.png",800,150)
+            self._paraport.emit(41)
+            self._wouttask.emit("Task n-1")
         elif numb is -2:
             self._qnsdisp.emit("neg2.png",800,150)
+            self._paraport.emit(42)
+            self._wouttask.emit("Task n-2")
         elif numb is -3:
             self._qnsdisp.emit("neg3.png",800,150)
+            self._paraport.emit(43)
+            self._wouttask.emit("Task n-3")
         else:
             pass
-
 
 class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
@@ -173,7 +192,8 @@ class nbackSpace_main(QtCore.QThread):
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    
+    _wouttask = QtCore.pyqtSignal(str)
+
     def __init__(self):
         super(nbackSpace_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
@@ -193,8 +213,6 @@ class nbackSpace_main(QtCore.QThread):
     def run_task(self,count):
         self.taskarr.clear()    #clear array
 
-
-        
         # Determine difficulty
         blanktime = 1000
         if count >= 30:
@@ -231,8 +249,8 @@ class nbackSpace_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 30 values
-        arraylen = 30
+        # generate 20 values
+        arraylen = 20
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
@@ -262,6 +280,17 @@ class nbackSpace_main(QtCore.QThread):
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],600,600)
+            try:
+                self.dispback = self.taskarr[self.dispcount+self.nval]
+            except:
+                self.dispback = self.taskarr[self.dispcount]
+
+            if self.taskarr[self.dispcount] == self.dispback and self.dispcount !=0:
+                self._wouttask.emit("Question Shown-True")
+                self._paraport.emit(59)
+            else:
+                self._wouttask.emit("Question Shown-False")
+                self._paraport.emit(58)
             self.answernbackSpace = True
 
             QtTest.QTest.qWait(showtime)
@@ -286,10 +315,10 @@ class nbackSpace_main(QtCore.QThread):
             self.answerappended = True
             self.answernbackSpace = False
 
-            try:
-                self.dispback = self.taskarr[self.dispcount+self.nval]
-            except:
-                self.dispback = self.taskarr[self.dispcount]
+            # try:
+            #     self.dispback = self.taskarr[self.dispcount+self.nval]
+            # except:
+            #     self.dispback = self.taskarr[self.dispcount]
 
             if data == "VerbTick.png":
                 if self.taskarr[self.dispcount] == self.dispback and self.dispcount != 0: #Check if answered correctly or not
@@ -325,9 +354,15 @@ class nbackSpace_main(QtCore.QThread):
     def diffdisp(self,numb):
         if numb is -1:
             self._qnsdisp.emit("neg1.png",800,150)
+            self._paraport.emit(51)
+            self._wouttask.emit("Task n-1")
         elif numb is -2:
             self._qnsdisp.emit("neg2.png",800,150)
+            self._paraport.emit(52)
+            self._wouttask.emit("Task n-2")
         elif numb is -3:
             self._qnsdisp.emit("neg3.png",800,150)
+            self._paraport.emit(53)
+            self._wouttask.emit("Task n-3")
         else:
             pass

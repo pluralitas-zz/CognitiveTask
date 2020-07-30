@@ -8,6 +8,7 @@ class workmemVerb_main(QtCore.QThread):
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
+    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(workmemVerb_main, self).__init__()
@@ -93,7 +94,7 @@ class workmemVerb_main(QtCore.QThread):
             showtime = 1500
 
         self._level.emit(self.level) 
-        #self.diffdisp(self.level)
+        self._paraport.emit(20) #Task 2
         QtTest.QTest.qWait(2000)
 
         # Show center point
@@ -114,6 +115,8 @@ class workmemVerb_main(QtCore.QThread):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
             self._qnsdisp.emit(self.disp,800,150)
+            self._paraport.emit(21)
+            self._wouttask.emit("Question Shown")
             QtTest.QTest.qWait(showtime)
             self._qnsdisp.emit("Blank.png",800,150)
             QtTest.QTest.qWait(blanktime)
@@ -201,7 +204,8 @@ class workmemSpace_main(QtCore.QThread):
     _qnsshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    
+    _wouttask = QtCore.pyqtSignal(str)
+
     def __init__(self):
         super(workmemSpace_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
@@ -285,7 +289,7 @@ class workmemSpace_main(QtCore.QThread):
             self.anstimelim = 10
             showtime = 1500
         self._level.emit(self.level)
-        #self.diffdisp(self.level)
+        self._paraport.emit(30) #Task 3
         QtTest.QTest.qWait(2000)
 
         # Show center point
@@ -306,6 +310,8 @@ class workmemSpace_main(QtCore.QThread):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
             self._qnsdisp.emit(self.disp,600,600)
+            self._paraport.emit(31)
+            self._wouttask.emit("Question Shown")
             QtTest.QTest.qWait(showtime)
             self._qnsdisp.emit("Blank.png",800,150)
             QtTest.QTest.qWait(blanktime)

@@ -78,13 +78,42 @@
 
 ## Parallel Port output command legend (0-255)
 
-| Name             |Number  |
-|------------------|--------|
-|"Do Task `#`"     |0`#`    |
-|"Question Shown"  |10      |
-|"Answers Shown:   |12      |
-|"User Answered"   |15      |
-|"Answered Correct"|21      |
-|"Answered Wrong"  |20      |
+| Global                |Num|
+|-----------------------|---|
+|"Answer Shown"         |4  |
+|"Answered Correct"     |9  |
+|"Answered Correct"     |8  |
 
-* `#` is the task number
+
+| Flanker Task          |10 |
+|-----------------------|---|
+|"Question Shown-Con"   |11 |
+|"Question Shown-Incon" |12 |
+
+
+| Working Memory-Verb   |20 |
+|-----------------------|---|
+|"Question Shown"       |21 |
+
+
+| Working Memory-Space |30 |
+|----------------------|---|
+|"Question Shown"      |31 |
+
+
+| n-back-Verb           |   |
+|-----------------------|---|
+|"Task n-1"             |41 |
+|"Task n-2"             |42 |
+|"Task n-3"             |43 |
+|"Question Shown-True"  |49 |
+|"Question Shown-False" |48 |
+
+
+| n-back-Space          |   |
+|-----------------------|---|
+|"Task n-1"             |51 |
+|"Task n-2"             |52 |
+|"Task n-3"             |53 |
+|"Question Shown-True"  |59 |
+|"Question Shown-False" |58 |
