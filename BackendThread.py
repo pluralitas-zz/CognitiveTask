@@ -41,10 +41,10 @@ class EncDAQBackThread(QtCore.QThread):
     samp = sam_rate*sam_period*counter # 100 samples
     degold = Encoder.deg
     degtravelled = []
-    degarrout = np.array([])
+    degarrout = []
     newdiff = 0
     speed = 0
-
+    degnowarr = []
     def run(self):
         while True:
             self.t+=self.period
@@ -89,13 +89,13 @@ class EncDAQBackThread(QtCore.QThread):
                 self.HRarr = self.samparr * self.HR
                 self.speedarr = self.samparr * self.speed
 
-                for i in range(len(self.degarrout)):
-                    for j in range(self.counter):
-                        self.degnowarr.append(self.degarrout[i])
+                if len(self.degarrout) >= 1:
+                    for i in range(len(self.degarrout)):
+                        for j in range(self.counter):
+                            self.degnowarr.append(self.degarrout[i])
                 self.degnowarr = np.transpose(np.array(self.degnowarr)[np.newaxis])
-                print("Degnowarr size:" + str(len(self.degnowarr)))
 
-                self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
+                self.comb = np.column_stack([np.array(self.degnowarr),self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
                 self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
             ############################# Reset
@@ -111,9 +111,14 @@ class PedalThread(QtCore.QThread):
     #Initlilize Pedal
     baseline_init=main()
     
+        # determines while loop sampling rate
+    t = time.time()
+    period = 0.5    
+    
     #Run function
     def run(self):
         while True:       
+            self.t+=self.period
             self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
             '''
             self.pedalRead[0][0] = Accum. Power
@@ -122,7 +127,9 @@ class PedalThread(QtCore.QThread):
             self.pedalRead[0][3] = Pedal Balance Right
             self.pedalRead[1] = Power Baseline    
             ''' #InstPower, AccumPower, InstCadence, pedalBalRight
-            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]]))) 
+            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
+
+            time.sleep(max(0,self.t-time.time()))
 
 class Window(QDialog):
     def __init__(self):

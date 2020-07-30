@@ -28,6 +28,7 @@ class Ui_root(QtWidgets.QMainWindow):
     tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
+    tasksnum = random.sample(range(0, 4), 4) # randomise tasks
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter[0])
@@ -57,7 +58,7 @@ class Ui_root(QtWidgets.QMainWindow):
             pass
 
     def tasknumset(self,num):
-        self.tasknumnow = self.tasksnum(num)
+        self.tasknumnow = self.tasksnum[num]
         self.CntDisplay()
         self.tasknameshow(self.tasksnum[self.tasknumnow])
 
@@ -65,7 +66,6 @@ class Ui_root(QtWidgets.QMainWindow):
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
-        self.tasksnum = random.sample(range(0, 4), 4) # randomise tasks
         self.firsttaskone = True
         self.firsttasktwo = True
         self.firsttaskthree = True
