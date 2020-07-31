@@ -90,16 +90,19 @@ class EncDAQBackThread(QtCore.QThread):
                 self.speedarr = self.samparr * self.speed
 
                 if len(self.degarrout) >= 1:
+                    self.degnowarr=[]
                     for i in range(len(self.degarrout)):
                         for j in range(self.counter):
                             self.degnowarr.append(self.degarrout[i])
+                else:
+                    self.degnowarr = self.samparr
                 self.degnowarr = np.transpose(np.array(self.degnowarr)[np.newaxis])
 
                 self.comb = np.column_stack([np.array(self.degnowarr),self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
                 self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
             ############################# Reset
-                self.degnowarr = []
+                self.degarrout = []
                 self.count = 0
         
             time.sleep(max(0,self.t-time.time()))
