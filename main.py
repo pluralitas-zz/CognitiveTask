@@ -507,6 +507,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
+        print("pedalwoutarr" + str(data))
         self.pedalwoutarr[0] = data #append into array for writeout
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAccPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))

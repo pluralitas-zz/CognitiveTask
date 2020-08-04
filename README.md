@@ -82,7 +82,7 @@
 |-----------------------|---|
 |"Answer Shown"         |4  |
 |"Answered Correct"     |9  |
-|"Answered Correct"     |8  |
+|"Answered Wrong"       |8  |
 
 
 | Flanker Task          |10 |
