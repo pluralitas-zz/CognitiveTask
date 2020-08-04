@@ -41,17 +41,17 @@ class EncDAQBackThread(QtCore.QThread):
     samp = sam_rate*sam_period*counter # 100 samples
     degold = Encoder.deg
     degtravelled = []
-    degarrout = []
+    degarrout = np.array(list())
     newdiff = 0
     speed = 0
     degnowarr = []
     def run(self):
         while True:
-            self.t+=self.period
-            self.count+=1
+            self.t += self.period
+            self.count += 1
         ############################# Encoder
             self.degnow = self.Encoder.deg #Read Encoder Degree
-            self.degarrout.append(self.degnow) #append into array for use with writeout
+            self.degarrout = np.append(self.degnow, self.degarrout) #append into array for use with writeout
             ## check whether encoder is going forward or in reverse
             if ((self.degold - self.degnow) > 180):
                 self.newdiff = self.degnow - self.degold + 360
@@ -67,9 +67,9 @@ class EncDAQBackThread(QtCore.QThread):
                 self.speed = int(sum(self.degtravelled)/self.sam_period*60/360) #calculate rpm
                 self.encorderSpeed.emit(self.speed)
                 self.degtravelled=[]
-        
+
             if self.count == self.counter:
-            ############################# PPG
+                ############################# PPG
                 self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
                 
                 if len(self.HRarrdaq) != self.HRcalarray: # PPG calculations (depends on HRaltime, else just append into HRarrdaq)
@@ -84,27 +84,25 @@ class EncDAQBackThread(QtCore.QThread):
                     self._PPGHeartRate.emit(self.HR)
                     self.HRarrdaq = np.array(list())
 
-            ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
+                ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
                 # pad signal to equal sample size of EMG for DAQ
                 self.HRarr = self.samparr * self.HR
                 self.speedarr = self.samparr * self.speed
 
-                if len(self.degarrout) >= 1:
-                    self.degnowarr=[]
-                    for i in range(len(self.degarrout)):
-                        for j in range(self.counter):
-                            self.degnowarr.append(self.degarrout[i])
+                if np.size(self.degarrout) >= 1:
+                    self.degnowarr = np.repeat(self.degarrout,10)
+                    self.degnowarr = np.transpose(self.degnowarr[:,:100][np.newaxis])
                 else:
                     self.degnowarr = self.samparr
-                self.degnowarr = np.transpose(np.array(self.degnowarr)[np.newaxis])
-
+                
                 self.comb = np.column_stack([np.array(self.degnowarr),self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
                 self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
-            ############################# Reset
-                self.degarrout = []
+                ############################# Reset
+                self.degarrout = np.array(list())
                 self.count = 0
         
+            print(self.t-time.time())
             time.sleep(max(0,self.t-time.time()))
             
 class PedalThread(QtCore.QThread):
