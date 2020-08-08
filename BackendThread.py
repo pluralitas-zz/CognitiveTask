@@ -91,18 +91,18 @@ class EncDAQBackThread(QtCore.QThread):
 
                 if np.size(self.degarrout) >= 1:
                     self.degnowarr = np.repeat(self.degarrout,10)
-                    self.degnowarr = np.transpose(self.degnowarr[:,:100][np.newaxis])
+                    self.degnowarr = np.transpose(self.degnowarr[np.newaxis])
                 else:
                     self.degnowarr = self.samparr
                 
-                self.comb = np.column_stack([np.array(self.degnowarr),self.speedarr,self.HRarr,self.daqarr[:,:3]]) #stack deg, speed, heartrate and EMG x 4
+                #self.degnowarrout = np.array(self.degnowarr)
+                self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:4]]) #stack deg, speed, heartrate and EMG x 4
                 self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
                 ############################# Reset
                 self.degarrout = np.array(list())
                 self.count = 0
         
-            print(self.t-time.time())
             time.sleep(max(0,self.t-time.time()))
             
 class PedalThread(QtCore.QThread):

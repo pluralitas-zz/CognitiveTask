@@ -396,7 +396,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def writeout(self,data): #time, elapsed time, deg, speed, heartrate, EMG x 4, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.comb = np.column_stack([np.ones((self.daqbackend.samples,1))*time.time(),np.ones((self.daqbackend.samples,1))*self.timecount,data,self.pedalwoutarr])
+        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time(), np.ones((self.daqbackend.samples,1))*self.timecount, data, self.pedalwoutarr])
         self.writefile.appendfile(self.comb) #write data to file
     
     def wouttask(self,data):
