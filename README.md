@@ -28,7 +28,7 @@
 3. Verbal Recall Task (Verbal)
 4. n-back Task (Visuospatial)
 5. n-back Task (Verbal)
-6. Divided Attention Task (able to fake other tasks)
+6. Majority Task
 
 ## Steps to install
 
@@ -117,3 +117,7 @@
 |"Task n-3"             |53 |
 |"Question Shown-True"  |59 |
 |"Question Shown-False" |58 |
+
+| Majority               |60 |
+|------------------------|---|
+|"Answers/Question Shown"|4  |

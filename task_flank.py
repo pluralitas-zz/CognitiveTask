@@ -27,7 +27,7 @@ class flank_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        if count >= 20:
+        if count >= 30:
             showtime = 300
             self.questions2 = self.questions
             self.level = 5
@@ -91,9 +91,10 @@ class flank_main(QtCore.QThread):
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
         
 
-        QtTest.QTest.qWait(100) # Wait before allowing user to answer
+        #QtTest.QTest.qWait(100) # Wait before allowing user to answer
         self.answerflank = True
         self._qnsshowhide.emit(1) #show the answer buttons
+        self._qnsshowhide.emit(0) #hide the answers buttons
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)

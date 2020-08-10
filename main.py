@@ -2,7 +2,7 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn, trngComplete #custom .py
+import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, trngComplete #custom .py
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
@@ -18,7 +18,7 @@ class Ui_root(QtWidgets.QMainWindow):
     UserIDNAME = "Test"
 
 # Define your Counter scores HERE
-    counter = np.array([0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace
+    counter = np.array([0,0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
 
 # Define TRAINING TIME HERE 
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
@@ -28,7 +28,7 @@ class Ui_root(QtWidgets.QMainWindow):
     tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    tasksnum = random.sample(range(0, 4), 4) # randomise tasks
+    tasksnum = random.sample(range(0, 5), 4) # randomise tasks
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter[0])
@@ -40,6 +40,8 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckVerb.run_task(self.counter[3])
         elif numb is 4:
             self.nbckSpace.run_task(self.counter[4])
+        elif numb = 5:
+            self.mjr.run_task(self.counter[5])
         else:
             pass
 
@@ -54,6 +56,8 @@ class Ui_root(QtWidgets.QMainWindow):
             self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
         elif numb is 4:
             self.cd.run_cd("NameNbackVisual.png") #10 seconds count down, 7 secs show task name
+        elif numb is 5:
+            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         else:
             pass
 
@@ -226,6 +230,18 @@ class Ui_root(QtWidgets.QMainWindow):
         self._answer.connect(self.wrkSpace.append_ans)
         self._speed.connect(self.wrkSpace.current_speed)
 
+        #connect majority task
+        self.mjr = task_major.major_main()
+        self.mjr._qnsdisp.connect(self.disp_qns)
+        self.mjr._ansdisp.connect(self.disp_ans)
+        self.mjr._counter.connect(self.counter_add)
+        self.mjr._level.connect(self.LevelDisplay)
+        self.mjr._qnsshowhide.connect(self.showhideAnswers)
+        self.mjr._paraport.connect(self.parwrite)
+        self.mjr._wouttask.connect(self.wouttask)
+        self._answer.connect(self.mjr.append_ans)
+        self._speed.connect(self.mjr.current_speed)
+
         #create shortcut for buttons
         self.QuesBtn_A.setShortcut("c")
         self.QuesBtn_B.setShortcut("v")
@@ -277,7 +293,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
             self.QuesBtn_ShldL.show()
             self.QuesBtn_ShldR.show()
-            self.para.parawrite(4)
+            QtTest.QTest.qWait(100)
+            self.parwrite(4)
             self.wouttask("Answers Shown")
         else:
             pass
@@ -286,12 +303,14 @@ class Ui_root(QtWidgets.QMainWindow):
         if boo == 1:
             self.counter[self.tasknumnow] += 1
             self.wouttask("Correct: " + str(self.counter))
-            self.para.parawrite(9)
+            QtTest.QTest.qWait(100)
+            self.parwrite(9)
         else:
             #if self.counter > 0:
             self.counter[self.tasknumnow] -=1
             self.wouttask("Wrong: "+ str(self.counter))
-            self.para.parawrite(8)
+            QtTest.QTest.qWait(100)
+            self.parwrite(8)
         self.CntDisplay()
 
         # if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
