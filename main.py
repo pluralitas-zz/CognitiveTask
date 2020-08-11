@@ -28,7 +28,8 @@ class Ui_root(QtWidgets.QMainWindow):
     tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    tasksnum = random.sample(range(0, 5), 4) # randomise tasks
+    # tasksnum = random.sample(range(0, 5), 4) # randomise tasks
+    tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter[0])
@@ -40,8 +41,9 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckVerb.run_task(self.counter[3])
         elif numb is 4:
             self.nbckSpace.run_task(self.counter[4])
-        elif numb = 5:
+        elif numb is 5:
             self.mjr.run_task(self.counter[5])
+
         else:
             pass
 
@@ -78,7 +80,7 @@ class Ui_root(QtWidgets.QMainWindow):
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
             
-            if 420 >= self.timecount > 120: #in seconds
+            if 420 >= self.timecount > 20: #120: #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
                     self.firsttaskone = False
@@ -526,7 +528,6 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
-        print("pedalwoutarr" + str(data))
         self.pedalwoutarr[0] = data #append into array for writeout
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAccPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))

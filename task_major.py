@@ -93,19 +93,20 @@ class major_main(QtCore.QThread):
 
         self.answermajor = True
         self._qnsshowhide.emit(1) #show the answer buttons
-        QtTest.QTest.qWait(showtime)
-        self._qnsshowhide.emit(0) #hide the answers buttons
+        QtTest.QTest.qWait(self.showtime)
+        #self._qnsshowhide.emit(0) #hide the answers buttons
         self._ansdisp.emit(self.questions) #emit correct answering array
         
         timeCount = 0
-        while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
+        while len(self.ansarr) < 1: #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
             if timeCount == self.cutofftime:
                 break
         
         self.answermajor = False
-        if self.ansarr == self.taskarr: #Check if answered correctly or not
+        print("taskcorrect[1] = " + str(self.taskcorrect[1]))
+        if self.ansarr == [self.taskcorrect[1][:-4]]: #Check if answered correctly or not
             print("Correct")
             self._counter.emit(1)
         else:
@@ -121,6 +122,7 @@ class major_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answermajor == True:
             self.ansarr.append(data[:6])
+            print("ansarr: "+ str(self.ansarr))
 
     def current_speed(self,data,data2):
         self.speed = data
