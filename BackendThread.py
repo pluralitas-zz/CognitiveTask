@@ -15,7 +15,7 @@ class EncDAQBackThread(QtCore.QThread):
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
-    samples = 100 #per acquisition
+    samples = 10 #per acquisition
     samparr = np.ones((samples,1))
     HRrange = [60,140] #Range of HR
     HRxVal = 2.5 #Threshold for edge detection for PPG
@@ -26,9 +26,7 @@ class EncDAQBackThread(QtCore.QThread):
 
     # determines while loop sampling rate
     t = time.time()
-    counter = 10 #number of samples for Encoder to take per DAQ return rate
-    period = 1/samp_rate*samples/counter #0.01s
-    count = 0 #for use in run() loop
+    period = 1/samp_rate*samples #1/100 = 0.01s
 
     # Initialize Encoder
     Encoder=encoder()
@@ -36,22 +34,19 @@ class EncDAQBackThread(QtCore.QThread):
     encorderSpeed = QtCore.pyqtSignal(int)
 
     # Variables for encoder
-    sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ # 10hz
+    sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ #100hz
     sam_period = 1 #period to collect signals sec 
-    samp = sam_rate*sam_period*counter # 100 samples
+    samp = sam_rate*sam_period #100*1 = 100 samples
     degold = Encoder.deg
     degtravelled = []
-    degarrout = np.array(list())
     newdiff = 0
     speed = 0
     degnowarr = []
     def run(self):
         while True:
             self.t += self.period
-            self.count += 1
         ############################# Encoder
             self.degnow = self.Encoder.deg #Read Encoder Degree
-            self.degarrout = np.append(self.degnow, self.degarrout) #append into array for use with writeout
             ## check whether encoder is going forward or in reverse
             if ((self.degold - self.degnow) > 180):
                 self.newdiff = self.degnow - self.degold + 360
@@ -68,40 +63,33 @@ class EncDAQBackThread(QtCore.QThread):
                 self.encorderSpeed.emit(self.speed)
                 self.degtravelled=[]
 
-            if self.count == self.counter:
-                ############################# PPG
-                self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
-                
-                if len(self.HRarrdaq) != self.HRcalarray: # PPG calculations (depends on HRaltime, else just append into HRarrdaq)
-                    self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,4])
-                else:
-                    self.HRarrdiff = np.diff(self.HRarrdaq)
-                    self.HRperiod = (np.where(self.HRarrdiff>self.HRxVal)[0]+1)/self.samp_rate
-                    self.HRperioddiff = np.diff(self.HRperiod)
-                    self.HRper_in = self.HRperioddiff[np.all([self.HRperioddiff > (60/self.HRrange[1]), self.HRperioddiff < (60/self.HRrange[0])], axis=0)]
+            ############################# PPG
+            self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
+            
+            if len(self.HRarrdaq) != self.HRcalarray: # PPG calculations (depends on HRaltime, else just append into HRarrdaq)
+                self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,4])
+            else:
+                self.HRarrdiff = np.diff(self.HRarrdaq)
+                self.HRperiod = (np.where(self.HRarrdiff>self.HRxVal)[0]+1)/self.samp_rate
+                self.HRperioddiff = np.diff(self.HRperiod)
+                self.HRper_in = self.HRperioddiff[np.all([self.HRperioddiff > (60/self.HRrange[1]), self.HRperioddiff < (60/self.HRrange[0])], axis=0)]
 
-                    self.HR = self.HR if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
-                    self._PPGHeartRate.emit(self.HR)
-                    self.HRarrdaq = np.array(list())
+                self.HR = self.HR if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
+                self._PPGHeartRate.emit(self.HR)
+                self.HRarrdaq = np.array(list())
 
-                ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
-                # pad signal to equal sample size of EMG for DAQ
-                self.HRarr = self.samparr * self.HR
-                self.speedarr = self.samparr * self.speed
+            ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
+            # pad signal to equal sample size of EMG for DAQ
+            self.HRarr = self.samparr * self.HR
+            self.speedarr = self.samparr * self.speed
+            self.degnowarr = self.samparr * self.degnow
+            
+            #self.degnowarrout = np.array(self.degnowarr)
+            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:4]]) #stack deg, speed, heartrate and EMG x 4
+            self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
-                if np.size(self.degarrout) >= 1:
-                    self.degnowarr = np.repeat(self.degarrout,10)
-                    self.degnowarr = np.transpose(self.degnowarr[np.newaxis])
-                else:
-                    self.degnowarr = self.samparr
-                
-                #self.degnowarrout = np.array(self.degnowarr)
-                self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:4]]) #stack deg, speed, heartrate and EMG x 4
-                self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
-
-                ############################# Reset
-                self.degarrout = np.array(list())
-                self.count = 0
+            ############################# Reset
+            self.degarrout = np.array(list())
         
             time.sleep(max(0,self.t-time.time()))
             
@@ -122,8 +110,8 @@ class PedalThread(QtCore.QThread):
             self.t+=self.period
             self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
             '''
-            self.pedalRead[0][0] = Accum. Power
-            self.pedalRead[0][1] = Instant Power
+            self.pedalRead[0][0] = Inst. Power
+            self.pedalRead[0][1] = Accum Power
             self.pedalRead[0][2] = Instant Cadence
             self.pedalRead[0][3] = Pedal Balance Right
             self.pedalRead[1] = Power Baseline

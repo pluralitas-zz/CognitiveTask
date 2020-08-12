@@ -105,7 +105,6 @@ class major_main(QtCore.QThread):
                 break
         
         self.answermajor = False
-        print("taskcorrect[1] = " + str(self.taskcorrect[1]))
         if self.ansarr == [self.taskcorrect[1][:-4]]: #Check if answered correctly or not
             print("Correct")
             self._counter.emit(1)
@@ -122,7 +121,6 @@ class major_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answermajor == True:
             self.ansarr.append(data[:6])
-            print("ansarr: "+ str(self.ansarr))
 
     def current_speed(self,data,data2):
         self.speed = data

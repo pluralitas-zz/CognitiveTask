@@ -3,9 +3,9 @@ from psychopy import parallel
 
 class wrtout:
     savepath = "C:\\Data" #data savepath
-    head = 'Time,Elapsed Time,Deg,Speed,Heart Rate,QC Left,HS Left,QC Right,HS Right,Accum. Power,Inst. Power,Inst. Cad,Balance R' #header
+    head = 'Time,ElapsedTime,Deg,Speed,HeartRate,QCLeft,HSLeft,QCRight,HSRight,InstPower,AccumPower,InstCad,BalanceR' #header
     init = np.zeros([1,13])
-    comms = "1000Hz, 100samples from DAQ; HR and EMG(s)\r\nEncoder angle w.r.t. LEFT crank is synchronised to DAQ once every 100 samples\r\nPedal Data at 1 Hz\r\n" #comments
+    comms = "1000Hz, 10samples from DAQ; HR and EMG(s)\r\nEncoder angle w.r.t. LEFT crank is synchronised to DAQ once every 100 samples\r\nPedal Data at 1 Hz\r\n" #comments
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
