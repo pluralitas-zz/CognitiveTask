@@ -43,7 +43,6 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckSpace.run_task(self.counter[4])
         elif numb is 5:
             self.mjr.run_task(self.counter[5])
-
         else:
             pass
 

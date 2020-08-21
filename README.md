@@ -23,12 +23,12 @@
 
 ## Currently 5 tasks are implemented:
 
-1. Erikssen Flanker Task
-2. Verbal Recall Task (Visuospatial)
-3. Verbal Recall Task (Verbal)
-4. n-back Task (Visuospatial)
-5. n-back Task (Verbal)
-6. Majority Task
+1. Erikssen Flanker Task ``Task 0``
+2. Verbal Recall Task (Verbal) ``Task 1``
+3. Verbal Recall Task (Visuospatial)  ``Task 2``
+4. n-back Task (Verbal) ``Task 3``
+5. n-back Task (Visuospatial) ``Task 4``
+6. Majority Task ``Task 5``
 
 ## Steps to install
 
