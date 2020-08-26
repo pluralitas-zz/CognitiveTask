@@ -5,7 +5,7 @@ class wrtout:
     savepath = "C:\\Data" #data savepath
     head = 'Time,ElapsedTime,Deg,Speed,HeartRate,QCLeft,HSLeft,QCRight,HSRight,InstPower,AccumPower,InstCad,BalanceR' #header
     init = np.zeros([1,13])
-    comms = "1000Hz, 10samples from DAQ; HR and EMG(s)\r\nEncoder angle w.r.t. LEFT crank is synchronised to DAQ once every 100 samples\r\nPedal Data at 1 Hz\r\n" #comments
+    comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nHR updates every 4 secs\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nPedal Data at 1 Hz\r\n" #comments
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
