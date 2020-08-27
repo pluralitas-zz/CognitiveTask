@@ -17,9 +17,9 @@ class EncDAQBackThread(QtCore.QThread):
     samp_rate = 1000 #for DAQ (Hz)
     samples = 10 #per acquisition
     samparr = np.ones((samples,1))
-    HRrange = [60,140] #Range of HR
+    HRrange = [30,200] #Range of HR
     HRxVal = 2.5 #Threshold for edge detection for PPG
-    HRcaltime = 4 #seconds for refreshing HR values, more = more accurate
+    HRcaltime = 5 #seconds for refreshing HR values, more = more accurate
     HR = 0
     HRcalarray = HRcaltime*samp_rate #4000 datapoints
     HRarrdaq = np.array(list())
@@ -69,12 +69,12 @@ class EncDAQBackThread(QtCore.QThread):
             if len(self.HRarrdaq) != self.HRcalarray: # PPG calculations (depends on HRaltime, else just append into HRarrdaq)
                 self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,4])
             else:
-                self.HRarrdiff = np.diff(self.HRarrdaq)
-                self.HRperiod = (np.where(self.HRarrdiff>self.HRxVal)[0]+1)/self.samp_rate
-                self.HRperioddiff = np.diff(self.HRperiod)
-                self.HRper_in = self.HRperioddiff[np.all([self.HRperioddiff > (60/self.HRrange[1]), self.HRperioddiff < (60/self.HRrange[0])], axis=0)]
-
-                self.HR = self.HR if len(self.HRper_in) == 0 else int(60/np.mean(self.HRper_in))
+                self.HRarrbool = self.HRarrdaq>2 #change to boolean
+                self.HRarrwhere = (np.where(self.HRarrbool)[0]) #find True element locations
+                self.HRarrdiff = np.diff(self.HRarrwhere) #find differences between locations
+                self.HRarrdiff = self.HRarrdiff[1:(len(self.HRarrdiff)-1)] #take out the first and last value
+                self.HRper_in = self.HRarrdiff[np.all([self.HRarrdiff > (np.round(60*self.samp_rate/self.HRrange[1])), self.HRarrdiff < (np.round(60*self.samp_rate/self.HRrange[0]))], axis=0)] #remove all difference outside of HRrange
+                self.HR = self.HR if len(self.HRper_in) == 0 else int(60*self.samp_rate/np.mean(self.HRper_in))
                 self._PPGHeartRate.emit(self.HR)
                 self.HRarrdaq = np.array(list())
 
