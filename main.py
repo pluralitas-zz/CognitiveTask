@@ -28,8 +28,8 @@ class Ui_root(QtWidgets.QMainWindow):
     tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    # tasksnum = random.sample(range(0, 5), 4) # randomise tasks
-    tasksnum = [5, 5, 5, 5]
+    tasksnum = random.sample(range(0, 5), 4) # randomise tasks
+    # tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter[0])
