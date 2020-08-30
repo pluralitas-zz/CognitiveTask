@@ -257,9 +257,15 @@ class Window(QDialog):
                 keyboard.release('a') 
 
 if __name__ == '__main__':
-    import sys
-    #Initialize Window
-    app =QApplication(sys.argv)
-    MainWin = Window()
-    MainWin.show()
-    sys.exit(app.exec_())
+    pedThread = PedalThread()
+    pedThread.start()
+
+
+
+
+    # import sys
+    # #Initialize Window
+    # app =QApplication(sys.argv)
+    # MainWin = Window()
+    # MainWin.show()
+    # sys.exit(app.exec_())

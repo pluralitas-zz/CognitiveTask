@@ -94,7 +94,7 @@ class flank_main(QtCore.QThread):
         #QtTest.QTest.qWait(100) # Wait before allowing user to answer
         self.answerflank = True
         self._qnsshowhide.emit(1) #show the answer buttons
-        self._qnsshowhide.emit(0) #hide the answers buttons
+        #self._qnsshowhide.emit(0) #hide the answers buttons
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)

@@ -79,7 +79,7 @@ class Ui_root(QtWidgets.QMainWindow):
         while self.timecount < self.trainsec:
             QtTest.QTest.qWait(1000)
             
-            if 420 >= self.timecount > 20: #120: #in seconds
+            if 420 >= self.timecount > 120: #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
                     self.firsttaskone = False
@@ -337,9 +337,11 @@ class Ui_root(QtWidgets.QMainWindow):
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
 
             self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-            for i in range(4):
-                data[i+1] = 'Blank.png'
-                data[i+6] = 'Blank.png'
+            #for i in range(4): #Change other values except data[0](Bottom Right) and data[5](Bottom Left) to "Blank.png" for display
+            #    data[i+1] = 'Blank.png' 
+            #    data[i+6] = 'Blank.png'
+            for i in range(len(self.data)): #Change all values to "Blank.png" for display
+                data[i] = 'Blank.png'
 
         elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'

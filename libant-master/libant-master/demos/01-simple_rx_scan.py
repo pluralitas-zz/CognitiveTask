@@ -8,10 +8,6 @@ from libAnt.node import Node
 
 def callback(msg):
     raw=str(msg)
-    
-
-    
-    
     if(int(raw[6:8],16)==16):
       
 
