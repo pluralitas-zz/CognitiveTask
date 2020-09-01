@@ -20,6 +20,9 @@ def callback(msg):
     global avgPower_baseline , baseLine_count
     #fout = open(fpath,'a+')
     raw=str(msg)
+    # print(msg) if msg is only 1 value then == HR
+    # print(len(msg)) 
+
     raw=raw.split(",")
     if not avgPower_baseline:
         avgPower_baseline=raw[1]
@@ -73,13 +76,12 @@ def main():
             if (bool(avgPower_baseline) & bool(baseLine_count)):
                 flag = False
                
-
     return [avgPower_baseline,baseLine_count]
 
 def DAQfunc(avgPower,baseCount):
     global avgPower_baseline, baseLine_count
     global raw 
-    max_count =4
+    max_count = 4
     baseLine_count = baseCount
     avgPower_baseline = avgPower
     output_raw = [[] for _ in range(max_count)]
@@ -102,4 +104,3 @@ if __name__ == "__main__":
     while 1:
         pedalRead=DAQfunc(y[0],y[1])
         print(pedalRead)
-         
