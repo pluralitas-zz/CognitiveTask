@@ -340,7 +340,7 @@ class Ui_root(QtWidgets.QMainWindow):
             #for i in range(4): #Change other values except data[0](Bottom Right) and data[5](Bottom Left) to "Blank.png" for display
             #    data[i+1] = 'Blank.png' 
             #    data[i+6] = 'Blank.png'
-            for i in range(len(self.data)): #Change all values to "Blank.png" for display
+            for i in range(len(data)): #Change all values to "Blank.png" for display
                 data[i] = 'Blank.png'
 
         elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
@@ -417,8 +417,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter[self.tasknumnow]) +"</font>")
 
 # Write out to file Stuff
-    def writeout(self,data): #time, elapsed time, deg, speed, heartrate, EMG x 4, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time(), np.ones((self.daqbackend.samples,1))*self.timecount, data, self.pedalwoutarr])
+    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
+        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time(), np.ones((self.daqbackend.samples,1))*self.timecount, data, self.heartratewoutarr, self.pedalwoutarr])
         self.writefile.appendfile(self.comb) #write data to file
     
     def wouttask(self,data):
@@ -519,8 +519,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
 
     def HRDisplay(self,data):
-        self.heartrate = str(data)
-        self.HUDValHR.setText("<font color='White'>"+ self.heartrate +"</font>")
+        self.heartratewoutarr[0] = data
+        self.HUDValHR.setText("<font color='White'>"+ str(data) +"</font>")
 
     def EncoderDisplay(self, data): # UI Slot to recieve Encoder
         self.speed=str(data)
@@ -564,6 +564,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.pedalBackend=PedalThread()
         self.daqbackend= EncDAQBackThread()
         self.pedalwoutarr = np.zeros((self.daqbackend.samples,4)) #blank array for use with writeout
+        self.heartratewoutarr = np.zeros((self.daqbackend.samples,1)) #blank array for use with writeout
 
         #Initialize Controller
         self.controller=self.Controller()        
@@ -580,8 +581,8 @@ class Ui_root(QtWidgets.QMainWindow):
         # Signal connect to Slots for Data
         self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 
         self.daqbackend.encorderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
-        self.daqbackend._PPGHeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
+        self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
 
 # Setup UI Stuff

@@ -20,11 +20,9 @@ def callback(msg):
     global avgPower_baseline , baseLine_count
     #fout = open(fpath,'a+')
     raw=str(msg)
-    # print(msg) if msg is only 1 value then == HR
-    # print(len(msg)) 
 
     raw=raw.split(",")
-    if not avgPower_baseline:
+    if not avgPower_baseline: #if value doesnt exist, create value
         avgPower_baseline=raw[1]
     if not baseLine_count:
         baseLine_count = int(raw[4])-1
@@ -68,9 +66,10 @@ def main():
             f = Factory(callback)
             n.enableRxScanMode() 
             n.start(f.parseMessage, eCallback) #print "USB OPENSTART""USB OPEN SUCCESS" & "USB CLOSE START" & "USB CLOSE END"
-            sleep(1.25)  # keep Listening for 30sec
-            output_raw[count][0:4] = raw
-            count = count+1
+            sleep(1.25) # keep Listening for 30sec
+            if len(raw) > 1:
+                output_raw[count][0:4] = raw #output_raw[count][0:4] = raw
+                count = count+1
             #print("Baseline")
             #print (type(output_raw))
             if (bool(avgPower_baseline) & bool(baseLine_count)):
@@ -81,10 +80,11 @@ def main():
 def DAQfunc(avgPower,baseCount):
     global avgPower_baseline, baseLine_count
     global raw 
-    max_count = 4
+    max_count = 2
     baseLine_count = baseCount
     avgPower_baseline = avgPower
     output_raw = [[] for _ in range(max_count)]
+    heartrate = np.array([])
     count = 0
     while count<max_count:
         with Node(USBDriver(vid=0x0FCF, pid=0x1008), 'MyNode') as n:
@@ -93,14 +93,21 @@ def DAQfunc(avgPower,baseCount):
             n.start(f.parseMessage, eCallback) #print "USB OPENSTART""USB OPEN SUCCESS" & "USB CLOSE START" & "USB CLOSE END"
             sleep(1.25)  # keep Listening for 1.25sec
             raw = [int(i) for i in raw]
-            output_raw[count][0:4] = raw
-            count = count+1
-            #print (output_raw)
-            #print(type(output_raw))
-    return [np.median(np.array(output_raw),axis=0),avgPower_baseline,baseLine_count]
+            if len(raw) == 1:
+                heartrate = raw
+            else:
+                output_raw[count][0:4] = raw
+                count = count+1
+    #print(output_raw)
+    #print(heartrate[-1])
+    if not heartrate: # Check if HR array has values in it
+        heartrate = np.array([0])
+
+    return [np.median(np.array(output_raw),axis=0), float(heartrate[-1]), avgPower_baseline,baseLine_count]
 
 if __name__ == "__main__": 
     y=main()
     while 1:
         pedalRead=DAQfunc(y[0],y[1])
-        print(pedalRead)
+        print(pedalRead[0])
+        print(pedalRead[1])

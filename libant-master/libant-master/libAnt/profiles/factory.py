@@ -3,10 +3,11 @@ from threading import Lock
 from libAnt.message import BroadcastMessage
 from libAnt.profiles.power_profile import PowerProfileMessage
 from libAnt.profiles.speed_cadence_profile import SpeedAndCadenceProfileMessage
-
+from libAnt.profiles.heartrate_profile import HeartRateProfileMessage
 
 class Factory:
     types = {
+        120: HeartRateProfileMessage,
         121: SpeedAndCadenceProfileMessage,
         11: PowerProfileMessage
     }
@@ -52,7 +53,6 @@ class Factory:
                 num = msg.deviceNumber
                 type = msg.deviceType
                 if type == 11: # Quick patch to filter out power messages with non-power info
-                    #if msg.content[0] != 16  | msg.content[0] != 19 :
                     if msg.content[0] != 16:     
                         return
                 pmsg = self.types[type](msg, self._messages[(num, type)] if (num, type) in self._messages else None)

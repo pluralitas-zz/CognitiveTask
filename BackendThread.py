@@ -11,18 +11,11 @@ class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
     # create signal slots
     _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
-    _PPGHeartRate = QtCore.pyqtSignal(int) #PPG signal slot
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
     samples = 10 #per acquisition
     samparr = np.ones((samples,1))
-    HRrange = [30,200] #Range of HR
-    HRxVal = 2.5 #Threshold for edge detection for PPG
-    HRcaltime = 5 #seconds for refreshing HR values, more = more accurate
-    HR = 0
-    HRcalarray = HRcaltime*samp_rate #4000 datapoints
-    HRarrdaq = np.array(list())
 
     # determines while loop sampling rate
     t = time.time()
@@ -63,29 +56,16 @@ class EncDAQBackThread(QtCore.QThread):
                 self.encorderSpeed.emit(self.speed)
                 self.degtravelled=[]
 
-            ############################# PPG
+            ############################# Acquire DAQ data
             self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
-            
-            if len(self.HRarrdaq) != self.HRcalarray: # PPG calculations (depends on HRaltime, else just append into HRarrdaq)
-                self.HRarrdaq = np.append(self.HRarrdaq, self.daqarr[:,4])
-            else:
-                self.HRarrbool = self.HRarrdaq>2 #change to boolean
-                self.HRarrwhere = (np.where(self.HRarrbool)[0]) #find True element locations
-                self.HRarrdiff = np.diff(self.HRarrwhere) #find differences between locations
-                self.HRarrdiff = self.HRarrdiff[1:(len(self.HRarrdiff)-1)] #take out the first and last value
-                self.HRper_in = self.HRarrdiff[np.all([self.HRarrdiff > (np.round(60*self.samp_rate/self.HRrange[1])), self.HRarrdiff < (np.round(60*self.samp_rate/self.HRrange[0]))], axis=0)] #remove all difference outside of HRrange
-                self.HR = self.HR if len(self.HRper_in) == 0 else int(60*self.samp_rate/np.mean(self.HRper_in))
-                self._PPGHeartRate.emit(self.HR)
-                self.HRarrdaq = np.array(list())
 
             ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
             # pad signal to equal sample size of EMG for DAQ
-            self.HRarr = self.samparr * self.HR
             self.speedarr = self.samparr * self.speed
             self.degnowarr = self.samparr * self.degnow
             
             #self.degnowarrout = np.array(self.degnowarr)
-            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.HRarr,self.daqarr[:,:4]]) #stack deg, speed, heartrate and EMG x 4
+            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.daqarr[:,:4]]) #stack deg, speed and EMG x 4
             self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
             ############################# Reset
@@ -96,7 +76,8 @@ class EncDAQBackThread(QtCore.QThread):
 class PedalThread(QtCore.QThread):
     # Create Signal Slot 
     _pedalValue = QtCore.pyqtSignal(list)
-    
+    _HeartRate = QtCore.pyqtSignal(int)
+
     #Initlilize Pedal
     baseline_init=main()
     
@@ -114,10 +95,11 @@ class PedalThread(QtCore.QThread):
             self.pedalRead[0][1] = Accum Power
             self.pedalRead[0][2] = Instant Cadence
             self.pedalRead[0][3] = Pedal Balance Right
-            self.pedalRead[1] = Power Baseline
+            self.pedalRead[1] = HeartRate (From Polar H10)
+            self.pedalRead[2] = Power Baseline
             ''' #AccumPower, InstPower, InstCadence, pedalBalRight
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
-
+            self._HeartRate.emit(self.pedalRead[1])
             time.sleep(max(0,self.t-time.time()))
 
 class Window(QDialog):
