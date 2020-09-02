@@ -78,12 +78,12 @@ class PedalThread(QtCore.QThread):
     _pedalValue = QtCore.pyqtSignal(list)
     _HeartRate = QtCore.pyqtSignal(int)
 
-    #Initlilize Pedal
+    #Initialise Pedal
     baseline_init=main()
     
-        # determines while loop sampling rate
+    #Determines while loop sampling rate
     t = time.time()
-    period = 0.5    
+    period = 0.5
     
     #Run function
     def run(self):
@@ -97,7 +97,7 @@ class PedalThread(QtCore.QThread):
             self.pedalRead[0][3] = Pedal Balance Right
             self.pedalRead[1] = HeartRate (From Polar H10)
             self.pedalRead[2] = Power Baseline
-            ''' #AccumPower, InstPower, InstCadence, pedalBalRight
+            ''' # InstPower, AccumPower, InstCadence, pedalBalRight
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
             self._HeartRate.emit(self.pedalRead[1])
             time.sleep(max(0,self.t-time.time()))
@@ -241,9 +241,6 @@ class Window(QDialog):
 if __name__ == '__main__':
     pedThread = PedalThread()
     pedThread.start()
-
-
-
 
     # import sys
     # #Initialize Window
