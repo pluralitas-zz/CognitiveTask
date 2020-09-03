@@ -80,9 +80,8 @@ class PedalThread(QtCore.QThread):
     _HeartRate = QtCore.pyqtSignal(int)
 
     #Initialise Pedal
-    #baseline_init=main()
     antdata = antrcv()
-        # determines while loop sampling rate
+    # determines while loop sampling rate
     t = time.time()
     period = 0.5   
     
@@ -90,11 +89,8 @@ class PedalThread(QtCore.QThread):
     def run(self):
         while True:       
             self.t+=self.period
-            #self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
-            self.pedalRead=self.antdata.antacq()
-            #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
+            self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
-            print(type(self.pedalRead[1][0]))
             self._HeartRate.emit(self.pedalRead[1][0])
             time.sleep(max(0,self.t-time.time()))
 
