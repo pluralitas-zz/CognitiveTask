@@ -5,7 +5,8 @@ from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
-from Powermeter_Test2 import main, DAQfunc
+#from Powermeter_Test2 import main, DAQfunc
+from antreceiver import antrcv
             
 class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
@@ -79,27 +80,22 @@ class PedalThread(QtCore.QThread):
     _HeartRate = QtCore.pyqtSignal(int)
 
     #Initialise Pedal
-    baseline_init=main()
-    
-    #Determines while loop sampling rate
+    #baseline_init=main()
+    antdata = antrcv()
+        # determines while loop sampling rate
     t = time.time()
-    period = 0.5
+    period = 0.5   
     
     #Run function
     def run(self):
         while True:       
             self.t+=self.period
-            self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
-            '''
-            self.pedalRead[0][0] = Inst. Power
-            self.pedalRead[0][1] = Accum Power
-            self.pedalRead[0][2] = Instant Cadence
-            self.pedalRead[0][3] = Pedal Balance Right
-            self.pedalRead[1] = HeartRate (From Polar H10)
-            self.pedalRead[2] = Power Baseline
-            ''' # InstPower, AccumPower, InstCadence, pedalBalRight
+            #self.pedalRead=DAQfunc(self.baseline_init[0],self.baseline_init[1]) #Read Pedal
+            self.pedalRead=self.antdata.antacq()
+            #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
-            self._HeartRate.emit(self.pedalRead[1])
+            print(type(self.pedalRead[1][0]))
+            self._HeartRate.emit(self.pedalRead[1][0])
             time.sleep(max(0,self.t-time.time()))
 
 class Window(QDialog):
@@ -241,6 +237,9 @@ class Window(QDialog):
 if __name__ == '__main__':
     pedThread = PedalThread()
     pedThread.start()
+
+
+
 
     # import sys
     # #Initialize Window

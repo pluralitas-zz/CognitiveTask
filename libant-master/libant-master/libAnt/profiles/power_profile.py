@@ -11,9 +11,9 @@ class PowerProfileMessage(ProfileMessage):
 
     def __str__(self):
         if self.dataPageNumber == 16 :   #Frances
-            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
-           
-        
+            #return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
+            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.averagePower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
+
     @lazyproperty
     def dataPageNumber(self):
         """
@@ -31,7 +31,6 @@ class PowerProfileMessage(ProfileMessage):
         """
         return self.msg.content[1]
 
-    
     @lazyproperty   #Frances
     def LeftPedalSmoothness(self): # 1/2% unit (range: 0-100%) for data page 0X13
         return self.msg.content[4]

@@ -13,5 +13,3 @@ for i in range(10):
     port.setData(1)
     port.setData(0)
     time.sleep(1)
-
-

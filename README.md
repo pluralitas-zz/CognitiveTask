@@ -17,7 +17,7 @@
 3. USB Gaming Controller (optional but recommended)
 4. Absolute Optical Encoder connected using RS232 Serial port (COM5)
 5. PowerTap P1 power meter using an ANT+ USB stick
-6. Elecrow Easy Pulse v1.1 for PPG connected using Digital Output to ai4 on USB-6001 DAQ (Dev1)
+6. Polar H10 heart rate sensor band using also ANT+ USB stick
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
 8. Ability to connect to EEG PC using DB25 USB2LPT Parallel Port converter using psychopy. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
 

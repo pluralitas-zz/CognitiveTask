@@ -466,7 +466,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.vidFrame.startVid() #Start video
 
         #Hide HUD Frame
-        self.HUDValAccPwr.hide()
+        self.HUDValAvgPwr.hide()
         #self.HUDValHR.hide()
         self.HUDValInstCad.hide()
         self.HUDValInstPwr.hide()
@@ -474,7 +474,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValPBalR.hide()
         self.HUDValSpd.hide()
         
-        self.HUDLabAccPwr.hide()
+        self.HUDLabAvgPwr.hide()
         #self.HUDLabHR.hide()
         self.HUDLabInstCad.hide()
         self.HUDLabInstPwr.hide()
@@ -531,7 +531,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
         self.pedalwoutarr[0] = data #append into array for writeout
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
-        self.HUDValAccPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
+        self.HUDValAvgPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
         self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
 
         if data[3] > 0:
@@ -687,11 +687,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValInstCad.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValInstCad.setObjectName("HUDValInstCad")
 
-        self.HUDValAccPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValAccPwr.setGeometry(QtCore.QRect(0, 485, 200, 85))
-        self.HUDValAccPwr.setFont(font)
-        self.HUDValAccPwr.setAlignment(QtCore.Qt.AlignCenter)
-        self.HUDValAccPwr.setObjectName("HUDValAccPwr")
+        self.HUDValAvgPwr = QtWidgets.QLabel(self.HUDFrame)
+        self.HUDValAvgPwr.setGeometry(QtCore.QRect(0, 485, 200, 85))
+        self.HUDValAvgPwr.setFont(font)
+        self.HUDValAvgPwr.setAlignment(QtCore.Qt.AlignCenter)
+        self.HUDValAvgPwr.setObjectName("HUDValAvgPwr")
 
         self.HUDValInstPwr = QtWidgets.QLabel(self.HUDFrame)
         self.HUDValInstPwr.setGeometry(QtCore.QRect(0, 595, 200, 85))
@@ -762,11 +762,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabSpd.setScaledContents(False)
         self.HUDLabSpd.setObjectName("HUDLabSpd")
 
-        self.HUDLabAccPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabAccPwr.setGeometry(QtCore.QRect(10, 460, 200, 25))
-        self.HUDLabAccPwr.setFont(font)
-        self.HUDLabAccPwr.setScaledContents(False)
-        self.HUDLabAccPwr.setObjectName("HUDLabAccPwr")
+        self.HUDLabAvgPwr = QtWidgets.QLabel(self.HUDFrame)
+        self.HUDLabAvgPwr.setGeometry(QtCore.QRect(10, 460, 200, 25))
+        self.HUDLabAvgPwr.setFont(font)
+        self.HUDLabAvgPwr.setScaledContents(False)
+        self.HUDLabAvgPwr.setObjectName("HUDLabAvgPwr")
 
         # Define Force Balance Separator VLine
         self.HUDLabPedBalSpr = QtWidgets.QFrame(self.HUDFrame)
@@ -877,8 +877,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValSpd.setText(_translate("root", "<font color='White'>0</font>"))
         #cadence
         self.HUDValInstCad.setText(_translate("root", "<font color='White'>0</font>"))
-        #Accumulate Power
-        self.HUDValAccPwr.setText(_translate("root", "<font color='White'>0</font>"))
+        #Average Power
+        self.HUDValAvgPwr.setText(_translate("root", "<font color='White'>0</font>"))
         #Instanceous Power
         self.HUDValInstPwr.setText(_translate("root", "<font color='White'>0</font>"))
         self.HUDLabPedBal.setText(_translate("root", "<font color='White'>Pedal Balance L/R (%)</font>"))
@@ -891,7 +891,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabTime.setText(_translate("root", "<font color='White'>Elapsed Time (s)</font>"))
         self.HUDLabHR.setText(_translate("root", "<font color='White'>Heart Rate (BPM)</font>"))
         self.HUDLabSpd.setText(_translate("root", "<font color='White'>Speed (RPM)</font>"))
-        self.HUDLabAccPwr.setText(_translate("root", "<font color='White'>Accum. Power (W)</font>"))
+        self.HUDLabAvgPwr.setText(_translate("root", "<font color='White'>Avg. Power (W)</font>"))
         #Start Btn
         self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Game Btn
