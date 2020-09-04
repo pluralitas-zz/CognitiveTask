@@ -5,7 +5,7 @@ class flank_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -65,7 +65,7 @@ class flank_main(QtCore.QThread):
 
         #Hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(100)
+            QtTest.QTest.qWait(1000)
 
         self._ansdisp.emit(self.answers) #emit answers into buttons
 
@@ -91,8 +91,8 @@ class flank_main(QtCore.QThread):
         QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
         
-        self._qnsshowhide.emit(1) #show the answer buttons
-        #self._qnsshowhide.emit(0) #hide the answers buttons
+        self._ansshowhide.emit(1) #show the answer buttons
+        #self._ansshowhide.emit(0) #hide the answers buttons
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
@@ -102,18 +102,18 @@ class flank_main(QtCore.QThread):
         
         self.answerflank = False
         if self.ansarr == self.taskarr: #Check if answered correctly or not
-            print("Correct")
+            # print("Correct")
             self._counter.emit(1)
             self._paraport.emit(15)
         else:
-            print("Wrong")
+            # print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(16)
 
-        print("finished test")
+        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
 
         #QtTest.QTest.qWait(10000) #wait between next test after everything is done
 

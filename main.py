@@ -15,7 +15,8 @@ class Ui_root(QtWidgets.QMainWindow):
     _speed = QtCore.pyqtSignal(int,int) #QtSlot for speed
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "Ahsan_Test"
+    UserIDNAME = "Test"
+    dotask = True #Put true to do task, else False to just cycle
 
 # Define your Counter scores HERE
     counter = np.array([0,0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
@@ -26,6 +27,8 @@ class Ui_root(QtWidgets.QMainWindow):
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
     tasknum = 0 #Task number sequence
+
+    demosec = QtCore.QTime(0,0,0).secsTo(QtCore.QTime(0,6,0)) #Demo Time
 
 # Define ALL YOUR TASKS FUNCTION HERE
     tasksnum = random.sample(range(0, 5), 4) # randomise tasks
@@ -67,7 +70,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.CntDisplay()
         self.tasknameshow(self.tasknumnow)
 
-# Define your task events here
+# Define YOUR RUN TASK EVENT HERE
     def task_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
@@ -77,8 +80,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.firsttaskfour = True
         
         while self.timecount < self.trainsec:
-            QtTest.QTest.qWait(1000)
-            
+                        
             if 420 >= self.timecount > 120: #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
@@ -112,11 +114,39 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.tasks(self.tasknumnow)
 
             else:
-                QtTest.QTest.qWait(1000)
+                pass
+            QtTest.QTest.qWait(1000)
 
         self.complet.run_com(1)
         ###################################################
 
+# Define YOUR DEMO TASK EVENT HERE
+    def demo_run(self):
+        #self.tasknameshow(0)
+        for i in range(10):
+            self.tasks(0)
+
+        self.tasknameshow(1)
+        for i in range(5):
+            self.tasks(1)
+
+        self.tasknameshow(2)
+        for i in range(5):
+            self.tasks(2)
+
+        self.tasknameshow(3)
+        for i in range(2):
+            self.tasks(3)
+
+        self.tasknameshow(4)
+        for i in range(2):
+            self.tasks(4)
+
+        self.tasknameshow(5)
+        for i in range(5):
+            self.tasks(5)
+
+# Main.py Ui_root Init
     class Controller(): #Create Controller Class
         
         def __init__(self): #intialise controller
@@ -140,7 +170,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
-        self.GameBtn.clicked.connect(lambda:self.NoHWButton())
+        self.GameBtn.clicked.connect(lambda:self.DemoBtnPress())
         #self.GameBtn.clicked.connect(lambda:self.Gamebutton()) #Change 2nd Start button to Game Mode
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
@@ -165,7 +195,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.divattn._qnsdisp.connect(self.disp_qns)
         self.divattn._ansdisp.connect(self.disp_ans)
         self.divattn._counter.connect(self.counter_add)
-        self.divattn._qnsshowhide.connect(self.showhideAnswers)
+        self.divattn._ansshowhide.connect(self.showhideAnswers)
         self.divattn._paraport.connect(self.parwrite)
         self.divattn._wouttask.connect(self.wouttask)
         self._answer.connect(self.divattn.append_ans)
@@ -177,7 +207,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._ansdisp.connect(self.disp_ans)
         self.flnk._counter.connect(self.counter_add)
         self.flnk._level.connect(self.LevelDisplay)
-        self.flnk._qnsshowhide.connect(self.showhideAnswers)
+        self.flnk._ansshowhide.connect(self.showhideAnswers)
         self.flnk._paraport.connect(self.parwrite)
         self.flnk._wouttask.connect(self.wouttask)
         self._answer.connect(self.flnk.append_ans)
@@ -189,7 +219,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._ansdisp.connect(self.disp_ans)
         self.wrkVerb._counter.connect(self.counter_add)
         self.wrkVerb._level.connect(self.LevelDisplay)
-        self.wrkVerb._qnsshowhide.connect(self.showhideAnswers)
+        self.wrkVerb._ansshowhide.connect(self.showhideAnswers)
         self.wrkVerb._paraport.connect(self.parwrite)
         self.wrkVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkVerb.append_ans)
@@ -201,7 +231,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._ansdisp.connect(self.disp_ans)
         self.nbckVerb._counter.connect(self.counter_add)
         self.nbckVerb._level.connect(self.LevelDisplay)
-        self.nbckVerb._qnsshowhide.connect(self.showhideAnswers)
+        self.nbckVerb._ansshowhide.connect(self.showhideAnswers)
         self.nbckVerb._paraport.connect(self.parwrite)
         self.nbckVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckVerb.append_ans)
@@ -213,7 +243,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._ansdisp.connect(self.disp_ans)
         self.nbckSpace._counter.connect(self.counter_add)
         self.nbckSpace._level.connect(self.LevelDisplay)
-        self.nbckSpace._qnsshowhide.connect(self.showhideAnswers)
+        self.nbckSpace._ansshowhide.connect(self.showhideAnswers)
         self.nbckSpace._paraport.connect(self.parwrite)
         self.nbckSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckSpace.append_ans)
@@ -225,7 +255,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._ansdisp.connect(self.disp_ans)
         self.wrkSpace._counter.connect(self.counter_add)
         self.wrkSpace._level.connect(self.LevelDisplay)
-        self.wrkSpace._qnsshowhide.connect(self.showhideAnswers)
+        self.wrkSpace._ansshowhide.connect(self.showhideAnswers)
         self.wrkSpace._paraport.connect(self.parwrite)
         self.wrkSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkSpace.append_ans)
@@ -237,7 +267,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.mjr._ansdisp.connect(self.disp_ans)
         self.mjr._counter.connect(self.counter_add)
         self.mjr._level.connect(self.LevelDisplay)
-        self.mjr._qnsshowhide.connect(self.showhideAnswers)
+        self.mjr._ansshowhide.connect(self.showhideAnswers)
         self.mjr._paraport.connect(self.parwrite)
         self.mjr._wouttask.connect(self.wouttask)
         self._answer.connect(self.mjr.append_ans)
@@ -315,6 +345,11 @@ class Ui_root(QtWidgets.QMainWindow):
         #     #self.vidFrame.restartVid()
         #     pass
 
+    def counter_reset(self):
+        self.counter = np.array([0,0,0,0,0,0])
+        QtTest.QTest.qWait(100)
+        self.CntDisplay()
+
     def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
         pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
         #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
@@ -339,7 +374,8 @@ class Ui_root(QtWidgets.QMainWindow):
                 # data[i+6] = 'Blank.png'
             for i in range(len(data)): #Change all values to "Blank.png" for display
                 data[i] = 'Blank.png'
-        if "Right.png" in data or "Left.png" in data:
+
+        elif "Right.png" in data or "Left.png" in data: #for use with task_major
             self.majorans = ["Right.png","Left.png","Blank.png"]
             self.ansdict = {'A':self.majorans[0],'B':self.majorans[0],'X':self.majorans[0],'Y':self.majorans[0],'U':self.majorans[1],'D':self.majorans[1],'L':self.majorans[1],'R':self.majorans[1],'L1':self.majorans[2],'R1':self.majorans[2]} #dictionary to compare button to picture displayed
         
@@ -418,15 +454,18 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter[self.tasknumnow]) +"</font>")
 
 # Write out to file Stuff
-    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
+    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, PPGRaw, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
         self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time(), np.ones((self.daqbackend.samples,1))*self.timecount, data, self.heartratewoutarr, self.pedalwoutarr])
         self.writefile.appendfile(self.comb) #write data to file
     
     def wouttask(self,data):
         self.timenow = str(np.datetime64('now')).replace(":","")
         self.taskcomb = np.column_stack([self.timenow, str(data)]) #time, data value
-        self.writetask.appendfile(self.taskcomb) #write task data to file
-    
+        try:
+            self.writetask.appendfile(self.taskcomb) #write task data to file
+        except:
+            pass
+
     def parwrite(self,data):
         self.para.parawrite(data)
 
@@ -442,11 +481,45 @@ class Ui_root(QtWidgets.QMainWindow):
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
         if data < self.pausespd: #Pause video if speed <pausespd
             self.pauseVid()
+            self.timer.stop()
         else: #start video if speed >=pausespd
             self.playVid()
+            self.timer.start()
 
-# Start Task Button Stuff & Game Start Button
+# Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
+        self.StartBtn.hide()
+        self.GameBtn.hide()
+        self.vidFrame.startVid() #Start video 
+
+        #start Backend signal slot connection
+        self.initBackendThread()
+
+        #Initialise and create Writeout file with username
+        self.writefile=wrtout(self.UserIDNAME)
+        self.writetask=wrttask(self.UserIDNAME)
+
+        # Start thread(s)
+        self.pedalBackend.start()
+        self.daqbackend.start()
+        self.timer.start(1000)
+
+        if self.dotask == True:
+            self.task_run()
+
+        self.timer.stop()
+        self.TimeReset()
+        if self.pedalBackend.isRunning():
+            self.pedalBackend.terminate()
+            self.pedalBackend.wait()
+        if self.daqbackend.isRunning():
+            self.daqbackend.terminate()
+            self.daqbackend.wait()
+
+        self.StartBtn.show()
+        self.GameBtn.show()
+
+    def DemoBtnPress(self): #Start No Hardware Task mode
         self.StartBtn.hide()
         self.GameBtn.hide()
         self.vidFrame.startVid() #Start video 
@@ -456,40 +529,21 @@ class Ui_root(QtWidgets.QMainWindow):
  
         # Start thread(s)
         self.pedalBackend.start()
-        self.daqbackend.start()
+        self.EncSpeed(999) #set dummy speed as 999
         self.timer.start(1000)
 
-        self.task_run()
+        self.demo_run()
 
-    def NoHWButton(self): #Start No Hardware Task mode
-        self.StartBtn.hide()
-        self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video
+        self.timer.stop()
+        self.TimeReset()
+        self.counter_reset()
 
-        #Hide HUD Frame
-        self.HUDValAvgPwr.hide()
-        #self.HUDValHR.hide()
-        self.HUDValInstCad.hide()
-        self.HUDValInstPwr.hide()
-        self.HUDValPBalL.hide()
-        self.HUDValPBalR.hide()
-        self.HUDValSpd.hide()
-        
-        self.HUDLabAvgPwr.hide()
-        #self.HUDLabHR.hide()
-        self.HUDLabInstCad.hide()
-        self.HUDLabInstPwr.hide()
-        self.HUDLabPedBal.hide()
-        self.HUDLabPedBalSpr.hide()
-        self.HUDLabSpd.hide()
+        if self.pedalBackend.isRunning():
+            self.pedalBackend.terminate()
+            self.pedalBackend.wait()
 
-        #start Backend signal slot connection
-        self.initBackendThread()
-        
-        # Start thread(s)
-        self.timer.start(1000)
-
-        self.task_run()
+        self.StartBtn.show()
+        self.GameBtn.show()
 
     def Gamebutton(self): #Start Game mode
         self.StartBtn.hide()
@@ -505,7 +559,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #start Backend signal slot connection
         self.initBackendThread()
-        self.daqbackend.encorderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
+        self.daqbackend._encoderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
 
         # Start thread(s)
         self.pedalBackend.start()
@@ -519,14 +573,20 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timedisp = self.timeleft.toString()  
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
 
+    def TimeReset(self):
+        self.timecount = 0
+        self.timeleft = self.traintime.addSecs(self.timecount)
+        self.timedisp = self.timeleft.toString() 
+        self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")        
+
     def HRDisplay(self,data):
         self.heartratewoutarr[0] = data
         self.HUDValHR.setText("<font color='White'>"+ str(data) +"</font>")
 
-    def EncoderDisplay(self, data): # UI Slot to recieve Encoder
-        self.speed=str(data)
+    def EncSpeed(self, data): # UI Slot to recieve Encoder Speed Value
+        self.speed=data
         self._speed.emit(data,self.pausespd)
-        self.HUDValSpd.setText("<font color='White'>"+ self.speed+"</font>")
+        self.HUDValSpd.setText("<font color='White'>"+ str(data)+"</font>")
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
@@ -572,16 +632,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.th_Controller=threading.Thread(target=self.controller.thread_Controller, args=(),daemon=True)
         self.th_Controller.start()
 
-        #Initialise and create Writeout file with username
-        self.writefile=wrtout(self.UserIDNAME)
-        self.writetask=wrttask(self.UserIDNAME)
-
         #Initialise and start Parallel port write to LPT
         self.para=paraout()
 
         # Signal connect to Slots for Data
-        self.daqbackend.encorderSpeed.connect(self.EncoderDisplay)  #Pass Speed to UI label2 
-        self.daqbackend.encorderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
+        self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
+        self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
@@ -611,7 +667,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Define Game Button
         self.GameBtn = QtWidgets.QPushButton(self)
-        self.GameBtn.setGeometry(QtCore.QRect(1250, 850, 100, 40))
+        self.GameBtn.setGeometry(QtCore.QRect(1140, 800, 100, 40))
         self.GameBtn.setFlat(False)
         self.GameBtn.setObjectName("GameBtn")
 
@@ -896,7 +952,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #Start Btn
         self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Game Btn
-        self.GameBtn.setText(_translate("root", "Task Only"))
+        self.GameBtn.setText(_translate("root", "Demo"))
         self.QuesBtn_Left.setText(_translate("root", "L"))
         self.QuesBtn_Down.setText(_translate("root", "D"))
         self.QuesBtn_Up.setText(_translate("root", "U"))
@@ -910,9 +966,12 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Close Program Stuff
     def closeEvent(self, event):
-
-        self.pedalBackend.terminate()
-        self.daqbackend.terminate()
+        if self.pedalBackend.isRunning():
+            self.pedalBackend.terminate()
+            self.pedalBackend.wait()
+        if self.daqbackend.isRunning():
+            self.daqbackend.terminate()
+            self.daqbackend.wait()
         event.accept()
         sys.exit()
 

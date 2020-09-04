@@ -12,6 +12,7 @@ class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
     # create signal slots
     _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
+    _encoderSpeed = QtCore.pyqtSignal(int)
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
@@ -24,8 +25,6 @@ class EncDAQBackThread(QtCore.QThread):
 
     # Initialize Encoder
     Encoder=encoder()
-    # Create Signal Slot 
-    encorderSpeed = QtCore.pyqtSignal(int)
 
     # Variables for encoder
     sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ #100hz
@@ -54,7 +53,7 @@ class EncDAQBackThread(QtCore.QThread):
             ## if appended to size defined by sam_period then calculate speed and emit
             if len(self.degtravelled) == self.samp:
                 self.speed = int(sum(self.degtravelled)/self.sam_period*60/360) #calculate rpm
-                self.encorderSpeed.emit(self.speed)
+                self._encoderSpeed.emit(self.speed)
                 self.degtravelled=[]
 
             ############################# Acquire DAQ data
@@ -66,7 +65,7 @@ class EncDAQBackThread(QtCore.QThread):
             self.degnowarr = self.samparr * self.degnow
             
             #self.degnowarrout = np.array(self.degnowarr)
-            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.daqarr[:,:4]]) #stack deg, speed and EMG x 4
+            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.daqarr]) #stack deg, speed and EMG x 4, PPGRaw
             self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
             ############################# Reset
@@ -191,8 +190,8 @@ class Window(QDialog):
         self.backend = EncDAQBackThread()
         self.pedalBackend=PedalThread()
         # Signal connect to Slot
-        self.backend.encorderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
-        self.backend.encorderSpeed.connect(self.controller.printSpeed)      #Pass Speed to controller slot
+        self.backend._encoderSpeed.connect(self.EncoderDisplay)             #Pass Speed to UI label2 
+        self.backend._encoderSpeed.connect(self.controller.printSpeed)      #Pass Speed to controller slot
         self.pedalBackend.pedalInstantPower.connect(self.InstantPower)      #Pass InstantPower to UI label4
         self.pedalBackend.pedalAccumPower.connect(self.AccumPower)          #Pass AccumPower to UI label5
         self.pedalBackend.pedalInstantCandence.connect(self.InstantCandence)#Pass InstantCandence to UI label6

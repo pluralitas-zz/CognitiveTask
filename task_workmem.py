@@ -5,7 +5,7 @@ class workmemVerb_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -108,7 +108,7 @@ class workmemVerb_main(QtCore.QThread):
 
         # hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(100)
+            QtTest.QTest.qWait(1000)
         
         # generate correct answers
         for i in range(self.dispcount):
@@ -121,7 +121,7 @@ class workmemVerb_main(QtCore.QThread):
             self._qnsdisp.emit("Blank.png",800,150)
             QtTest.QTest.qWait(blanktime)
 
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         self.ran_ans() #randomise answer
 
         timeCount = 0
@@ -139,11 +139,11 @@ class workmemVerb_main(QtCore.QThread):
         #     print("Wrong")
         #     self._counter.emit(0)
 
-        print("finished test")
+        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
         self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
@@ -156,7 +156,7 @@ class workmemVerb_main(QtCore.QThread):
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
         self._paraport.emit(23)
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemVerb = True
 
@@ -166,11 +166,11 @@ class workmemVerb_main(QtCore.QThread):
             self.ansarr.append(data)
 
             if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
-                print("Correct")
+                # print("Correct")
                 self._counter.emit(1)
                 self._paraport.emit(25)
             else:
-                print("Wrong")
+                # print("Wrong")
                 self._counter.emit(0)
                 self._paraport.emit(26)
     
@@ -211,7 +211,7 @@ class workmemSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -314,7 +314,7 @@ class workmemSpace_main(QtCore.QThread):
 
         # hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(100)
+            QtTest.QTest.qWait(1000)
         
         # generate correct answers
         for i in range(self.dispcount):
@@ -327,7 +327,7 @@ class workmemSpace_main(QtCore.QThread):
             self._qnsdisp.emit("Blank.png",800,150)
             QtTest.QTest.qWait(blanktime)
 
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         self.ran_ans() #randomise answer
 
         timeCount = 0
@@ -345,11 +345,11 @@ class workmemSpace_main(QtCore.QThread):
         #     print("Wrong")
         #     self._counter.emit(0)
 
-        print("finished test")
+        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
         self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
@@ -364,7 +364,7 @@ class workmemSpace_main(QtCore.QThread):
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
         self._paraport.emit(33)
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemSpace = True
 
@@ -374,11 +374,11 @@ class workmemSpace_main(QtCore.QThread):
             self.ansarr.append(data)
 
             if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
-                print("Correct")
+                # print("Correct")
                 self._counter.emit(1)
                 self._paraport.emit(35)
             else:
-                print("Wrong")
+                # print("Wrong")
                 self._counter.emit(0)
                 self._paraport.emit(36)
     

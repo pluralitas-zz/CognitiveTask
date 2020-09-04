@@ -3,14 +3,19 @@ import main #custom .py
 from PyQt5 import QtCore, QtWidgets, QtMultimediaWidgets, QtMultimedia
 
 class MainWid(QtWidgets.QWidget):
+    vidFileState = True
     def __init__(self,parent):
         self.playstate = 0
         self.vidpath = "C:\Data"
         self.videos = "Videos" #location of videos relative to main.py
         #self.vidd = os.path.join(os.path.dirname(__file__),self.videos)
         #self.vidd = os.path.join(os.getcwd(),self.videos) # using Videos folder in the CognitiveTask folder
-        self.vidd = os.path.join(self.vidpath, self.videos) # using C:\Data\Videos folder 
-        self.vidFile = [files for files in os.listdir(self.vidd) if files.endswith(".mp4")] #find all video files in video folder
+        self.vidd = os.path.join(self.vidpath, self.videos) # using C:\Data\Videos folder
+        try:
+            self.vidFile = [files for files in os.listdir(self.vidd) if files.endswith(".mp4")] #find all video files in video folder
+        except:
+            self.vidFileState = False
+
         super(MainWid,self).__init__(parent)  
 
         self.setupUi(self)
@@ -31,8 +36,8 @@ class MainWid(QtWidgets.QWidget):
         self.vidPlayer.setVideoOutput(self.vidFrame)
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatio)
         
-        file = os.path.join(self.vidd, random.choice(self.vidFile))
-        self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
+        #file = os.path.join(self.vidd, random.choice(self.vidFile))
+        #self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.parent = parent
         #self.vidPlayer.stop()
         #self.button = QtWidgets.QPushButton("Play")
@@ -45,10 +50,11 @@ class MainWid(QtWidgets.QWidget):
 
     def restartVid(self):
         self.vidPlayer.stop()
-        file = os.path.join(self.vidd, random.choice(self.vidFile))
-        self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
-        self.vidPlayer.play()
-        self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
+        if self.vidFileState == True:
+            file = os.path.join(self.vidd, random.choice(self.vidFile))
+            self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
+            self.vidPlayer.play()
+            self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
 
     def pauseVid(self):
         if self.playstate == 1:
@@ -59,10 +65,11 @@ class MainWid(QtWidgets.QWidget):
             self.vidPlayer.play()
             self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
         elif self.playstate == 0:
-            file = os.path.join(self.vidd, random.choice(self.vidFile))
-            self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
-            self.vidPlayer.play()
-            self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
+            if self.vidFileState == True:
+                file = os.path.join(self.vidd, random.choice(self.vidFile))
+                self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
+                self.vidPlayer.play()
+                self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatioByExpanding)
         else:
             pass
 
@@ -79,7 +86,7 @@ class MainWid(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot(QtMultimedia.QMediaPlayer.State)
     def on_stateChanged(self, state):
-        print(state)
+        # print(state)
         self.playstate = state
         if state == QtMultimedia.QMediaPlayer.PlayingState:
             self.graphView.fitInView(self.vidFrame, QtCore.Qt.KeepAspectRatioByExpanding)

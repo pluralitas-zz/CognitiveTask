@@ -8,7 +8,7 @@ class divattn_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -82,7 +82,7 @@ class divattn_main(QtCore.QThread):
         QtTest.QTest.qWait(100)
         
         self.answerdivattn = True
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
 
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
@@ -94,16 +94,16 @@ class divattn_main(QtCore.QThread):
         self.answerdivattn = False
 
         if self.ansarr == self.taskarr: #Check if answered correctly or not
-            print("Correct")
+            # print("Correct")
             self._counter.emit(1)
         else:
-            print("Wrong")
+            # print("Wrong")
             self._counter.emit(0)
 
-        print("finished test")
+        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0)
+        self._ansshowhide.emit(0)
 
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):

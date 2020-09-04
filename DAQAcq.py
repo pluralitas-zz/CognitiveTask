@@ -14,7 +14,7 @@ class daq:
     def acqdaq(self,rate,sam):
         if self.daqfound == True:
             with nidaqmx.Task() as task:
-                task.ai_channels.add_ai_voltage_chan("Dev1/ai0:3", terminal_config=nidaqmx.constants.TerminalConfiguration.RSE) #ai0:3 = QC Left, HS Left, QC Right, HS Right. Input terminal config=RSE(10083)
+                task.ai_channels.add_ai_voltage_chan("Dev1/ai0:4", terminal_config=nidaqmx.constants.TerminalConfiguration.RSE) #ai0:3 = QC Left, HS Left, QC Right, HS Right. ai4 = PPG Raw. Input terminal config=RSE(10083)
                 task.timing.cfg_samp_clk_timing(rate=rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE)
                 raw_in = task.read(number_of_samples_per_channel=sam)
             arr_out = np.array(raw_in)
@@ -34,8 +34,4 @@ if __name__ == "__main__":
     arrdaq = daqq.acqdaq(samp_rate,samples)
     
     print(np.round(arrdaq,decimals=2))
-    #print column
-    # col = arrdaq[:,0]
-    # test = arrdaq[:,1:]
-    # comb = np.column_stack([test,col])
 

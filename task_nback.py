@@ -5,7 +5,7 @@ class nbackVerb_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -82,7 +82,7 @@ class nbackVerb_main(QtCore.QThread):
                 self.taskarr[self.correctarr[i]] = self.taskarr[self.correctarr[i]+self.nval]
 
         self._ansdisp.emit(self.answers)
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -92,7 +92,7 @@ class nbackVerb_main(QtCore.QThread):
             self.answerappended = False
 
             while self.speed < self.pausespd: #hold task in while loop while user isnt cycling
-                QtTest.QTest.qWait(100)
+                QtTest.QTest.qWait(1000)
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],800,150)
@@ -122,9 +122,9 @@ class nbackVerb_main(QtCore.QThread):
                     break
 
         self.answernbackVerb = False
-        print("finished test")
+        # print("finished test")
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
         
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
@@ -143,11 +143,11 @@ class nbackVerb_main(QtCore.QThread):
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    print("Correct: " + str(self.anscount))
+                    # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    print("Wrong")
+                    # print("Wrong")
 
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
@@ -155,15 +155,15 @@ class nbackVerb_main(QtCore.QThread):
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    print("Correct: " + str(self.anscount))
+                    # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    print("Wrong")
+                    # print("Wrong")
 
             else:
                 self._counter.emit(0)
-                print("Wrong")
+                # print("Wrong")
     
     def current_speed(self,data,data2):
         self.speed = data
@@ -189,7 +189,7 @@ class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -266,7 +266,7 @@ class nbackSpace_main(QtCore.QThread):
                 self.taskarr[self.correctarr[i]] = self.taskarr[self.correctarr[i]+self.nval]
 
         self._ansdisp.emit(self.answers)
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
@@ -276,7 +276,7 @@ class nbackSpace_main(QtCore.QThread):
             self.answerappended = False
 
             while self.speed < self.pausespd: #hold task in while loop while user isnt cycling
-                QtTest.QTest.qWait(100)
+                QtTest.QTest.qWait(1000)
 
             self.dispcount = i
             self._qnsdisp.emit(self.taskarr[i],600,600)
@@ -305,9 +305,9 @@ class nbackSpace_main(QtCore.QThread):
                     break
 
         self.answernbackSpace = False
-        print("finished test")
+        # print("finished test")
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
         
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
@@ -326,26 +326,26 @@ class nbackSpace_main(QtCore.QThread):
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    print("Correct: " + str(self.anscount))
+                    # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    print("Wrong")
+                    # print("Wrong")
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    print("Correct: " + str(self.anscount))
+                    # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    print("Wrong")
+                    # print("Wrong")
 
             else:
                 self._counter.emit(0)
-                print("Wrong")
+                # print("Wrong")
     
     def current_speed(self,data,data2):
         self.speed = data

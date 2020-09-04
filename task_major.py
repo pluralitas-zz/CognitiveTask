@@ -5,7 +5,7 @@ class major_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
-    _qnsshowhide = QtCore.pyqtSignal(int)
+    _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
@@ -89,13 +89,13 @@ class major_main(QtCore.QThread):
 
         #Hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(100)
+            QtTest.QTest.qWait(1000)
 
         self.answermajor = True
-        self._qnsshowhide.emit(1) #show the answer buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(self.showtime)
-        #self._qnsshowhide.emit(0) #hide the answers buttons
-        #self._ansdisp.emit(self.questions) #emit correct answering array
+        #self._ansshowhide.emit(0) #hide the answers buttons
+        self._ansdisp.emit(self.questions) #emit correct answering array
         
         timeCount = 0
         while len(self.ansarr) < 1: #While loop to hold code till answered or time passes
@@ -106,16 +106,16 @@ class major_main(QtCore.QThread):
         
         self.answermajor = False
         if self.ansarr == [self.taskcorrect[1]]: #Check if answered correctly or not
-            print("Correct")
+            # print("Correct")
             self._counter.emit(1)
         else:
-            print("Wrong")
+            # print("Wrong")
             self._counter.emit(0)
 
-        print("finished test")
+        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
-        self._qnsshowhide.emit(0) #hide the answer buttons
+        self._ansshowhide.emit(0) #hide the answer buttons
 
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):

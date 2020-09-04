@@ -60,13 +60,13 @@ class USBDriver(Driver):
         return self._driver_open
 
     def _open(self) -> None:
-        print('USB OPEN START')
+        # print('USB OPEN START')
         try:
             # find the first USB device that matches the filter
             self._dev = find(idVendor=self._idVendor, idProduct=self._idProduct)
 
             if self._dev is None:
-                print("123")
+                # print("123")
                 raise DriverException("Could not open specified device")
 
             # Detach kernel driver
@@ -123,7 +123,7 @@ class USBDriver(Driver):
             pass
         self._dev = self._epOut = self._epIn = None
         self._driver_open = False
-        print('USB CLOSE END')
+        # print('USB CLOSE END')
 
     def _read(self, count: int, timeout=None) -> bytes:
         data = bytearray()
