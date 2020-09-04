@@ -24,8 +24,8 @@
 ## Currently 5 tasks are implemented:
 
 1. Erikssen Flanker Task ``Task 0``
-2. Verbal Recall Task (Verbal) ``Task 1``
-3. Verbal Recall Task (Visuospatial)  ``Task 2``
+2. Recall Task (Verbal) ``Task 1``
+3. Recall Task (Visuospatial)  ``Task 2``
 4. n-back Task (Verbal) ``Task 3``
 5. n-back Task (Visuospatial) ``Task 4``
 6. Majority Task ``Task 5``
@@ -78,27 +78,30 @@
 
 ## Parallel Port output command legend (0-255)
 
-| Global                |Num|
-|-----------------------|---|
-|"Answer Shown"         |4  |
-|"Answered Correct"     |9  |
-|"Answered Wrong"       |8  |
 
-
-| Flanker Task          |10 |
+| Flanker Task          |   |
 |-----------------------|---|
+|"Flanks Shown"         |10 | CNV Preparedness
 |"Question Shown-Con"   |11 |
 |"Question Shown-Incon" |12 |
+|"User Answered Correct"|15 |
+|"User Answered Wrong"  |16 |
 
 
 | Working Memory-Verb   |20 |
 |-----------------------|---|
 |"Question Shown"       |21 |
+|"Answers Shown"        |23 |
+|"User Answered Correct"|25 |
+|"User Answered Wrong"  |26 |
 
 
 | Working Memory-Space |30 |
 |----------------------|---|
 |"Question Shown"      |31 |
+|"Answers Shown"        |33 |
+|"User Answered Correct"|35 |
+|"User Answered Wrong"  |36 |
 
 
 | n-back-Verb           |   |

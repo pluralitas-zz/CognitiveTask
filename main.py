@@ -15,7 +15,7 @@ class Ui_root(QtWidgets.QMainWindow):
     _speed = QtCore.pyqtSignal(int,int) #QtSlot for speed
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "Test"
+    UserIDNAME = "Ahsan_Test"
 
 # Define your Counter scores HERE
     counter = np.array([0,0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
@@ -29,7 +29,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define ALL YOUR TASKS FUNCTION HERE
     tasksnum = random.sample(range(0, 5), 4) # randomise tasks
-    # tasksnum = [5, 5, 5, 5]
+    #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
             self.flnk.run_task(self.counter[0])
@@ -295,7 +295,6 @@ class Ui_root(QtWidgets.QMainWindow):
             self.QuesBtn_ShldL.show()
             self.QuesBtn_ShldR.show()
             QtTest.QTest.qWait(100)
-            self.parwrite(4)
             self.wouttask("Answers Shown")
         else:
             pass
@@ -305,13 +304,11 @@ class Ui_root(QtWidgets.QMainWindow):
             self.counter[self.tasknumnow] += 1
             self.wouttask("Correct: " + str(self.counter))
             QtTest.QTest.qWait(100)
-            self.parwrite(9)
         else:
-            #if self.counter > 0:
-            self.counter[self.tasknumnow] -=1
+            if self.counter[self.tasknumnow] > 0:
+                self.counter[self.tasknumnow] -=1
             self.wouttask("Wrong: "+ str(self.counter))
             QtTest.QTest.qWait(100)
-            self.parwrite(8)
         self.CntDisplay()
 
         # if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
@@ -337,13 +334,17 @@ class Ui_root(QtWidgets.QMainWindow):
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
 
             self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-            #for i in range(4): #Change other values except data[0](Bottom Right) and data[5](Bottom Left) to "Blank.png" for display
-            #    data[i+1] = 'Blank.png' 
-            #    data[i+6] = 'Blank.png'
+            # for i in range(4): #Change other values except data[0](Bottom Right) and data[5](Bottom Left) to "Blank.png" for display
+                # data[i+1] = 'Blank.png' 
+                # data[i+6] = 'Blank.png'
             for i in range(len(data)): #Change all values to "Blank.png" for display
                 data[i] = 'Blank.png'
-
+        if "Right.png" in data or "Left.png" in data:
+            self.majorans = ["Right.png","Left.png","Blank.png"]
+            self.ansdict = {'A':self.majorans[0],'B':self.majorans[0],'X':self.majorans[0],'Y':self.majorans[0],'U':self.majorans[1],'D':self.majorans[1],'L':self.majorans[1],'R':self.majorans[1],'L1':self.majorans[2],'R1':self.majorans[2]} #dictionary to compare button to picture displayed
+        
         elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
+
             [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
             self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
 

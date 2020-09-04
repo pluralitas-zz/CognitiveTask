@@ -13,8 +13,9 @@ class flank_main(QtCore.QThread):
     def __init__(self):
         super(flank_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
-        self.questions = ["FlankLCon.png", "FlankRCon.png","FlankLIncon.png","FlankRIncon.png"]
-        self.answers = ["FlankR.png","FlankL.png"]
+        self.questions = ["FlankLConL.png", "FlankRConR.png","FlankLInconR.png","FlankRInconL.png"]
+        self.flankprep = ["FlankL.png","FlankR.png"]
+        self.answers = ["Right.png","Left.png"]
         self.taskarr = []
         self.ansarr = []
         self.answerflank = False
@@ -28,35 +29,29 @@ class flank_main(QtCore.QThread):
 
         # Determine difficulty
         if count >= 30:
-            showtime = 300
-            self.questions2 = self.questions
+            showtime = 100
             self.level = 5
-            self.cutofftime = 20 #multiplies of 100ms
+            self.cutofftime = 30 #multiplies of 100ms
         elif count >= 20:
-            showtime = 300
-            self.questions2 = self.questions
+            showtime = 200
             self.level = 4
             self.cutofftime = 30 #multiplies of 100ms
         elif count >= 10:
             showtime = 500
-            self.questions2 = self.questions
             self.level = 3
             self.cutofftime = 50 #multiplies of 100ms
         elif count >=5:
-            showtime = 700
-            self.questions2 = self.questions[:2]
+            showtime = 700 #ms
             self.level = 2
             self.cutofftime = 70 #multiplies of 100ms
         else:
             showtime = 1000
-            self.questions2 = self.questions[:2]
             self.level = 1
             self.cutofftime = 100 #multiplies of 100ms
 
         # Show Difficulty
         #self.diffdisp(self.level)
         self._level.emit(self.level)
-        self._paraport.emit(10) #Task 1
         QtTest.QTest.qWait(2000)
         
         # Show center point
@@ -74,11 +69,16 @@ class flank_main(QtCore.QThread):
 
         self._ansdisp.emit(self.answers) #emit answers into buttons
 
-        #Randomise and display the answer
-        self.disp = random.choice(self.questions2)
-        self.taskarr.append(self.disp[:6])
-        #print(self.taskarr)
+        #Randomise and display the flankprep
+        self.disp = random.choice(self.flankprep)
+        self._paraport.emit(10) #Task 1
+        self._qnsdisp.emit(self.disp,800,150) #display Flankprep
+        QtTest.QTest.qWait(400)
 
+        #Find relevancy in flankprep and select REAL question
+        self.questions2 = [s for s in self.questions if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
+        self.disp = random.choice(self.questions2)
+        self.taskarr.append(self.disp[-5])
         self._qnsdisp.emit(self.disp,800,150)
         if "Incon" in self.disp:
             self._paraport.emit(12)
@@ -87,12 +87,10 @@ class flank_main(QtCore.QThread):
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
 
+        self.answerflank = True
         QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
         
-
-        #QtTest.QTest.qWait(100) # Wait before allowing user to answer
-        self.answerflank = True
         self._qnsshowhide.emit(1) #show the answer buttons
         #self._qnsshowhide.emit(0) #hide the answers buttons
         timeCount = 0
@@ -106,9 +104,11 @@ class flank_main(QtCore.QThread):
         if self.ansarr == self.taskarr: #Check if answered correctly or not
             print("Correct")
             self._counter.emit(1)
+            self._paraport.emit(15)
         else:
             print("Wrong")
             self._counter.emit(0)
+            self._paraport.emit(16)
 
         print("finished test")
         self.ansarr.clear()     #clear array
@@ -120,7 +120,7 @@ class flank_main(QtCore.QThread):
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
         if self.answerflank == True:
-            self.ansarr.append(data[:6])
+            self.ansarr.append(data[0])
             #print(self.ansarr)
 
     def current_speed(self,data,data2):

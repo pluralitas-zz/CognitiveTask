@@ -12,7 +12,7 @@ class major_main(QtCore.QThread):
 
     def __init__(self):
         super(major_main, self).__init__()
-        self.questions = ["FlankR.png","FlankL.png"]
+        self.questions = ["Right.png","Left.png"]
         self.blanktask = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.taskarr = []
         self.ansarr = []
@@ -95,7 +95,7 @@ class major_main(QtCore.QThread):
         self._qnsshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(self.showtime)
         #self._qnsshowhide.emit(0) #hide the answers buttons
-        self._ansdisp.emit(self.questions) #emit correct answering array
+        #self._ansdisp.emit(self.questions) #emit correct answering array
         
         timeCount = 0
         while len(self.ansarr) < 1: #While loop to hold code till answered or time passes
@@ -105,7 +105,7 @@ class major_main(QtCore.QThread):
                 break
         
         self.answermajor = False
-        if self.ansarr == [self.taskcorrect[1][:-4]]: #Check if answered correctly or not
+        if self.ansarr == [self.taskcorrect[1]]: #Check if answered correctly or not
             print("Correct")
             self._counter.emit(1)
         else:
@@ -120,7 +120,7 @@ class major_main(QtCore.QThread):
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
         if self.answermajor == True:
-            self.ansarr.append(data[:6])
+            self.ansarr.append(data)
 
     def current_speed(self,data,data2):
         self.speed = data

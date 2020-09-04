@@ -18,8 +18,8 @@ class workmemVerb_main(QtCore.QThread):
         self.anscount = 0
         self.taskarr = []
         self.anspadarr =[]
-        self.anstimelim = 10
         self.ansarr = []
+        self.anstimelim = 10
         self.answerworkmemVerb = False
         self.level = 0
         self.speed = 0
@@ -130,14 +130,14 @@ class workmemVerb_main(QtCore.QThread):
             timeCount += 1
             if timeCount == (self.anstimelim*10):
                 break
-            
+
         self.answerworkmemVerb = False
-        if self.ansarr == self.taskarr: #Check if answered correctly or not
-            print("Correct")
-            self._counter.emit(1)
-        else:
-            print("Wrong")
-            self._counter.emit(0)
+        # if self.ansarr == self.taskarr: #Check if answered correctly or not
+        #     print("Correct")
+        #     self._counter.emit(1)
+        # else:
+        #     print("Wrong")
+        #     self._counter.emit(0)
 
         print("finished test")
         self.ansarr.clear()     #clear array
@@ -155,6 +155,7 @@ class workmemVerb_main(QtCore.QThread):
 
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
+        self._paraport.emit(23)
         self._qnsshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemVerb = True
@@ -163,7 +164,16 @@ class workmemVerb_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answerworkmemVerb == True:
             self.ansarr.append(data)
-            #print(self.ansarr)
+
+            if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
+                print("Correct")
+                self._counter.emit(1)
+                self._paraport.emit(25)
+            else:
+                print("Wrong")
+                self._counter.emit(0)
+                self._paraport.emit(26)
+    
             self.answerworkmemVerb = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
@@ -195,7 +205,7 @@ class workmemVerb_main(QtCore.QThread):
         elif numb is 10:
             self._qnsdisp.emit("cd10.png",800,150)              
         else:
-            pass   
+            pass
 
 class workmemSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
@@ -288,6 +298,7 @@ class workmemSpace_main(QtCore.QThread):
             self.level = 1
             self.anstimelim = 10
             showtime = 1500
+
         self._level.emit(self.level)
         self._paraport.emit(30) #Task 3
         QtTest.QTest.qWait(2000)
@@ -327,12 +338,12 @@ class workmemSpace_main(QtCore.QThread):
                 break
 
         self.answerworkmemSpace = False
-        if self.ansarr == self.taskarr: #Check if answered correctly or not
-            print("Correct")
-            self._counter.emit(1)
-        else:
-            print("Wrong")
-            self._counter.emit(0)
+        # if self.ansarr == self.taskarr: #Check if answered correctly or not
+        #     print("Correct")
+        #     self._counter.emit(1)
+        # else:
+        #     print("Wrong")
+        #     self._counter.emit(0)
 
         print("finished test")
         self.ansarr.clear()     #clear array
@@ -352,6 +363,7 @@ class workmemSpace_main(QtCore.QThread):
 
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
+        self._paraport.emit(33)
         self._qnsshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
         self.answerworkmemSpace = True
@@ -360,7 +372,16 @@ class workmemSpace_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answerworkmemSpace == True:
             self.ansarr.append(data)
-            #print(self.ansarr)
+
+            if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
+                print("Correct")
+                self._counter.emit(1)
+                self._paraport.emit(35)
+            else:
+                print("Wrong")
+                self._counter.emit(0)
+                self._paraport.emit(36)
+    
             self.answerworkmemSpace = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
