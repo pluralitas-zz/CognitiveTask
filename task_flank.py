@@ -68,13 +68,15 @@ class flank_main(QtCore.QThread):
             QtTest.QTest.qWait(1000)
 
         self._ansdisp.emit(self.answers) #emit answers into buttons
+        self._ansshowhide.emit(1) #show the answer buttons
 
         #Randomise and display the flankprep
         self.disp = random.choice(self.flankprep)
         self._paraport.emit(10) #Task 1
         self._qnsdisp.emit(self.disp,800,150) #display Flankprep
         QtTest.QTest.qWait(400)
-
+        self.answerflank = True
+        
         #Find relevancy in flankprep and select REAL question
         self.questions2 = [s for s in self.questions if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
         self.disp = random.choice(self.questions2)
@@ -87,12 +89,10 @@ class flank_main(QtCore.QThread):
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
 
-        self.answerflank = True
+
         QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
         
-        self._ansshowhide.emit(1) #show the answer buttons
-        #self._ansshowhide.emit(0) #hide the answers buttons
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)

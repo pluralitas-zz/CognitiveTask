@@ -36,8 +36,8 @@ class MainWid(QtWidgets.QWidget):
         self.vidPlayer.setVideoOutput(self.vidFrame)
         self.graphView.fitInView(self.vidFrame,QtCore.Qt.KeepAspectRatio)
         
-        #file = os.path.join(self.vidd, random.choice(self.vidFile))
-        #self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
+        file = os.path.join(self.vidd, random.choice(self.vidFile))
+        self.vidPlayer.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(file)))
         self.parent = parent
         #self.vidPlayer.stop()
         #self.button = QtWidgets.QPushButton("Play")

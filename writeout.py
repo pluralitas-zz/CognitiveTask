@@ -34,14 +34,13 @@ class wrttask:
             np.savetxt(filpath, data, delimiter=',',fmt="%s")
 
 class paraout:
-    def __init__(self):
         #LPT1 = 0x378, LPT2=0x278, LPT3=0x3BC
-        self.prt = parallel.ParallelPort(address=0x0278)
-        self.prt.setData(0)
-
     def parawrite(self,data):
-        self.prt.setData(data)
-        self.prt.setData(0)
+        # self.prt.setData(data)
+        # self.prt.setData(0)
+        with parallel.ParallelPort(address=0x0278) as prt:
+            prt.setData(200)
+            prt.setData(0)
 
 if __name__ == "__main__":
 

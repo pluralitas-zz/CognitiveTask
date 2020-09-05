@@ -122,7 +122,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
-        #self.tasknameshow(0)
+        self.tasknameshow(0)
         for i in range(10):
             self.tasks(0)
 
@@ -509,13 +509,13 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.timer.stop()
         self.TimeReset()
+        self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
             self.pedalBackend.terminate()
             self.pedalBackend.wait()
         if self.daqbackend.isRunning():
             self.daqbackend.terminate()
             self.daqbackend.wait()
-
         self.StartBtn.show()
         self.GameBtn.show()
 
@@ -537,7 +537,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.timer.stop()
         self.TimeReset()
         self.counter_reset()
-
+        self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
             self.pedalBackend.terminate()
             self.pedalBackend.wait()
