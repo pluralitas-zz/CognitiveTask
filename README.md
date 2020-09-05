@@ -20,6 +20,7 @@
 6. Polar H10 heart rate sensor band using also ANT+ USB stick
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
 8. Ability to connect to EEG PC using DB25 USB2LPT Parallel Port converter using psychopy. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
+    * Using "Debug register trap" will cause BSOD 0x109 on Windows 10.
 
 ## Currently 5 tasks are implemented:
 
