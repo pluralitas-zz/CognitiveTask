@@ -43,7 +43,7 @@ class paraout:
             self.prtsuccess = False
 
     def parawrite(self,data):
-        if self.prtsuccess = True:
+        if self.prtsuccess == True:
             self.prt.setData(data)
             self.prt.setData(0)
 

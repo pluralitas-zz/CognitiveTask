@@ -24,7 +24,6 @@ class encoder:
 
         return self.encdeg
 
-
     @property
     def spd(self): #average speed over a period
         self.samp_rate = 100 #sample rate (hz)
