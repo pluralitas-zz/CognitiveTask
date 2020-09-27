@@ -274,56 +274,56 @@ class Ui_root(QtWidgets.QMainWindow):
         self._speed.connect(self.mjr.current_speed)
 
         #create shortcut for buttons
-        self.QuesBtn_A.setShortcut("c")
-        self.QuesBtn_B.setShortcut("v")
-        self.QuesBtn_X.setShortcut("d")
-        self.QuesBtn_Y.setShortcut("f")
-        self.QuesBtn_Up.setShortcut(QtCore.Qt.Key_Up)
-        self.QuesBtn_Down.setShortcut(QtCore.Qt.Key_Down)
-        self.QuesBtn_Left.setShortcut(QtCore.Qt.Key_Left)
-        self.QuesBtn_Right.setShortcut(QtCore.Qt.Key_Right)
-        self.QuesBtn_ShldL.setShortcut("e")
-        self.QuesBtn_ShldR.setShortcut("r")
+        # self.AnsBtn_Cr.setShortcut("c")
+        self.AnsBtn_Cl.setShortcut("v")
+        self.AnsBtn_Sq.setShortcut("d")
+        # self.AnsBtn_Tr.setShortcut("f")
+        # self.AnsBtn_Up.setShortcut(QtCore.Qt.Key_Up)
+        # self.AnsBtn_Down.setShortcut(QtCore.Qt.Key_Down)
+        self.AnsBtn_Left.setShortcut(QtCore.Qt.Key_Left)
+        self.AnsBtn_Right.setShortcut(QtCore.Qt.Key_Right)
+        # self.AnsBtn_ShldL.setShortcut("e")
+        # self.AnsBtn_ShldR.setShortcut("r")
 
         #connect the buttons to answering definition
-        self.QuesBtn_A.clicked.connect(lambda:self.answer())
-        self.QuesBtn_B.clicked.connect(lambda:self.answer())
-        self.QuesBtn_X.clicked.connect(lambda:self.answer())
-        self.QuesBtn_Y.clicked.connect(lambda:self.answer())
-        self.QuesBtn_Up.clicked.connect(lambda:self.answer())
-        self.QuesBtn_Down.clicked.connect(lambda:self.answer())
-        self.QuesBtn_Left.clicked.connect(lambda:self.answer())
-        self.QuesBtn_Right.clicked.connect(lambda:self.answer())
-        self.QuesBtn_ShldL.clicked.connect(lambda:self.answer())
-        self.QuesBtn_ShldR.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_Cr.clicked.connect(lambda:self.answer())
+        self.AnsBtn_Cl.clicked.connect(lambda:self.answer())
+        self.AnsBtn_Sq.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_Tr.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_Up.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_Down.clicked.connect(lambda:self.answer())
+        self.AnsBtn_Left.clicked.connect(lambda:self.answer())
+        self.AnsBtn_Right.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_ShldL.clicked.connect(lambda:self.answer())
+        # self.AnsBtn_ShldR.clicked.connect(lambda:self.answer())
 
     def showhideAnswers(self,value): #Show/Hide UI buttons for displaying answers
         if value == 0:
-            self.QuesBtn_Left.hide()
-            self.QuesBtn_Down.hide()
-            self.QuesBtn_Up.hide()
-            self.QuesBtn_Right.hide()
+            self.AnsBtn_Left.hide()
+            # self.AnsBtn_Down.hide()
+            # self.AnsBtn_Up.hide()
+            self.AnsBtn_Right.hide()
 
-            self.QuesBtn_X.hide()
-            self.QuesBtn_Y.hide()
-            self.QuesBtn_B.hide()
-            self.QuesBtn_A.hide()
+            self.AnsBtn_Sq.hide()
+            # self.AnsBtn_Tr.hide()
+            self.AnsBtn_Cl.hide()
+            # self.AnsBtn_Cr.hide()
 
-            self.QuesBtn_ShldL.hide()
-            self.QuesBtn_ShldR.hide()
+            # self.AnsBtn_ShldL.hide()
+            # self.AnsBtn_ShldR.hide()
         elif value == 1:
-            self.QuesBtn_Left.show()
-            self.QuesBtn_Down.show()
-            self.QuesBtn_Up.show()
-            self.QuesBtn_Right.show()
+            self.AnsBtn_Left.show()
+            # self.AnsBtn_Down.show()
+            # self.AnsBtn_Up.show()
+            self.AnsBtn_Right.show()
 
-            self.QuesBtn_X.show()
-            self.QuesBtn_Y.show()
-            self.QuesBtn_B.show()
-            self.QuesBtn_A.show()
+            self.AnsBtn_Sq.show()
+            # self.AnsBtn_Tr.show()
+            self.AnsBtn_Cl.show()
+            # self.AnsBtn_Cr.show()
 
-            self.QuesBtn_ShldL.show()
-            self.QuesBtn_ShldR.show()
+            # self.AnsBtn_ShldL.show()
+            # self.AnsBtn_ShldR.show()
             QtTest.QTest.qWait(100)
             self.wouttask("Answers Shown")
         else:
@@ -393,53 +393,53 @@ class Ui_root(QtWidgets.QMainWindow):
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[0])))
-        self.QuesBtn_A.setIcon(icon)
-        self.QuesBtn_A.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Cr.setIcon(icon)
+        self.AnsBtn_Cr.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[1])))
-        self.QuesBtn_B.setIcon(icon)
-        self.QuesBtn_B.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Cl.setIcon(icon)
+        self.AnsBtn_Cl.setIconSize(QtCore.QSize(300,300))
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[2])))
-        self.QuesBtn_X.setIcon(icon)
-        self.QuesBtn_X.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Sq.setIcon(icon)
+        self.AnsBtn_Sq.setIconSize(QtCore.QSize(300,300))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[3])))
-        self.QuesBtn_Y.setIcon(icon)
-        self.QuesBtn_Y.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Tr.setIcon(icon)
+        self.AnsBtn_Tr.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[4])))
-        self.QuesBtn_Up.setIcon(icon)
-        self.QuesBtn_Up.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Up.setIcon(icon)
+        self.AnsBtn_Up.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[5])))
-        self.QuesBtn_Down.setIcon(icon)
-        self.QuesBtn_Down.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Down.setIcon(icon)
+        self.AnsBtn_Down.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[6])))
-        self.QuesBtn_Left.setIcon(icon)
-        self.QuesBtn_Left.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Left.setIcon(icon)
+        self.AnsBtn_Left.setIconSize(QtCore.QSize(300,300))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[7])))
-        self.QuesBtn_Right.setIcon(icon)
-        self.QuesBtn_Right.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_Right.setIcon(icon)
+        self.AnsBtn_Right.setIconSize(QtCore.QSize(300,300))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[8])))
-        self.QuesBtn_ShldL.setIcon(icon)
-        self.QuesBtn_ShldL.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_ShldL.setIcon(icon)
+        self.AnsBtn_ShldL.setIconSize(QtCore.QSize(200,200))
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[9])))
-        self.QuesBtn_ShldR.setIcon(icon)
-        self.QuesBtn_ShldR.setIconSize(QtCore.QSize(200,200))
+        self.AnsBtn_ShldR.setIcon(icon)
+        self.AnsBtn_ShldR.setIconSize(QtCore.QSize(200,200))
 
     def answer(self): #emit answer to task subpy
         sender = self.sender()
@@ -650,28 +650,27 @@ class Ui_root(QtWidgets.QMainWindow):
         root.setMaximumSize(QtCore.QSize(1600, 900))
         #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top, for Games only
         root.setAttribute(QtCore.Qt.WA_TranslucentBackground,on=True)
-
         root.closeEvent = self.closeEvent
 
-        # Define Video Task as centralwidget
+    # Define Video Task as centralwidget
         self.vidFrame = VideoPlayer.MainWid(self)
         self.setCentralWidget(self.vidFrame)
         #self.vidFrame.hide() #hide video frame
         #self.centralwidget.setObjectName("centralwidget")
 
-        # Define Start Button
+    # Define Start Button
         self.StartBtn = QtWidgets.QPushButton(self)
         self.StartBtn.setGeometry(QtCore.QRect(1250, 800, 100, 40))
         self.StartBtn.setFlat(False)
         self.StartBtn.setObjectName("StartBtn")
 
-        # Define Game Button
+    # Define Game Button
         self.GameBtn = QtWidgets.QPushButton(self)
         self.GameBtn.setGeometry(QtCore.QRect(1140, 800, 100, 40))
         self.GameBtn.setFlat(False)
         self.GameBtn.setObjectName("GameBtn")
 
-        #Define Warning Frame
+    # Define Warning Frame
         self.WarnFrame = QtWidgets.QLabel(self)
         self.WarnFrame.setGeometry(QtCore.QRect(300,100,800,100))
         self.WarnFrame.setMinimumSize(QtCore.QSize(0, 0))
@@ -684,7 +683,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.setPixmap(pixmap)
         self.WarnFrame.hide()
 
-        #Define Task Frame
+    # Define Task Frame
         self.TaskFrame = QtWidgets.QLabel(self)
         self.TaskFrame.setGeometry(QtCore.QRect(200, 40, 1000, 800))
         self.TaskFrame.setMinimumSize(QtCore.QSize(0, 0))
@@ -709,7 +708,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskValCnt.setObjectName("TaskValCnt")
 
-        # Define HUD Frame
+    # Define HUD Frame
         self.HUDFrame = QtWidgets.QWidget(self)
         self.HUDFrame.setGeometry(QtCore.QRect(1400, 0, 200, 900))
         self.HUDFrame.setMaximumSize(QtCore.QSize(1600, 900))
@@ -717,7 +716,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDFrame.setObjectName("HUDFrame")
         self.HUDFrame.setStyleSheet("background-color: rgba(0,0,0,15%)")
 
-        # Define Value Display
+    # Define Value Display
         font = QtGui.QFont("Gill Sans MT", pointSize = 48, weight = 50)
 
         self.HUDValTime = QtWidgets.QLabel(self.HUDFrame)
@@ -768,7 +767,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValPBalL.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValPBalL.setObjectName("HUDValPBalL")
 
-        # Define Labels
+    # Define Labels
         font = QtGui.QFont("Gill Sans MT", pointSize = 14)
 
         self.TaskLabLevel = QtWidgets.QLabel(self)
@@ -825,7 +824,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabAvgPwr.setScaledContents(False)
         self.HUDLabAvgPwr.setObjectName("HUDLabAvgPwr")
 
-        # Define Force Balance Separator VLine
+    # Define Force Balance Separator VLine
         self.HUDLabPedBalSpr = QtWidgets.QFrame(self.HUDFrame)
         self.HUDLabPedBalSpr.setGeometry(QtCore.QRect(100, 710, 3, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -841,77 +840,81 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabPedBalSpr.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.HUDLabPedBalSpr.setObjectName("HUDLabPedBalSpr")
 
-        #Define Question Buttons
+    #Define Question Buttons
         QBtnfont = QtGui.QFont("Gill Sans MT", pointSize = 1)
-        self.QuesBtn_Left = QtWidgets.QPushButton(self)
-        self.QuesBtn_Left.setGeometry(QtCore.QRect(40, 440, 200, 200))
-        self.QuesBtn_Left.setFont(QBtnfont)
-        self.QuesBtn_Left.setFlat(True)
-        self.QuesBtn_Left.setObjectName("QuesBtn_Left")
-        self.QuesBtn_Left.hide()
+        self.AnsBtn_Left = QtWidgets.QPushButton(self)
+        self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 600, 300, 300))
+        self.AnsBtn_Left.setFont(QBtnfont)
+        self.AnsBtn_Left.setStyleSheet("background-color: rgba(0,0,0,15%)")
+        #self.AnsBtn_Left.setFlat(True)
+        self.AnsBtn_Left.setObjectName("AnsBtn_Left")
+        #self.AnsBtn_Left.hide()
 
-        self.QuesBtn_Down = QtWidgets.QPushButton(self)
-        self.QuesBtn_Down.setGeometry(QtCore.QRect(240, 640, 200, 200))
-        self.QuesBtn_Down.setFont(QBtnfont)
-        self.QuesBtn_Down.setFlat(True)
-        self.QuesBtn_Down.setObjectName("QuesBtn_Down")
-        self.QuesBtn_Down.hide()
+        self.AnsBtn_Down = QtWidgets.QPushButton(self)
+        self.AnsBtn_Down.setGeometry(QtCore.QRect(240, 640, 200, 200))
+        self.AnsBtn_Down.setFont(QBtnfont)
+        self.AnsBtn_Down.setFlat(True)
+        self.AnsBtn_Down.setObjectName("AnsBtn_Down")
+        self.AnsBtn_Down.hide()
 
-        self.QuesBtn_Up = QtWidgets.QPushButton(self)
-        self.QuesBtn_Up.setGeometry(QtCore.QRect(240, 240, 200, 200))
-        self.QuesBtn_Up.setFont(QBtnfont)
-        self.QuesBtn_Up.setFlat(True)
-        self.QuesBtn_Up.setObjectName("QuesBtn_Up")
-        self.QuesBtn_Up.hide()
+        self.AnsBtn_Up = QtWidgets.QPushButton(self)
+        self.AnsBtn_Up.setGeometry(QtCore.QRect(240, 240, 200, 200))
+        self.AnsBtn_Up.setFont(QBtnfont)
+        self.AnsBtn_Up.setFlat(True)
+        self.AnsBtn_Up.setObjectName("AnsBtn_Up")
+        self.AnsBtn_Up.hide()
 
-        self.QuesBtn_Right = QtWidgets.QPushButton(self)
-        self.QuesBtn_Right.setGeometry(QtCore.QRect(440, 440, 200, 200))
-        self.QuesBtn_Right.setFont(QBtnfont)
-        self.QuesBtn_Right.setFlat(True)
-        self.QuesBtn_Right.setObjectName("QuesBtn_Right")
-        self.QuesBtn_Right.hide()
+        self.AnsBtn_Right = QtWidgets.QPushButton(self)
+        self.AnsBtn_Right.setGeometry(QtCore.QRect(350, 600, 300, 300))
+        self.AnsBtn_Right.setFont(QBtnfont)
+        self.AnsBtn_Right.setStyleSheet("background-color: rgba(0,0,0,15%)")
+        #self.AnsBtn_Right.setFlat(True)
+        self.AnsBtn_Right.setObjectName("AnsBtn_Right")
+        #self.AnsBtn_Right.hide()
 
-        self.QuesBtn_X = QtWidgets.QPushButton(self)
-        self.QuesBtn_X.setGeometry(QtCore.QRect(760, 440, 200, 200))
-        self.QuesBtn_X.setFont(QBtnfont)
-        self.QuesBtn_X.setFlat(True)
-        self.QuesBtn_X.setObjectName("QuesBtn_X")
-        self.QuesBtn_X.hide()
+        self.AnsBtn_Sq = QtWidgets.QPushButton(self)
+        self.AnsBtn_Sq.setGeometry(QtCore.QRect(750, 600, 300, 300))
+        self.AnsBtn_Sq.setFont(QBtnfont)
+        self.AnsBtn_Sq.setStyleSheet("background-color: rgba(0,0,0,15%)")
+        #self.AnsBtn_Sq.setFlat(True)
+        self.AnsBtn_Sq.setObjectName("AnsBtn_Sq")
+        #self.AnsBtn_Sq.hide()
 
-        self.QuesBtn_Y = QtWidgets.QPushButton(self)
-        self.QuesBtn_Y.setGeometry(QtCore.QRect(960, 240, 200, 200))
-        self.QuesBtn_Y.setFont(QBtnfont)
-        self.QuesBtn_Y.setFlat(True)
-        self.QuesBtn_Y.setObjectName("QuesBtn_Y")
-        self.QuesBtn_Y.hide()
+        self.AnsBtn_Tr = QtWidgets.QPushButton(self)
+        self.AnsBtn_Tr.setGeometry(QtCore.QRect(960, 240, 200, 200))
+        self.AnsBtn_Tr.setFont(QBtnfont)
+        self.AnsBtn_Tr.setFlat(True)
+        self.AnsBtn_Tr.setObjectName("AnsBtn_Tr")
+        self.AnsBtn_Tr.hide()
 
-        self.QuesBtn_B = QtWidgets.QPushButton(self)
-        self.QuesBtn_B.setGeometry(QtCore.QRect(1160, 440, 200, 200))
-        self.QuesBtn_B.setFont(QBtnfont)
-        self.QuesBtn_B.setFlat(True)
-        self.QuesBtn_B.setObjectName("QuesBtn_B")
-        self.QuesBtn_B.hide()
+        self.AnsBtn_Cl = QtWidgets.QPushButton(self)
+        self.AnsBtn_Cl.setGeometry(QtCore.QRect(1100, 600, 300, 300))
+        self.AnsBtn_Cl.setFont(QBtnfont)
+        self.AnsBtn_Cl.setStyleSheet("background-color: rgba(0,0,0,15%)")
+        #self.AnsBtn_Cl.setFlat(True)
+        self.AnsBtn_Cl.setObjectName("AnsBtn_Cl")
+        #self.AnsBtn_Cl.hide()
 
-        self.QuesBtn_A = QtWidgets.QPushButton(self)
-        self.QuesBtn_A.setGeometry(QtCore.QRect(960, 640, 200, 200))
-        self.QuesBtn_A.setFont(QBtnfont)
-        self.QuesBtn_A.setFlat(True)
-        self.QuesBtn_A.setObjectName("QuesBtn_A")
-        self.QuesBtn_A.hide()
+        self.AnsBtn_Cr = QtWidgets.QPushButton(self)
+        self.AnsBtn_Cr.setGeometry(QtCore.QRect(960, 640, 200, 200))
+        self.AnsBtn_Cr.setFont(QBtnfont)
+        self.AnsBtn_Cr.setFlat(True)
+        self.AnsBtn_Cr.setObjectName("AnsBtn_Cr")
+        self.AnsBtn_Cr.hide()
 
-        self.QuesBtn_ShldL = QtWidgets.QPushButton(self)
-        self.QuesBtn_ShldL.setGeometry(QtCore.QRect(240, 20, 200, 200))
-        self.QuesBtn_ShldL.setFont(QBtnfont)
-        self.QuesBtn_ShldL.setFlat(True)
-        self.QuesBtn_ShldL.setObjectName("QuesBtn_ShldL")
-        self.QuesBtn_ShldL.hide()
+        self.AnsBtn_ShldL = QtWidgets.QPushButton(self)
+        self.AnsBtn_ShldL.setGeometry(QtCore.QRect(240, 20, 200, 200))
+        self.AnsBtn_ShldL.setFont(QBtnfont)
+        self.AnsBtn_ShldL.setFlat(True)
+        self.AnsBtn_ShldL.setObjectName("AnsBtn_ShldL")
+        self.AnsBtn_ShldL.hide()
 
-        self.QuesBtn_ShldR = QtWidgets.QPushButton(self)
-        self.QuesBtn_ShldR.setGeometry(QtCore.QRect(960, 20, 200, 200))
-        self.QuesBtn_ShldR.setFont(QBtnfont)
-        self.QuesBtn_ShldR.setFlat(True)
-        self.QuesBtn_ShldR.setObjectName("QuesBtn_ShldR")
-        self.QuesBtn_ShldR.hide()
+        self.AnsBtn_ShldR = QtWidgets.QPushButton(self)
+        self.AnsBtn_ShldR.setGeometry(QtCore.QRect(960, 20, 200, 200))
+        self.AnsBtn_ShldR.setFont(QBtnfont)
+        self.AnsBtn_ShldR.setFlat(True)
+        self.AnsBtn_ShldR.setObjectName("AnsBtn_ShldR")
+        self.AnsBtn_ShldR.hide()
         #root.setCentralWidget(self.centralwidget)
  
         self.retranslateUi(root)
@@ -953,16 +956,17 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Game Btn
         self.GameBtn.setText(_translate("root", "Demo"))
-        self.QuesBtn_Left.setText(_translate("root", "L"))
-        self.QuesBtn_Down.setText(_translate("root", "D"))
-        self.QuesBtn_Up.setText(_translate("root", "U"))
-        self.QuesBtn_Right.setText(_translate("root", "R"))
-        self.QuesBtn_X.setText(_translate("root", "X"))
-        self.QuesBtn_Y.setText(_translate("root", "Y"))
-        self.QuesBtn_B.setText(_translate("root", "B"))
-        self.QuesBtn_A.setText(_translate("root", "A"))
-        self.QuesBtn_ShldL.setText(_translate("root", "L1"))
-        self.QuesBtn_ShldR.setText(_translate("root", "R1"))
+        #Answer Btn
+        self.AnsBtn_Left.setText(_translate("root", "L"))
+        # self.AnsBtn_Down.setText(_translate("root", "D"))
+        # self.AnsBtn_Up.setText(_translate("root", "U"))
+        self.AnsBtn_Right.setText(_translate("root", "R"))
+        self.AnsBtn_Sq.setText(_translate("root", "X"))
+        # self.AnsBtn_Tr.setText(_translate("root", "Y"))
+        self.AnsBtn_Cl.setText(_translate("root", "B"))
+        # self.AnsBtn_Cr.setText(_translate("root", "A"))
+        # self.AnsBtn_ShldL.setText(_translate("root", "L1"))
+        # self.AnsBtn_ShldR.setText(_translate("root", "R1"))
 
 # Close Program Stuff
     def closeEvent(self, event):
