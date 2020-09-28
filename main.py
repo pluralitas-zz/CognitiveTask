@@ -124,7 +124,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def demo_run(self):
         self.tasknameshow(0)
         for i in range(10):
-            self.tasks(5)
+            self.tasks(0)
 
         self.tasknameshow(1)
         for i in range(5):
