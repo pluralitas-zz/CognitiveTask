@@ -33,61 +33,61 @@ class workmemVerb_main(QtCore.QThread):
         # Determine difficulty
         blanktime = 1000
         if count >= 80:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 7
             self.level = 10
-            self.anstimelim = 20
+            self.anstimelim = 25
             showtime = 500
         elif count >= 70:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 7
             self.level = 9
-            self.anstimelim = 20
+            self.anstimelim = 30
             showtime = 700
         elif count >= 60:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 6
             self.level = 8
-            self.anstimelim = 20
+            self.anstimelim = 25
             showtime = 700
         elif count >= 50:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 5
             self.level = 7
             self.anstimelim = 20
             showtime = 700
         elif count >= 40:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 4
             self.level = 6
             self.anstimelim = 15
             showtime = 700
         elif count >= 30:
-            self.anscount = 8
+            self.anscount = 4
             self.dispcount = 4
             self.level = 5
             self.anstimelim = 15
             showtime = 700
         elif count >= 20:
-            self.anscount = 8
+            self.anscount = 4
             self.dispcount = 3
             self.level = 4
             self.anstimelim = 15
             showtime = 700
         elif count >= 10:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 3
             self.level = 3
             self.anstimelim = 10
             showtime = 1000
         elif count >= 5:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 2
             self.level = 2
             self.anstimelim = 10
             showtime = 1000
         else:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 2
             self.level = 1
             self.anstimelim = 10
@@ -113,13 +113,14 @@ class workmemVerb_main(QtCore.QThread):
         # generate correct answers
         for i in range(self.dispcount):
             self.disp = random.choice(self.questions)
-            self.taskarr.append(self.disp)
-            self._qnsdisp.emit(self.disp,800,150)
-            self._paraport.emit(21)
-            self._wouttask.emit("Question Shown")
-            QtTest.QTest.qWait(showtime)
-            self._qnsdisp.emit("Blank.png",800,150)
-            QtTest.QTest.qWait(blanktime)
+            if self.disp not in self.taskarr:
+                self.taskarr.append(self.disp)
+                self._qnsdisp.emit(self.disp,800,150)
+                self._paraport.emit(21)
+                self._wouttask.emit("Question Shown")
+                QtTest.QTest.qWait(showtime)
+                self._qnsdisp.emit("Blank.png",800,150)
+                QtTest.QTest.qWait(blanktime)
 
         self._ansshowhide.emit(1) #show the answer buttons
         self.ran_ans() #randomise answer
@@ -236,64 +237,64 @@ class workmemSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
 
-        # Determine difficulty            
+    # Determine difficulty            
         blanktime = 1000
         if count >= 80:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 7
             self.level = 10
-            self.anstimelim = 20
+            self.anstimelim = 25
             showtime = 500
         elif count >= 70:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 7
             self.level = 9
-            self.anstimelim = 20
+            self.anstimelim = 30
             showtime = 700
         elif count >= 60:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 6
             self.level = 8
-            self.anstimelim = 20
+            self.anstimelim = 25
             showtime = 700
         elif count >= 50:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 5
             self.level = 7
             self.anstimelim = 20
             showtime = 700
         elif count >= 40:
-            self.anscount = 10
+            self.anscount = 4
             self.dispcount = 4
             self.level = 6
             self.anstimelim = 15
             showtime = 700
         elif count >= 30:
-            self.anscount = 8
+            self.anscount = 4
             self.dispcount = 4
             self.level = 5
             self.anstimelim = 15
             showtime = 700
         elif count >= 20:
-            self.anscount = 8
+            self.anscount = 4
             self.dispcount = 3
             self.level = 4
             self.anstimelim = 15
             showtime = 700
         elif count >= 10:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 3
             self.level = 3
             self.anstimelim = 10
             showtime = 1000
         elif count >= 5:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 2
             self.level = 2
             self.anstimelim = 10
             showtime = 1000
         else:
-            self.anscount = 4
+            self.anscount = 2
             self.dispcount = 2
             self.level = 1
             self.anstimelim = 10
@@ -303,29 +304,30 @@ class workmemSpace_main(QtCore.QThread):
         self._paraport.emit(30) #Task 3
         QtTest.QTest.qWait(2000)
 
-        # Show center point
+    # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
         
-        # Delay before questions start showing on screen
+    # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
-        # hold task in while loop while user isnt cycling
+    # hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
             QtTest.QTest.qWait(1000)
         
-        # generate correct answers
+    # generate correct answers
         for i in range(self.dispcount):
             self.disp = random.choice(self.questions)
-            self.taskarr.append(self.disp)
-            self._qnsdisp.emit(self.disp,600,600)
-            self._paraport.emit(31)
-            self._wouttask.emit("Question Shown")
-            QtTest.QTest.qWait(showtime)
-            self._qnsdisp.emit("Blank.png",800,150)
-            QtTest.QTest.qWait(blanktime)
+            if self.disp not in self.taskarr:
+                self.taskarr.append(self.disp)
+                self._qnsdisp.emit(self.disp,600,600)
+                self._paraport.emit(31)
+                self._wouttask.emit("Question Shown")
+                QtTest.QTest.qWait(showtime)
+                self._qnsdisp.emit("Blank.png",800,150)
+                QtTest.QTest.qWait(blanktime)
 
         self._ansshowhide.emit(1) #show the answer buttons
         self.ran_ans() #randomise answer

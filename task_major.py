@@ -9,11 +9,12 @@ class major_main(QtCore.QThread):
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
     _wouttask = QtCore.pyqtSignal(str)
+    _qnsmultidisp = QtCore.pyqtSignal(list)
 
     def __init__(self):
         super(major_main, self).__init__()
         self.questions = ["Right.png","Left.png"]
-        self.blanktask = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
+        self.blanktask = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.taskarr = []
         self.ansarr = []
         self.answermajor = False
@@ -29,8 +30,8 @@ class major_main(QtCore.QThread):
         if count >= 30:
             self.showtime = 300 #ms
             self.level = 5
-            self.showtotal = 7 #total number of questions show, must be odd number
-            self.showratio = 4 #number of questions in the same side, must be more than half of showtotal
+            self.showtotal = 5 #total number of questions show, must be odd number
+            self.showratio = 3 #number of questions in the same side, must be more than half of showtotal
             self.cutofftime = 30 #multiplies of 100ms
         elif count >= 20:
             self.showtime = 500 #ms
@@ -67,22 +68,6 @@ class major_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate correct answers
-        self.showoppo = self.showtotal - self.showratio # Number of questions showing opposite
-        self.taskchange = random.sample(range(0,9),self.showtotal)
-        self.taskcorrect = random.sample(self.questions,2) #First is wrong, 2nd is correct
-        self.taskarr = self.blanktask.copy() #create taskarr all blank tasks
-
-        if self.showoppo > 0: #if there are opposite to show
-            for i in range(self.showoppo):
-                self.taskarr[self.taskchange[i]] = self.taskcorrect[0]
-        
-        for i in range(self.showratio): #append correct answers to taskarr
-            self.taskarr[self.taskchange[self.showoppo+i]] = self.taskcorrect[1]
-
-        self._wouttask.emit("Question Shown")
-        self._ansdisp.emit(self.taskarr) #emit taskarr into buttons
-
         #Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
@@ -91,11 +76,27 @@ class major_main(QtCore.QThread):
         while self.speed < self.pausespd: 
             QtTest.QTest.qWait(1000)
 
-        self.answermajor = True
+        self._ansdisp.emit(self.questions) #emit answers into buttons
         self._ansshowhide.emit(1) #show the answer buttons
+
+        # generate correct answers
+        self.showoppo = self.showtotal - self.showratio # Number of questions showing opposite
+        self.taskchange = random.sample(range(0,4),self.showoppo) #array values to change to wrong
+        self.taskcorrect = random.sample(self.questions,2) #First is wrong, 2nd is correct
+        self.taskarr = self.blanktask.copy() #create taskarr all blank tasks
+
+        for i in range(self.showtotal): #append correct answers to taskarr
+            self.taskarr[i] = self.taskcorrect[1]
+
+        for i in range(len(self.taskchange)): #change correct to wrong answers
+            self.taskarr[self.taskchange[i]] = self.taskcorrect[0]
+
+        self._wouttask.emit("Question Shown")
+        self._qnsmultidisp.emit(self.taskarr) #emit taskarr into buttons
+
+        self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
-        #self._ansshowhide.emit(0) #hide the answers buttons
-        self._ansdisp.emit(self.questions) #emit correct answering array
+        self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
         
         timeCount = 0
         while len(self.ansarr) < 1: #While loop to hold code till answered or time passes

@@ -124,7 +124,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def demo_run(self):
         self.tasknameshow(0)
         for i in range(10):
-            self.tasks(0)
+            self.tasks(5)
 
         self.tasknameshow(1)
         for i in range(5):
@@ -264,6 +264,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #connect majority task
         self.mjr = task_major.major_main()
         self.mjr._qnsdisp.connect(self.disp_qns)
+        self.mjr._qnsmultidisp.connect(self.disp_qnsmulti)
         self.mjr._ansdisp.connect(self.disp_ans)
         self.mjr._counter.connect(self.counter_add)
         self.mjr._level.connect(self.LevelDisplay)
@@ -274,56 +275,31 @@ class Ui_root(QtWidgets.QMainWindow):
         self._speed.connect(self.mjr.current_speed)
 
         #create shortcut for buttons
-        # self.AnsBtn_Cr.setShortcut("c")
         self.AnsBtn_Cl.setShortcut("v")
         self.AnsBtn_Sq.setShortcut("d")
-        # self.AnsBtn_Tr.setShortcut("f")
-        # self.AnsBtn_Up.setShortcut(QtCore.Qt.Key_Up)
-        # self.AnsBtn_Down.setShortcut(QtCore.Qt.Key_Down)
         self.AnsBtn_Left.setShortcut(QtCore.Qt.Key_Left)
         self.AnsBtn_Right.setShortcut(QtCore.Qt.Key_Right)
-        # self.AnsBtn_ShldL.setShortcut("e")
-        # self.AnsBtn_ShldR.setShortcut("r")
 
         #connect the buttons to answering definition
-        # self.AnsBtn_Cr.clicked.connect(lambda:self.answer())
         self.AnsBtn_Cl.clicked.connect(lambda:self.answer())
         self.AnsBtn_Sq.clicked.connect(lambda:self.answer())
-        # self.AnsBtn_Tr.clicked.connect(lambda:self.answer())
-        # self.AnsBtn_Up.clicked.connect(lambda:self.answer())
-        # self.AnsBtn_Down.clicked.connect(lambda:self.answer())
         self.AnsBtn_Left.clicked.connect(lambda:self.answer())
         self.AnsBtn_Right.clicked.connect(lambda:self.answer())
-        # self.AnsBtn_ShldL.clicked.connect(lambda:self.answer())
-        # self.AnsBtn_ShldR.clicked.connect(lambda:self.answer())
 
     def showhideAnswers(self,value): #Show/Hide UI buttons for displaying answers
         if value == 0:
             self.AnsBtn_Left.hide()
-            # self.AnsBtn_Down.hide()
-            # self.AnsBtn_Up.hide()
             self.AnsBtn_Right.hide()
-
             self.AnsBtn_Sq.hide()
-            # self.AnsBtn_Tr.hide()
             self.AnsBtn_Cl.hide()
-            # self.AnsBtn_Cr.hide()
 
-            # self.AnsBtn_ShldL.hide()
-            # self.AnsBtn_ShldR.hide()
         elif value == 1:
             self.AnsBtn_Left.show()
-            # self.AnsBtn_Down.show()
-            # self.AnsBtn_Up.show()
             self.AnsBtn_Right.show()
 
             self.AnsBtn_Sq.show()
-            # self.AnsBtn_Tr.show()
             self.AnsBtn_Cl.show()
-            # self.AnsBtn_Cr.show()
 
-            # self.AnsBtn_ShldL.show()
-            # self.AnsBtn_ShldR.show()
             QtTest.QTest.qWait(100)
             self.wouttask("Answers Shown")
         else:
@@ -350,96 +326,85 @@ class Ui_root(QtWidgets.QMainWindow):
         QtTest.QTest.qWait(100)
         self.CntDisplay()
 
-    def disp_qns(self,data,wid,hei): #Display list of Questions in TaskFrame
-        pixmap = QtGui.QPixmap(os.path.join(os.path.join(os.path.dirname(__file__),"Pictures"), data))
-        #pixmap = pixmap.scaled(self.TaskFrame.width(),self.TaskFrame.height(),QtCore.Qt.KeepAspectRatio)
+    def disp_qns(self,data,wid,hei): #Display list of Questions in Ques_Center
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data))
+        #pixmap = pixmap.scaled(self.Ques_Center.width(),self.Ques_Center.height(),QtCore.Qt.KeepAspectRatio)
         pixmap = pixmap.scaled(wid,hei,QtCore.Qt.KeepAspectRatio)
 
         if data == "Blank.png" or data =="Center.png" or data == "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
             self.wouttask("Question Shown")
-        self.TaskFrame.setPixmap(pixmap)
+        self.Ques_Center.setPixmap(pixmap)
+
+    def disp_qnsmulti(self,data):
+        self.wouttask("Question Shown")
+        if len(data) < 5:
+            [data.append('Blank.png') for i in range(5 - len(data))] #append to 5 data with 'Blank.png'
+
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data[0]))
+        pixmap = pixmap.scaled(200,200,QtCore.Qt.KeepAspectRatio)
+        self.Ques_N.setPixmap(pixmap)
+
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data[1]))
+        pixmap = pixmap.scaled(200,200,QtCore.Qt.KeepAspectRatio)
+        self.Ques_NE.setPixmap(pixmap)
+
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data[2]))
+        pixmap = pixmap.scaled(200,200,QtCore.Qt.KeepAspectRatio)
+        self.Ques_SE.setPixmap(pixmap)
+
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data[3]))
+        pixmap = pixmap.scaled(200,200,QtCore.Qt.KeepAspectRatio)
+        self.Ques_SW.setPixmap(pixmap)
+
+        pixmap = QtGui.QPixmap(os.path.join(self.picd, data[4]))
+        pixmap = pixmap.scaled(200,200,QtCore.Qt.KeepAspectRatio)
+        self.Ques_NW.setPixmap(pixmap)
 
     def disp_ans(self,data): #Display Answers in relevant buttons
         
-        if len(data) == 2: #if value is 2, allow all left 4(arrows) and right 4(ABXY) buttons to do the same thing
-            [data.insert(1,data[0]) for i in range(3)]
-            [data.insert(5,data[4]) for i in range(3)]
-            [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
+        if len(data) == 2: #if value is 2, allow all left 2(LR) and right 2(SqCl) buttons to do the same thing
+            data.insert(1,data[0])
+            data.insert(4,data[2])
+            self.ansdict = {'Cl':data[0],'Sq':data[1],'L':data[2],'R':data[3]} #dictionary to compare button to picture displayed
+            # Change other values except 'Cl' and 'L' "Blank.png" for display
+            data[0] = 'Blank.png' 
+            data[2] = 'Blank.png'
+            # for i in range(len(data)): #Change all values to "Blank.png" for display
+            #     data[i] = 'Blank.png'
 
-            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-            # for i in range(4): #Change other values except data[0](Bottom Right) and data[5](Bottom Left) to "Blank.png" for display
-                # data[i+1] = 'Blank.png' 
-                # data[i+6] = 'Blank.png'
-            for i in range(len(data)): #Change all values to "Blank.png" for display
-                data[i] = 'Blank.png'
+        elif len(data) != 2 and len(data) < 4: #append to fit the list of buttons if list of values are not enough
 
-        elif "Right.png" in data or "Left.png" in data: #for use with task_major
-            self.majorans = ["Right.png","Left.png","Blank.png"]
-            self.ansdict = {'A':self.majorans[0],'B':self.majorans[0],'X':self.majorans[0],'Y':self.majorans[0],'U':self.majorans[1],'D':self.majorans[1],'L':self.majorans[1],'R':self.majorans[1],'L1':self.majorans[2],'R1':self.majorans[2]} #dictionary to compare button to picture displayed
-        
-        elif len(data) != 2 and len(data) < 10: #append to fit the list of buttons if list of values are not enough
+            [data.append('Blank.png') for i in range(4 - len(data))] #append to 5 data with 'Blank.png'
+            self.ansdict = {'Cl':data[0],'Sq':data[1],'L':data[2],'R':data[3]} #dictionary to compare button to picture displayed
 
-            [data.append('Blank.png') for i in range(10 - len(data))] #append to 10 data with 'Blank.png'
-            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
-
-        elif len(data) > 10:
+        elif len(data) > 4:
             data = random.sample(data,10)
-            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+            self.ansdict = {'Cl':data[0],'Sq':data[1],'L':data[2],'R':data[3]} #dictionary to compare button to picture displayed
 
         else:
-            self.ansdict = {'A':data[0],'B':data[1],'X':data[2],'Y':data[3],'U':data[4],'D':data[5],'L':data[6],'R':data[7],'L1':data[8],'R1':data[9]} #dictionary to compare button to picture displayed
+            self.ansdict = {'Cl':data[0],'Sq':data[1],'L':data[2],'R':data[3]} #dictionary to compare button to picture displayed
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[0])))
-        self.AnsBtn_Cr.setIcon(icon)
-        self.AnsBtn_Cr.setIconSize(QtCore.QSize(200,200))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[1])))
         self.AnsBtn_Cl.setIcon(icon)
         self.AnsBtn_Cl.setIconSize(QtCore.QSize(300,300))
         
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[2])))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[1])))
         self.AnsBtn_Sq.setIcon(icon)
         self.AnsBtn_Sq.setIconSize(QtCore.QSize(300,300))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[3])))
-        self.AnsBtn_Tr.setIcon(icon)
-        self.AnsBtn_Tr.setIconSize(QtCore.QSize(200,200))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[4])))
-        self.AnsBtn_Up.setIcon(icon)
-        self.AnsBtn_Up.setIconSize(QtCore.QSize(200,200))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[5])))
-        self.AnsBtn_Down.setIcon(icon)
-        self.AnsBtn_Down.setIconSize(QtCore.QSize(200,200))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[6])))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[2])))
         self.AnsBtn_Left.setIcon(icon)
         self.AnsBtn_Left.setIconSize(QtCore.QSize(300,300))
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[7])))
+        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[3])))
         self.AnsBtn_Right.setIcon(icon)
         self.AnsBtn_Right.setIconSize(QtCore.QSize(300,300))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[8])))
-        self.AnsBtn_ShldL.setIcon(icon)
-        self.AnsBtn_ShldL.setIconSize(QtCore.QSize(200,200))
-
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(os.path.join(self.picd,data[9])))
-        self.AnsBtn_ShldR.setIcon(icon)
-        self.AnsBtn_ShldR.setIconSize(QtCore.QSize(200,200))
 
     def answer(self): #emit answer to task subpy
         sender = self.sender()
@@ -550,7 +515,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.GameBtn.hide()
 
         #Hide tasks stuff
-        self.TaskFrame.hide()
+        self.Ques_Center.hide()
         self.TaskLabCnt.hide()
         self.TaskValCnt.hide()
         self.TaskLabLevel.hide()
@@ -678,21 +643,71 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.WarnFrame.setText("")
         self.WarnFrame.setAlignment(QtCore.Qt.AlignCenter)
-        self.WarnFrame.setObjectName("TaskFrame")
+        self.WarnFrame.setObjectName("Ques_Center")
         pixmap = QtGui.QPixmap(os.path.join(self.picd, "Pause.png"))
         self.WarnFrame.setPixmap(pixmap)
         self.WarnFrame.hide()
 
-    # Define Task Frame
-        self.TaskFrame = QtWidgets.QLabel(self)
-        self.TaskFrame.setGeometry(QtCore.QRect(200, 40, 1000, 800))
-        self.TaskFrame.setMinimumSize(QtCore.QSize(0, 0))
-        self.TaskFrame.setMaximumSize(QtCore.QSize(1000, 800))
-        self.TaskFrame.setAutoFillBackground(False)
-        self.TaskFrame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.TaskFrame.setText("")
-        self.TaskFrame.setAlignment(QtCore.Qt.AlignCenter)
-        self.TaskFrame.setObjectName("TaskFrame")
+    # Define Task Frame/Question Frame
+        self.Ques_Center = QtWidgets.QLabel(self)
+        self.Ques_Center.setGeometry(QtCore.QRect(200, 0, 1000, 800))
+        self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
+        self.Ques_Center.setAutoFillBackground(False)
+        self.Ques_Center.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_Center.setText("")
+        self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_Center.setObjectName("Ques_Center")
+
+        self.Ques_N = QtWidgets.QLabel(self)
+        self.Ques_N.setGeometry(QtCore.QRect(600, 130, 200, 200))
+        self.Ques_N.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_N.setMaximumSize(QtCore.QSize(300, 300))
+        self.Ques_N.setAutoFillBackground(False)
+        self.Ques_N.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_N.setText("")
+        self.Ques_N.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_N.setObjectName("Ques_N")
+
+        self.Ques_NW = QtWidgets.QLabel(self)
+        self.Ques_NW.setGeometry(QtCore.QRect(350, 280, 200, 200))
+        self.Ques_NW.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_NW.setMaximumSize(QtCore.QSize(300, 300))
+        self.Ques_NW.setAutoFillBackground(False)
+        self.Ques_NW.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_NW.setText("")
+        self.Ques_NW.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_NW.setObjectName("Ques_NW")
+
+        self.Ques_NE = QtWidgets.QLabel(self)
+        self.Ques_NE.setGeometry(QtCore.QRect(850, 280, 200, 200))
+        self.Ques_NE.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_NE.setMaximumSize(QtCore.QSize(300, 300))
+        self.Ques_NE.setAutoFillBackground(False)
+        self.Ques_NE.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_NE.setText("")
+        self.Ques_NE.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_NE.setObjectName("Ques_NE")
+
+        self.Ques_SW = QtWidgets.QLabel(self)
+        self.Ques_SW.setGeometry(QtCore.QRect(480, 480, 200, 200))
+        self.Ques_SW.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_SW.setMaximumSize(QtCore.QSize(300, 300))
+        self.Ques_SW.setAutoFillBackground(False)
+        self.Ques_SW.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_SW.setText("")
+        self.Ques_SW.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_SW.setObjectName("Ques_NW")
+
+        self.Ques_SE = QtWidgets.QLabel(self)
+        self.Ques_SE.setGeometry(QtCore.QRect(720, 480, 200, 200))
+        self.Ques_SE.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_SE.setMaximumSize(QtCore.QSize(300, 300))
+        self.Ques_SE.setAutoFillBackground(False)
+        self.Ques_SE.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_SE.setText("")
+        self.Ques_SE.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_SE.setObjectName("Ques_NE")
 
         font = QtGui.QFont("Gill Sans MT", pointSize = 36, weight = 50)
 
@@ -701,12 +716,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValLevel.setFont(font)
         self.TaskValLevel.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskValLevel.setObjectName("TaskValLevel")
+        self.TaskValLevel.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.TaskValCnt = QtWidgets.QLabel(self)
         self.TaskValCnt.setGeometry(QtCore.QRect(10, 140, 80, 50))
         self.TaskValCnt.setFont(font)
         self.TaskValCnt.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskValCnt.setObjectName("TaskValCnt")
+        self.TaskValCnt.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
     # Define HUD Frame
         self.HUDFrame = QtWidgets.QWidget(self)
@@ -775,12 +792,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskLabLevel.setFont(font)
         self.TaskLabLevel.setScaledContents(False)
         self.TaskLabLevel.setObjectName("TaskLabLevel")
+        self.TaskLabLevel.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.TaskLabCnt = QtWidgets.QLabel(self)
         self.TaskLabCnt.setGeometry(QtCore.QRect(10, 110, 80, 25))
         self.TaskLabCnt.setFont(font)
         self.TaskLabCnt.setScaledContents(False)
         self.TaskLabCnt.setObjectName("TaskLabCnt")
+        self.TaskLabCnt.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.HUDLabPedBal = QtWidgets.QLabel(self.HUDFrame)
         self.HUDLabPedBal.setGeometry(QtCore.QRect(10, 680, 200, 25))
@@ -840,82 +859,39 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabPedBalSpr.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.HUDLabPedBalSpr.setObjectName("HUDLabPedBalSpr")
 
-    #Define Question Buttons
+    #Define Answer Buttons
         QBtnfont = QtGui.QFont("Gill Sans MT", pointSize = 1)
         self.AnsBtn_Left = QtWidgets.QPushButton(self)
-        self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 600, 300, 300))
+        self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 550, 300, 300))
         self.AnsBtn_Left.setFont(QBtnfont)
         self.AnsBtn_Left.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Left.setFlat(True)
         self.AnsBtn_Left.setObjectName("AnsBtn_Left")
-        #self.AnsBtn_Left.hide()
-
-        self.AnsBtn_Down = QtWidgets.QPushButton(self)
-        self.AnsBtn_Down.setGeometry(QtCore.QRect(240, 640, 200, 200))
-        self.AnsBtn_Down.setFont(QBtnfont)
-        self.AnsBtn_Down.setFlat(True)
-        self.AnsBtn_Down.setObjectName("AnsBtn_Down")
-        self.AnsBtn_Down.hide()
-
-        self.AnsBtn_Up = QtWidgets.QPushButton(self)
-        self.AnsBtn_Up.setGeometry(QtCore.QRect(240, 240, 200, 200))
-        self.AnsBtn_Up.setFont(QBtnfont)
-        self.AnsBtn_Up.setFlat(True)
-        self.AnsBtn_Up.setObjectName("AnsBtn_Up")
-        self.AnsBtn_Up.hide()
+        self.AnsBtn_Left.hide()
 
         self.AnsBtn_Right = QtWidgets.QPushButton(self)
-        self.AnsBtn_Right.setGeometry(QtCore.QRect(350, 600, 300, 300))
+        self.AnsBtn_Right.setGeometry(QtCore.QRect(350, 550, 300, 300))
         self.AnsBtn_Right.setFont(QBtnfont)
         self.AnsBtn_Right.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Right.setFlat(True)
         self.AnsBtn_Right.setObjectName("AnsBtn_Right")
-        #self.AnsBtn_Right.hide()
+        self.AnsBtn_Right.hide()
 
         self.AnsBtn_Sq = QtWidgets.QPushButton(self)
-        self.AnsBtn_Sq.setGeometry(QtCore.QRect(750, 600, 300, 300))
+        self.AnsBtn_Sq.setGeometry(QtCore.QRect(750, 550, 300, 300))
         self.AnsBtn_Sq.setFont(QBtnfont)
         self.AnsBtn_Sq.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Sq.setFlat(True)
         self.AnsBtn_Sq.setObjectName("AnsBtn_Sq")
-        #self.AnsBtn_Sq.hide()
-
-        self.AnsBtn_Tr = QtWidgets.QPushButton(self)
-        self.AnsBtn_Tr.setGeometry(QtCore.QRect(960, 240, 200, 200))
-        self.AnsBtn_Tr.setFont(QBtnfont)
-        self.AnsBtn_Tr.setFlat(True)
-        self.AnsBtn_Tr.setObjectName("AnsBtn_Tr")
-        self.AnsBtn_Tr.hide()
+        self.AnsBtn_Sq.hide()
 
         self.AnsBtn_Cl = QtWidgets.QPushButton(self)
-        self.AnsBtn_Cl.setGeometry(QtCore.QRect(1100, 600, 300, 300))
+        self.AnsBtn_Cl.setGeometry(QtCore.QRect(1100, 550, 300, 300))
         self.AnsBtn_Cl.setFont(QBtnfont)
         self.AnsBtn_Cl.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Cl.setFlat(True)
         self.AnsBtn_Cl.setObjectName("AnsBtn_Cl")
-        #self.AnsBtn_Cl.hide()
-
-        self.AnsBtn_Cr = QtWidgets.QPushButton(self)
-        self.AnsBtn_Cr.setGeometry(QtCore.QRect(960, 640, 200, 200))
-        self.AnsBtn_Cr.setFont(QBtnfont)
-        self.AnsBtn_Cr.setFlat(True)
-        self.AnsBtn_Cr.setObjectName("AnsBtn_Cr")
-        self.AnsBtn_Cr.hide()
-
-        self.AnsBtn_ShldL = QtWidgets.QPushButton(self)
-        self.AnsBtn_ShldL.setGeometry(QtCore.QRect(240, 20, 200, 200))
-        self.AnsBtn_ShldL.setFont(QBtnfont)
-        self.AnsBtn_ShldL.setFlat(True)
-        self.AnsBtn_ShldL.setObjectName("AnsBtn_ShldL")
-        self.AnsBtn_ShldL.hide()
-
-        self.AnsBtn_ShldR = QtWidgets.QPushButton(self)
-        self.AnsBtn_ShldR.setGeometry(QtCore.QRect(960, 20, 200, 200))
-        self.AnsBtn_ShldR.setFont(QBtnfont)
-        self.AnsBtn_ShldR.setFlat(True)
-        self.AnsBtn_ShldR.setObjectName("AnsBtn_ShldR")
-        self.AnsBtn_ShldR.hide()
-        #root.setCentralWidget(self.centralwidget)
+        self.AnsBtn_Cl.hide()
  
         self.retranslateUi(root)
         QtCore.QMetaObject.connectSlotsByName(root)
@@ -958,15 +934,9 @@ class Ui_root(QtWidgets.QMainWindow):
         self.GameBtn.setText(_translate("root", "Demo"))
         #Answer Btn
         self.AnsBtn_Left.setText(_translate("root", "L"))
-        # self.AnsBtn_Down.setText(_translate("root", "D"))
-        # self.AnsBtn_Up.setText(_translate("root", "U"))
         self.AnsBtn_Right.setText(_translate("root", "R"))
-        self.AnsBtn_Sq.setText(_translate("root", "X"))
-        # self.AnsBtn_Tr.setText(_translate("root", "Y"))
-        self.AnsBtn_Cl.setText(_translate("root", "B"))
-        # self.AnsBtn_Cr.setText(_translate("root", "A"))
-        # self.AnsBtn_ShldL.setText(_translate("root", "L1"))
-        # self.AnsBtn_ShldR.setText(_translate("root", "R1"))
+        self.AnsBtn_Sq.setText(_translate("root", "Sq"))
+        self.AnsBtn_Cl.setText(_translate("root", "Cl"))
 
 # Close Program Stuff
     def closeEvent(self, event):
