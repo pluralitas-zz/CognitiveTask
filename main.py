@@ -70,6 +70,17 @@ class Ui_root(QtWidgets.QMainWindow):
         self.CntDisplay()
         self.tasknameshow(self.tasknumnow)
 
+# Define YOUR CYCLE TASK EVENT HERE
+    def cycle_task(self):
+        ################################################### 
+        ###############     RUN TASKS     #################
+        
+        while self.timecount < self.trainsec:
+            QtTest.QTest.qWait(1000)
+
+        self.complet.run_com(1)
+        ###################################################
+
 # Define YOUR RUN TASK EVENT HERE
     def task_run(self):
         ################################################### 
@@ -471,6 +482,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         if self.dotask == True:
             self.task_run()
+        else:
+            self.cycle_task()
 
         self.timer.stop()
         self.TimeReset()
@@ -617,25 +630,25 @@ class Ui_root(QtWidgets.QMainWindow):
         root.setAttribute(QtCore.Qt.WA_TranslucentBackground,on=True)
         root.closeEvent = self.closeEvent
 
-    # Define Video Task as centralwidget
+        # Define Video Task as centralwidget
         self.vidFrame = VideoPlayer.MainWid(self)
         self.setCentralWidget(self.vidFrame)
         #self.vidFrame.hide() #hide video frame
         #self.centralwidget.setObjectName("centralwidget")
 
-    # Define Start Button
+        # Define Start Button
         self.StartBtn = QtWidgets.QPushButton(self)
         self.StartBtn.setGeometry(QtCore.QRect(1250, 800, 100, 40))
         self.StartBtn.setFlat(False)
         self.StartBtn.setObjectName("StartBtn")
 
-    # Define Game Button
+        # Define Game Button
         self.GameBtn = QtWidgets.QPushButton(self)
         self.GameBtn.setGeometry(QtCore.QRect(1140, 800, 100, 40))
         self.GameBtn.setFlat(False)
         self.GameBtn.setObjectName("GameBtn")
 
-    # Define Warning Frame
+        # Define Warning Frame
         self.WarnFrame = QtWidgets.QLabel(self)
         self.WarnFrame.setGeometry(QtCore.QRect(300,100,800,100))
         self.WarnFrame.setMinimumSize(QtCore.QSize(0, 0))
@@ -648,7 +661,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.setPixmap(pixmap)
         self.WarnFrame.hide()
 
-    # Define Task Frame/Question Frame
+        # Define Task Frame/Question Frame
         self.Ques_Center = QtWidgets.QLabel(self)
         self.Ques_Center.setGeometry(QtCore.QRect(200, 0, 1000, 800))
         self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
@@ -725,7 +738,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setObjectName("TaskValCnt")
         self.TaskValCnt.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
-    # Define HUD Frame
+        # Define HUD Frame
         self.HUDFrame = QtWidgets.QWidget(self)
         self.HUDFrame.setGeometry(QtCore.QRect(1400, 0, 200, 900))
         self.HUDFrame.setMaximumSize(QtCore.QSize(1600, 900))
@@ -733,7 +746,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDFrame.setObjectName("HUDFrame")
         self.HUDFrame.setStyleSheet("background-color: rgba(0,0,0,15%)")
 
-    # Define Value Display
+        # Define Value Display
         font = QtGui.QFont("Gill Sans MT", pointSize = 48, weight = 50)
 
         self.HUDValTime = QtWidgets.QLabel(self.HUDFrame)
@@ -784,7 +797,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValPBalL.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValPBalL.setObjectName("HUDValPBalL")
 
-    # Define Labels
+        # Define Labels
         font = QtGui.QFont("Gill Sans MT", pointSize = 14)
 
         self.TaskLabLevel = QtWidgets.QLabel(self)
@@ -843,7 +856,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabAvgPwr.setScaledContents(False)
         self.HUDLabAvgPwr.setObjectName("HUDLabAvgPwr")
 
-    # Define Force Balance Separator VLine
+        # Define Force Balance Separator VLine
         self.HUDLabPedBalSpr = QtWidgets.QFrame(self.HUDFrame)
         self.HUDLabPedBalSpr.setGeometry(QtCore.QRect(100, 710, 3, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -859,7 +872,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDLabPedBalSpr.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.HUDLabPedBalSpr.setObjectName("HUDLabPedBalSpr")
 
-    #Define Answer Buttons
+        # Define Answer Buttons
         QBtnfont = QtGui.QFont("Gill Sans MT", pointSize = 1)
         self.AnsBtn_Left = QtWidgets.QPushButton(self)
         self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 550, 300, 300))
@@ -956,5 +969,3 @@ if __name__ == "__main__":
     ui.show()     #Show UI
 
     sys.exit(app.exec_())
-
-    

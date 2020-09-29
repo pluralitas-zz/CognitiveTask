@@ -77,7 +77,6 @@ class major_main(QtCore.QThread):
             QtTest.QTest.qWait(1000)
 
         self._ansdisp.emit(self.questions) #emit answers into buttons
-        self._ansshowhide.emit(1) #show the answer buttons
 
         # generate correct answers
         self.showoppo = self.showtotal - self.showratio # Number of questions showing opposite
@@ -97,6 +96,7 @@ class major_main(QtCore.QThread):
         self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
         self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
+        self._ansshowhide.emit(1) #show the answer buttons
         
         timeCount = 0
         while len(self.ansarr) < 1: #While loop to hold code till answered or time passes

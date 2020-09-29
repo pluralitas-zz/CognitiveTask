@@ -159,8 +159,8 @@ class workmemVerb_main(QtCore.QThread):
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
         self._paraport.emit(23)
-        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
+        self._ansshowhide.emit(1) #show the answer buttons
         self.answerworkmemVerb = True
 
     #Append answers from main.py by user to determine if values are correct + randomise next answer
@@ -360,16 +360,14 @@ class workmemSpace_main(QtCore.QThread):
         
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
-            if len(self.anspadarr) <= len(self.questions) and self.ran_disp not in self.anspadarr: #check if more than no. of available question variations
-                    self.anspadarr.append(self.ran_disp)
-            else:
+            if self.ran_disp not in self.anspadarr: # check for recurring values
                 self.anspadarr.append(self.ran_disp)
 
         random.shuffle(self.anspadarr) #shuffle array around
         self._ansdisp.emit(self.anspadarr) #emit answers into buttons
         self._paraport.emit(33)
-        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(100)
+        self._ansshowhide.emit(1) #show the answer buttons
         self.answerworkmemSpace = True
 
     #Append answers from main.py by user to determine if values are correct + randomise next answer

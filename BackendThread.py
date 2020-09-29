@@ -232,13 +232,3 @@ class Window(QDialog):
 if __name__ == '__main__':
     pedThread = PedalThread()
     pedThread.start()
-
-
-
-
-    # import sys
-    # #Initialize Window
-    # app =QApplication(sys.argv)
-    # MainWin = Window()
-    # MainWin.show()
-    # sys.exit(app.exec_())
