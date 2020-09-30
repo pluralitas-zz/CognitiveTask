@@ -431,8 +431,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, PPGRaw, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time(), np.ones((self.daqbackend.samples,1))*self.timecount, data, self.heartratewoutarr, self.pedalwoutarr])
-        self.writefile.appendfile(self.comb) #write data to file
+        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time()*1000, np.ones((self.daqbackend.samples,1))*self.timecount, data, self.heartratewoutarr, self.pedalwoutarr])
+        self.writefile.appendfile(self.comb.astype(int)) #write data to file
     
     def wouttask(self,data):
         self.timenow = str(np.datetime64('now')).replace(":","")

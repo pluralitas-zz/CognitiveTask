@@ -65,8 +65,8 @@ class EncDAQBackThread(QtCore.QThread):
             self.degnowarr = self.samparr * self.degnow
             
             #self.degnowarrout = np.array(self.degnowarr)
-            self.comb = np.column_stack([self.degnowarr,self.speedarr,self.daqarr]) #stack deg, speed and EMG x 4, PPGRaw
-            self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
+            self.comb = np.column_stack([self.degnowarr*100,self.speedarr,self.daqarr*1000]) #stack deg, speed and EMG x 4, PPGRaw
+            self._woutBackEndArray.emit(self.comb.astype(int)) #emit all the EMG signal array
 
             ############################# Reset
             self.degarrout = np.array(list())
