@@ -7,7 +7,7 @@ from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joysti
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
 from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
-from writeout import wrtout, wrttask, paraout
+from writeout import wrtout, wrttask, paraout, wrtbin
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -192,7 +192,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Task Stuff
     def initTaskSigSlot(self): #Initialise Task Stuff
-        
+      
         #connect countdown
         self.cd = cdown.countdown_main()
         self.cd._qnsdisp.connect(self.disp_qns)
@@ -472,7 +472,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
 
         #Initialise and create Writeout file with username
-        self.writefile=wrtout(self.UserIDNAME)
+        self.writefile=wrtbin(self.UserIDNAME)
+        #self.writefile=wrtout(self.UserIDNAME)
         self.writetask=wrttask(self.UserIDNAME)
 
         # Start thread(s)
