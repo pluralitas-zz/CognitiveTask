@@ -41,7 +41,7 @@ class wrtbin:
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
-        self.fname = filename + "__" + self.timenow + ".dat" #join username with timestamp for file name
+        self.fname = filename + "__" + self.timenow + "_14col_int64.dat" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
         self.init.tofile(self.fpath)
 
@@ -52,6 +52,7 @@ class wrtbin:
 class wrttask:
     savepath = "C:\\Data"
     head = 'Time, ID'
+    comms = "Check ID"
     init = np.zeros([0,2])
 
     def __init__(self,filename):

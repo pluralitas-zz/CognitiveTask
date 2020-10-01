@@ -13,6 +13,7 @@ class EncDAQBackThread(QtCore.QThread):
     # create signal slots
     _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
     _encoderSpeed = QtCore.pyqtSignal(int)
+    _Timeout = QtCore.pyqtSignal(int)
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
@@ -21,6 +22,7 @@ class EncDAQBackThread(QtCore.QThread):
 
     # determines while loop sampling rate
     t = time.time()
+    counter = 0
     period = 1/samp_rate*samples #1/100 = 0.01s
 
     # Initialize Encoder
@@ -38,6 +40,10 @@ class EncDAQBackThread(QtCore.QThread):
     def run(self):
         while True:
             self.t += self.period
+        ######################### Elapsed Time Counter
+            if self.counter == int(1/self.period):
+                self._Timeout.emit(1)
+                self.counter = 0
         ############################# Encoder
             self.degnow = self.Encoder.deg #Read Encoder Degree
             ## check whether encoder is going forward or in reverse
@@ -66,23 +72,24 @@ class EncDAQBackThread(QtCore.QThread):
             
             #self.degnowarrout = np.array(self.degnowarr)
             self.comb = np.column_stack([self.degnowarr*100,self.speedarr,self.daqarr*1000]) #stack deg, speed and EMG x 4, PPGRaw
-            self._woutBackEndArray.emit(self.comb.astype('int64')) #emit all the EMG signal array
+            self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
 
             ############################# Reset
             self.degarrout = np.array(list())
-        
+            self.counter += 1
+
             time.sleep(max(0,self.t-time.time()))
             
 class PedalThread(QtCore.QThread):
     # Create Signal Slot 
     _pedalValue = QtCore.pyqtSignal(list)
     _HeartRate = QtCore.pyqtSignal(int)
-
+    
     #Initialise Pedal
     antdata = antrcv()
     # determines while loop sampling rate
     t = time.time()
-    period = 0.5   
+    period = 0.5
     
     #Run function
     def run(self):

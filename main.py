@@ -27,7 +27,7 @@ class Ui_root(QtWidgets.QMainWindow):
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
     tasknum = 0 #Task number sequence
-
+    timer = True
     demosec = QtCore.QTime(0,0,0).secsTo(QtCore.QTime(0,6,0)) #Demo Time
 
 # Define ALL YOUR TASKS FUNCTION HERE
@@ -186,8 +186,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.TimeDisplay) #connect QtTimer for Elapsed Time
+        self.timer = False
         #self.vidFrame.startVid() #Start Video
 
 # Task Stuff
@@ -457,10 +456,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
         if data < self.pausespd: #Pause video if speed <pausespd
             self.pauseVid()
-            self.timer.stop()
+            self.timer = False
         else: #start video if speed >=pausespd
             self.playVid()
-            self.timer.start()
+            self.timer = True
 
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
@@ -479,14 +478,16 @@ class Ui_root(QtWidgets.QMainWindow):
         # Start thread(s)
         self.pedalBackend.start()
         self.daqbackend.start()
-        self.timer.start(1000)
+
+        #Start Time recording
+        self.timer = True
 
         if self.dotask == True:
             self.task_run()
         else:
             self.cycle_task()
 
-        self.timer.stop()
+        self.timer = False
         self.TimeReset()
         self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
@@ -509,11 +510,10 @@ class Ui_root(QtWidgets.QMainWindow):
         # Start thread(s)
         self.pedalBackend.start()
         self.EncSpeed(999) #set dummy speed as 999
-        self.timer.start(1000)
 
         self.demo_run()
 
-        self.timer.stop()
+        self.timer = False
         self.TimeReset()
         self.counter_reset()
         self.vidFrame.pauseVid()
@@ -543,14 +543,15 @@ class Ui_root(QtWidgets.QMainWindow):
         # Start thread(s)
         self.pedalBackend.start()
         self.daqbackend.start()
-        self.timer.start(1000)
 
 # HUD Stuff
     def TimeDisplay(self):
-        self.timecount += 1
-        self.timeleft = self.traintime.addSecs(self.timecount)
-        self.timedisp = self.timeleft.toString()  
-        self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
+        if self.timer == True:
+            self.timecount += 1
+            self.timeleft = self.traintime.addSecs(self.timecount)
+            self.timedisp = self.timeleft.toString()  
+            self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
+        else: pass
 
     def TimeReset(self):
         self.timecount = 0
@@ -620,6 +621,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
+        self.daqbackend._Timeout.connect(self.TimeDisplay)        #Pass timer
 
 # Setup UI Stuff
     def setupUi(self, root):
