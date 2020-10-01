@@ -607,7 +607,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.para=paraout()
 
         # Signal connect to Slots for Data
-        self._time.connect(self.daqbackend.HRrcv)     #Pass time for writeout
+        self._time.connect(self.daqbackend.Timercv)     #Pass time for writeout
         self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
         self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3

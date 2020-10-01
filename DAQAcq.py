@@ -18,9 +18,8 @@ class daq:
                 task.timing.cfg_samp_clk_timing(rate=rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE)
                 raw_in = task.read(number_of_samples_per_channel=sam)
             arr_out = np.array(raw_in)
-            arr_out = np.transpose(arr_out)
         else:
-            arr_out = np.zeros([sam,5],dtype=int)
+            arr_out = np.zeros([5,sam],dtype=int)
 
         return arr_out
 

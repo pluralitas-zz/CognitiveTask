@@ -3,7 +3,7 @@ from psychopy import parallel
 
 class wrtout:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
+    head = 'Time*1000,ElapsedTime,Deg*10,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
     init = np.zeros([1,13])
     comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nHeart Rate Data, Pedal Data at 1 Hz\r\n" #comments
 
@@ -17,31 +17,14 @@ class wrtout:
         with open(self.fpath, 'ab') as filpath: #'ab' for append, binary mode
             np.savetxt(filpath, data, fmt="%d", delimiter=',')
 
-class wrtdframe:
-    savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
-    init = np.zeros([1,13])
-    comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nHeart Rate Data, Pedal Data at 1 Hz\r\n\r\n" #comments
-
-    def __init__(self,filename):
-        self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
-        self.fname = filename + "__" + self.timenow + ".csv" #join username with timestamp for file name
-        self.fpath = os.path.join(self.savepath, self.fname)
-        self.fpath = os.path.join(self.savepath, self.fname)
-        np.savetxt(self.fpath, self.init, fmt="%d", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
-
-    def appendfile(self,dat):
-        self.dt = pd.DataFrame(data=dat,dtype=np.int64)
-        self.dt.to_csv(self.fpath,mode='a', index=False, header=False)
-
 class wrtbin:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
+    head = 'Time*1000,ElapsedTime,Deg*10,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
     init = np.zeros([1,13])
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
-        self.fname = filename + "__" + self.timenow + "_14col_int64.dat" #join username with timestamp for file name
+        self.fname = filename + "__" + self.timenow + "_13col_uint16.dat" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
         self.init.tofile(self.fpath)
 
@@ -82,12 +65,21 @@ class paraout:
 if __name__ == "__main__":
     import numpy as np
     import time
-
+    t = 23.45
     test = wrtbin("testt")
-    wans = np.random.rand(5,13)*1000
+    # wans = np.random.rand(4,12)*1000
+    samparr = np.ones((1,5))
+    wans = np.ones((5,4))
+    toos = np.ones((5,6))
     timenow = str(np.datetime64('now')).replace(":","")
-    out = np.column_stack([np.ones((5,1))*time.time()*1000, wans])
-    out = out
-    print(out)
-    for i in range(100):
-        test.appendfile(out.astype('int64'))
+    # out = np.column_stack([np.ones((5,1))*(time.time()-t)*1000, wans])
+    out = np.append(samparr*t*100,samparr*t*1000,axis=0)
+    out = np.append(out, np.ones((2,5))*2,axis=0)
+    out = np.append(out, np.ones((1,5))*t*10,axis=0)
+    out = np.append(out, wans.T,axis=0)
+    out = np.append(out,toos.T*2,axis=0).T
+    print(out.astype(int))
+    print(np.size(out))
+
+    # for i in range(100):
+    #     test.appendfile(out.astype('int32'))

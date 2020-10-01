@@ -12,13 +12,12 @@ from writeout import wrtbin
 class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
     # create signal slots
-    _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
     _encoderSpeed = QtCore.pyqtSignal(int)
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
     samples = 25 #per acquisition
-    samparr = np.ones((samples,1))
+    samparr = np.ones((1,samples))
     inittime = 0
 
     # determines while loop sampling rate
@@ -71,30 +70,33 @@ class EncDAQBackThread(QtCore.QThread):
             ############################# Acquire DAQ data
             self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
 
-            ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
-            # pad signal to equal sample size of EMG for DAQ
-            #self.degnowarrout = np.array(self.degnowarr)
-            self.comb = np.column_stack([np.ones((self.samples,1))*(time.time()-self.inittime)*1000, 
-                                        np.ones((self.samples,1))*self.timecount, 
-                                        self.samparr * self.degnow*100,
-                                        self.samparr * self.speed,
-                                        self.daqarr*1000,
-                                        self.antwoutarr]) #stack deg, speed and EMG x 4, PPGRaw
-            # self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
-            self.writeout(self.comb)
+            ############################# combine System Time, Elapsed Time, Degree, Speed, EMG output, HR and Pedal output to emit to writeout.py
+            # self.comb = np.column_stack([   self.samparr    * (time.time()-self.inittime)*1000, 
+            #                                 self.samparr    * self.timecount, 
+            #                                 self.samparr    * self.degnow*10,
+            #                                 self.samparr    * self.speed,
+            #                                 self.daqarr     * 1000,
+            #                                 self.antwoutarr         ])
+
+            self.comb = np.append(self.samparr*(time.time()-self.inittime)*1000,    self.samparr*self.timecount,    axis=0)
+            self.comb = np.append(self.comb,                                        self.samparr*self.degnow*10,    axis=0)
+            self.comb = np.append(self.comb,                                        self.samparr*self.speed,        axis=0)
+            self.comb = np.append(self.comb,                                        self.daqarr*1000,             axis=0)
+            self.comb = np.append(self.comb,                                        self.antwoutarr.T,              axis=0)
+
+            self.writeout(self.comb.T)
 
             ############################# Reset
-            self.degarrout = np.array(list())
             print(0,self.t-time.time())
             QtTest.QTest.qWait(max(0,self.t-time.time()))
 
-    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.writefile.appendfile(self.comb.astype('int32')) #write data to file
+    def writeout(self,data): #systime, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
+        self.writefile.appendfile(data.astype('uint16')) #write data to file
 
     def ANTrcv(self,data):
         self.antwoutarr[0] = data
 
-    def HRrcv(self,data):
+    def Timercv(self,data):
         self.timecount = data
          
 class PedalThread(QtCore.QThread):
