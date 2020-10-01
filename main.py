@@ -12,6 +12,7 @@ _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
     _answer = QtCore.pyqtSignal(str) #QtSlot for answering questions in task subpy
     _speed = QtCore.pyqtSignal(int,int) #QtSlot for speed
+    _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
@@ -27,7 +28,6 @@ class Ui_root(QtWidgets.QMainWindow):
     tasknumnow = 0 #Task number now
     tasknum = 0 #Task number sequence
     timer = True
-    demosec = QtCore.QTime(0,0,0).secsTo(QtCore.QTime(0,6,0)) #Demo Time
 
 # Define ALL YOUR TASKS FUNCTION HERE
     tasksnum = random.sample(range(0, 5), 4) # randomise tasks
@@ -430,10 +430,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter[self.tasknumnow]) +"</font>")
 
 # Write out to file Stuff
-    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, PPGRaw, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.comb = np.column_stack([ np.ones((self.daqbackend.samples,1))*time.time()*1000, np.ones((self.daqbackend.samples,1))*self.timecount, data, self.heartratewoutarr, self.pedalwoutarr])
-        self.writefile.appendfile(self.comb.astype('int64')) #write data to file
-    
     def wouttask(self,data):
         self.timenow = str(np.datetime64('now')).replace(":","")
         self.taskcomb = np.column_stack([self.timenow, str(data)]) #time, data value
@@ -472,8 +468,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
 
         #Initialise and create Writeout file with username
-        self.writefile=wrtbin(self.UserIDNAME)
-        # self.writefile=wrtout(self.UserIDNAME)
         self.writetask=wrttask(self.UserIDNAME)
 
         # Start thread(s)
@@ -548,18 +542,19 @@ class Ui_root(QtWidgets.QMainWindow):
     def TimeDisplay(self):
         # if self.timer == True:
         self.timecount += 1
+        self._time.emit(self.timecount)
         self.timeleft = self.traintime.addSecs(self.timecount).toString()
         self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
         # else: pass
 
     def TimeReset(self):
         self.timecount = 0
+        self._time.emit(0)
         self.timeleft = self.traintime.addSecs(self.timecount)
         self.timedisp = self.timeleft.toString() 
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")        
 
     def HRDisplay(self,data):
-        self.heartratewoutarr[0] = data
         self.HUDValHR.setText("<font color='White'>"+ str(data) +"</font>")
 
     def EncSpeed(self, data): # UI Slot to recieve Encoder Speed Value
@@ -569,7 +564,6 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
-        self.pedalwoutarr[0] = data #append into array for writeout
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAvgPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
         self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
@@ -602,9 +596,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def initBackendThread(self): 
         # Create backend Threads
         self.pedalBackend=PedalThread()
-        self.daqbackend= EncDAQBackThread()
-        self.pedalwoutarr = np.zeros((self.daqbackend.samples,4)) #blank array for use with writeout
-        self.heartratewoutarr = np.zeros((self.daqbackend.samples,1)) #blank array for use with writeout
+        self.daqbackend= EncDAQBackThread(self.UserIDNAME)
 
         #Initialize Controller
         self.controller=self.Controller()        
@@ -615,11 +607,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.para=paraout()
 
         # Signal connect to Slots for Data
+        self._time.connect(self.daqbackend.HRrcv)     #Pass time for writeout
         self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
         self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
-        self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
+        self.pedalBackend._ANTwrtout.connect(self.daqbackend.ANTrcv) #Pass HR, pedal values for writeout
 
 # Setup UI Stuff
     def setupUi(self, root):
@@ -910,7 +903,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.retranslateUi(root)
         QtCore.QMetaObject.connectSlotsByName(root)
 
-    # Set UI Default Text
+# Set UI Default Text
     def retranslateUi(self, root):
         root.setWindowTitle(_translate("root", "Cognitive Cycling"))
         #level

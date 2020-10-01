@@ -35,7 +35,7 @@ class antrcv:
         else:
             self.heartrate = self.raw
         
-        #print(self.raw)
+        # print(self.raw)
 
     def eCallback(self,e):
         print(e) #print "device is closed""

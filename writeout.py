@@ -3,8 +3,8 @@ from psychopy import parallel
 
 class wrtout:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,PPGRaw*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
-    init = np.zeros([1,14])
+    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
+    init = np.zeros([1,13])
     comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nHeart Rate Data, Pedal Data at 1 Hz\r\n" #comments
 
     def __init__(self,filename):
@@ -19,8 +19,8 @@ class wrtout:
 
 class wrtdframe:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,PPGRaw*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
-    init = np.zeros([1,14])
+    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
+    init = np.zeros([1,13])
     comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nHeart Rate Data, Pedal Data at 1 Hz\r\n\r\n" #comments
 
     def __init__(self,filename):
@@ -36,8 +36,8 @@ class wrtdframe:
 
 class wrtbin:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,PPGRaw*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
-    init = np.zeros([1,14])
+    head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
+    init = np.zeros([1,13])
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file

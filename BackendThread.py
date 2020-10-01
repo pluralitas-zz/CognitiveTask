@@ -1,12 +1,13 @@
 import time, threading, numpy as np
 from PyQt5.QtWidgets import QApplication, QDialog, QLabel, QVBoxLayout
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtTest
 from DAQAcq import daq
 from EncoderNew import encoder
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from pynput.keyboard import Key, Controller
 #from Powermeter_Test2 import main, DAQfunc
 from antreceiver import antrcv
+from writeout import wrtbin
             
 class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
@@ -16,12 +17,13 @@ class EncDAQBackThread(QtCore.QThread):
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
-    samples = 10 #per acquisition
+    samples = 20 #per acquisition
     samparr = np.ones((samples,1))
+    inittime = 0
 
     # determines while loop sampling rate
-    t = time.time()
     period = 1/samp_rate*samples #1/100 = 0.01s
+    t=0
 
     # Initialize Encoder
     Encoder=encoder()
@@ -35,9 +37,19 @@ class EncDAQBackThread(QtCore.QThread):
     newdiff = 0
     speed = 0
     degnowarr = []
+
+    # Writeout
+    antwoutarr = np.zeros((samples,5)) #blank array for use with writeout
+    timecount = 0
+
+    def __init__(self,data):
+        super(EncDAQBackThread,self).__init__()
+        self.writefile=wrtbin(data)
+        self.inittime = time.time()
+
     def run(self):
         while True:
-            self.t += self.period
+            self.t = time.time() + self.period
         ############################# Encoder
             self.degnow = self.Encoder.deg #Read Encoder Degree
             ## check whether encoder is going forward or in reverse
@@ -61,23 +73,36 @@ class EncDAQBackThread(QtCore.QThread):
 
             ############################# combine Time, Degree, Speed, HR and EMG output to emit to writeout.py
             # pad signal to equal sample size of EMG for DAQ
-            self.speedarr = self.samparr * self.speed
-            self.degnowarr = self.samparr * self.degnow
-            
             #self.degnowarrout = np.array(self.degnowarr)
-            self.comb = np.column_stack([self.degnowarr*100,self.speedarr,self.daqarr*1000]) #stack deg, speed and EMG x 4, PPGRaw
-            self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
+            self.comb = np.column_stack([np.ones((self.samples,1))*(time.time()-self.inittime)*1000, 
+                                        np.ones((self.samples,1))*self.timecount, 
+                                        self.samparr * self.degnow*100,
+                                        self.samparr * self.speed,
+                                        self.daqarr*1000,
+                                        self.antwoutarr]) #stack deg, speed and EMG x 4, PPGRaw
+            # self._woutBackEndArray.emit(self.comb) #emit all the EMG signal array
+            self.writeout(self.comb)
 
             ############################# Reset
             self.degarrout = np.array(list())
+            print(0,self.t-time.time())
+            QtTest.QTest.qWait(max(0,self.t-time.time()))
 
-            time.sleep(max(0,self.t-time.time()))
-            
+    def writeout(self,data): #time, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
+        self.writefile.appendfile(self.comb.astype('int32')) #write data to file
+
+    def ANTrcv(self,data):
+        self.antwoutarr[0] = data
+
+    def HRrcv(self,data):
+        self.timecount = data
+         
 class PedalThread(QtCore.QThread):
     # Create Signal Slot 
     _pedalValue = QtCore.pyqtSignal(list)
     _HeartRate = QtCore.pyqtSignal(int)
-    
+    _ANTwrtout = QtCore.pyqtSignal(list)
+
     #Initialise Pedal
     antdata = antrcv()
     # determines while loop sampling rate
@@ -91,6 +116,7 @@ class PedalThread(QtCore.QThread):
             self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
             self._HeartRate.emit(self.pedalRead[1][0])
+            self._ANTwrtout.emit([self.pedalRead[1][0],self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))])#HeartRate,InstPower,AccumPower
             #time.sleep(max(0,self.t-time.time()))
 
 class Window(QDialog):
