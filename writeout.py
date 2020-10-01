@@ -1,4 +1,4 @@
-import os, numpy as np, pandas as pd
+import os, numpy as np
 from psychopy import parallel
 
 class wrtout:

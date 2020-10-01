@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
@@ -186,7 +185,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
-        self.timer = False
+        self.timer = QtCore.QTimer(self)
+        self.timer.setTimerType(QtCore.Qt.PreciseTimer)
+        self.timer.timeout.connect(self.TimeDisplay)
         #self.vidFrame.startVid() #Start Video
 
 # Task Stuff
@@ -456,10 +457,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
         if data < self.pausespd: #Pause video if speed <pausespd
             self.pauseVid()
-            self.timer = False
+            self.timer.stop()
         else: #start video if speed >=pausespd
             self.playVid()
-            self.timer = True
+            self.timer.start(1000)
 
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
@@ -472,7 +473,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #Initialise and create Writeout file with username
         self.writefile=wrtbin(self.UserIDNAME)
-        #self.writefile=wrtout(self.UserIDNAME)
+        # self.writefile=wrtout(self.UserIDNAME)
         self.writetask=wrttask(self.UserIDNAME)
 
         # Start thread(s)
@@ -480,14 +481,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.daqbackend.start()
 
         #Start Time recording
-        self.timer = True
+        self.timer.start(1000)
 
         if self.dotask == True:
             self.task_run()
         else:
             self.cycle_task()
 
-        self.timer = False
+        self.timer.stop()
         self.TimeReset()
         self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
@@ -513,7 +514,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.demo_run()
 
-        self.timer = False
         self.TimeReset()
         self.counter_reset()
         self.vidFrame.pauseVid()
@@ -546,12 +546,11 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # HUD Stuff
     def TimeDisplay(self):
-        if self.timer == True:
-            self.timecount += 1
-            self.timeleft = self.traintime.addSecs(self.timecount)
-            self.timedisp = self.timeleft.toString()  
-            self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")
-        else: pass
+        # if self.timer == True:
+        self.timecount += 1
+        self.timeleft = self.traintime.addSecs(self.timecount).toString()
+        self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
+        # else: pass
 
     def TimeReset(self):
         self.timecount = 0
@@ -621,7 +620,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.daqbackend._woutBackEndArray.connect(self.writeout)    #Writeout
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
-        self.daqbackend._Timeout.connect(self.TimeDisplay)        #Pass timer
 
 # Setup UI Stuff
     def setupUi(self, root):

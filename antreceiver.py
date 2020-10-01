@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-import time
-#from libAnt.drivers.serial import SerialDriver
+from PyQt5 import QtTest
 from libAnt.drivers.usb import USBDriver
 from libAnt.loggers.pcap import PcapLogger
 from libAnt.node import Node
@@ -50,7 +48,7 @@ class antrcv:
                 f = Factory(self.callback)
                 n.enableRxScanMode() 
                 n.start(f.parseMessage, self.eCallback) #print "USB OPENSTART""USB OPEN SUCCESS" & "USB CLOSE START" & "USB CLOSE END"
-                time.sleep(1) # keep Listening for 30sec
+                QtTest.QTest.qWait(1000) # keep Listening for 30sec
 
             if (bool(self.powermeter) and bool(self.heartrate)): #break while loop if filled
                 #print("broken")

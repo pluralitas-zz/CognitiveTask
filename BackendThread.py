@@ -13,7 +13,6 @@ class EncDAQBackThread(QtCore.QThread):
     # create signal slots
     _woutBackEndArray = QtCore.pyqtSignal(np.ndarray) #EMG signal slot
     _encoderSpeed = QtCore.pyqtSignal(int)
-    _Timeout = QtCore.pyqtSignal(int)
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
@@ -22,7 +21,6 @@ class EncDAQBackThread(QtCore.QThread):
 
     # determines while loop sampling rate
     t = time.time()
-    counter = 0
     period = 1/samp_rate*samples #1/100 = 0.01s
 
     # Initialize Encoder
@@ -40,10 +38,6 @@ class EncDAQBackThread(QtCore.QThread):
     def run(self):
         while True:
             self.t += self.period
-        ######################### Elapsed Time Counter
-            if self.counter == int(1/self.period):
-                self._Timeout.emit(1)
-                self.counter = 0
         ############################# Encoder
             self.degnow = self.Encoder.deg #Read Encoder Degree
             ## check whether encoder is going forward or in reverse
@@ -76,7 +70,6 @@ class EncDAQBackThread(QtCore.QThread):
 
             ############################# Reset
             self.degarrout = np.array(list())
-            self.counter += 1
 
             time.sleep(max(0,self.t-time.time()))
             
@@ -89,16 +82,16 @@ class PedalThread(QtCore.QThread):
     antdata = antrcv()
     # determines while loop sampling rate
     t = time.time()
-    period = 0.5
+    period = 1
     
     #Run function
     def run(self):
         while True:       
-            self.t+=self.period
+            #self.t+=self.period
             self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
             self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
             self._HeartRate.emit(self.pedalRead[1][0])
-            time.sleep(max(0,self.t-time.time()))
+            #time.sleep(max(0,self.t-time.time()))
 
 class Window(QDialog):
     def __init__(self):

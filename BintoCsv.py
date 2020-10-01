@@ -1,8 +1,8 @@
-import os, numpy as np, pandas as pd
+import os, numpy as np
 from psychopy import parallel
 
 savepath = "C:\\Data" #data savepath
-fname = "testt__2020-09-30T144512"
+fname = "Test__2020-10-01T061200_14col_int64"
 fpathin = os.path.join(savepath, fname + ".dat")
 fpathout = os.path.join(savepath, fname + ".csv")
 head = 'Time*1000,ElapsedTime,Deg*100,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,PPGRaw*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
