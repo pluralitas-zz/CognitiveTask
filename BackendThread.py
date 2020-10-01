@@ -17,7 +17,7 @@ class EncDAQBackThread(QtCore.QThread):
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
     samples = 25 #per acquisition
-    samparr = np.ones((1,samples))
+    samparr = np.ones((1,samples)) #use np.ones(samples) for list
     inittime = 0
 
     # determines while loop sampling rate
@@ -35,11 +35,13 @@ class EncDAQBackThread(QtCore.QThread):
     degtravelled = []
     newdiff = 0
     speed = 0
-    degnowarr = []
+    degnowarr = samparr*0
+    speedarr = samparr*0
 
     # Writeout
     antwoutarr = np.zeros((samples,5)) #blank array for use with writeout
-    timecount = 0
+    timecount = samparr*0
+    comb = []
 
     def __init__(self,data):
         super(EncDAQBackThread,self).__init__()
@@ -59,6 +61,7 @@ class EncDAQBackThread(QtCore.QThread):
             else:
                 self.newdiff = self.degnow - self.degold
             self.degold = self.degnow
+            self.degnowarr = self.samparr*self.degnow*10
             self.degtravelled.append(self.newdiff)
             
             ## if appended to size defined by sam_period then calculate speed and emit
@@ -66,38 +69,61 @@ class EncDAQBackThread(QtCore.QThread):
                 self.speed = int(sum(self.degtravelled)/self.sam_period*60/360) #calculate rpm
                 self._encoderSpeed.emit(self.speed)
                 self.degtravelled=[]
+                self.speedarr = self.samparr*self.speed
 
             ############################# Acquire DAQ data
             self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
 
             ############################# combine System Time, Elapsed Time, Degree, Speed, EMG output, HR and Pedal output to emit to writeout.py
-            # self.comb = np.column_stack([   self.samparr    * (time.time()-self.inittime)*1000, 
-            #                                 self.samparr    * self.timecount, 
-            #                                 self.samparr    * self.degnow*10,
-            #                                 self.samparr    * self.speed,
-            #                                 self.daqarr     * 1000,
+            self.systimer = self.samparr*(time.time()-self.inittime)*1000
+            # self.comb = np.column_stack([   self.systimer, 
+            #                                 self.timecount, 
+            #                                 self.degnowarr,
+            #                                 self.speedarr,
+            #                                 self.daqarr,
             #                                 self.antwoutarr         ])
+            # self.writeout(self.comb.astype('uint16'))
 
-            self.comb = np.append(self.samparr*(time.time()-self.inittime)*1000,    self.samparr*self.timecount,    axis=0)
-            self.comb = np.append(self.comb,                                        self.samparr*self.degnow*10,    axis=0)
-            self.comb = np.append(self.comb,                                        self.samparr*self.speed,        axis=0)
-            self.comb = np.append(self.comb,                                        self.daqarr*1000,             axis=0)
-            self.comb = np.append(self.comb,                                        self.antwoutarr.T,              axis=0)
+            ###### Use append
+            # self.comb = np.append(self.systimer,    self.timecount,     axis=0)
+            # self.comb = np.append(self.comb,        self.degnowarr,     axis=0)
+            # self.comb = np.append(self.comb,        self.speedarr,      axis=0)
+            # self.comb = np.append(self.comb,        self.daqarr,        axis=0)
+            # self.comb = np.append(self.comb,        self.antwoutarr.T,  axis=0)
 
-            self.writeout(self.comb.T)
+            ###### Use concatenate, Use self.samparr = np.ones((1,self.samples))
+            # self.comb = np.concatenate((self.systimer,    self.timecount),      axis=0)
+            # self.comb = np.concatenate((self.comb,        self.degnowarr),      axis=0)
+            # self.comb = np.concatenate((self.comb,        self.speedarr),       axis=0)
+            # self.comb = np.concatenate((self.comb,        self.daqarr),         axis=0)
+            # self.comb = np.concatenate((self.comb,        self.antwoutarr.T),   axis=0)
 
+            # self.writeout(self.comb.T.astype('uint16'))
+
+            ###### Use list append, Use self.samparr = np.ones(self.samples)
+            self.comb.append(self.systimer.tolist())
+            self.comb.append(self.timecount.tolist())
+            self.comb.append(self.degnowarr.tolist())
+            self.comb.append(self.speedarr.tolist())
+            for i in range(4):
+                self.comb.append(self.daqarr[i].tolist())
+            for i in range(5):
+                self.comb.append(self.antwoutarr.T[i].tolist())
+
+            self.writeout(np.array(self.comb).T.astype('uint16'))
+            
             ############################# Reset
             print(0,self.t-time.time())
             QtTest.QTest.qWait(max(0,self.t-time.time()))
 
     def writeout(self,data): #systime, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
-        self.writefile.appendfile(data.astype('uint16')) #write data to file
+        self.writefile.appendfile(data) #write data to file
 
     def ANTrcv(self,data):
         self.antwoutarr[0] = data
 
     def Timercv(self,data):
-        self.timecount = data
+        self.timecount = self.samparr*data
          
 class PedalThread(QtCore.QThread):
     # Create Signal Slot 
