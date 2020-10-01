@@ -17,7 +17,7 @@ class EncDAQBackThread(QtCore.QThread):
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
-    samples = 20 #per acquisition
+    samples = 25 #per acquisition
     samparr = np.ones((samples,1))
     inittime = 0
 
