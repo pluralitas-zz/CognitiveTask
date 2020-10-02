@@ -6,11 +6,10 @@ from libAnt.profiles.factory import Factory
 import numpy as np
 
 class antrcv:
-    raw = np.array([])
-    heartrate = np.array([])
-    powermeter = np.array([])
-    bl = np.zeros(2) # baseline: [power, count] for avg power calculation
-
+    raw = []
+    heartrate = []
+    powermeter = []
+    
     def __init__(self):
         pass
             
@@ -41,8 +40,8 @@ class antrcv:
         print(e) #print "device is closed""
 
     def antacq(self):
-        self.heartrate = np.array([])
-        self.powermeter = np.array([])
+        self.heartrate = []
+        self.powermeter = []
         while True: #while loop to acquire ANT raw data input
             with Node(USBDriver(vid=0x0FCF, pid=0x1008), 'MyNode') as n:
                 f = Factory(self.callback)

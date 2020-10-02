@@ -20,7 +20,7 @@ class wrtout:
 class wrtbin:
     savepath = "C:\\Data" #data savepath
     head = 'Time*1000,ElapsedTime,Deg*10,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
-    init = np.zeros([1,13])
+    init = np.zeros([1,13]).astype("uint16")
 
     def __init__(self,filename):
         self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
@@ -77,8 +77,10 @@ if __name__ == "__main__":
     samp = 10
     ant = [90,20,10,5,2]
     daq = [[0]*samp]*4
-    print(daq)
     # daq = np.zeros([4,samp],dtype='uint16').tolist()
+    out.append( [t*100] * samp)
+    out.append( [t*100] * samp)
+    out.append( [t*100] * samp)
     out.append( [t*100] * samp)
     for i in range(4):
         out.append(daq[i])
@@ -89,4 +91,4 @@ if __name__ == "__main__":
     print(np.array(out).T.astype(int))
 
     # for i in range(100):
-    #     test.appendfile(out.astype('int32'))
+    test.appendfile(np.array(out).T.astype('uint16'))

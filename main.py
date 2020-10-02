@@ -19,9 +19,9 @@ class Ui_root(QtWidgets.QMainWindow):
     dotask = True #Put true to do task, else False to just cycle
 
 # Define your Counter scores HERE
-    counter = np.array([0,0,0,0,0,0]) #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
+    counter = [0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
 
-# Define TRAINING TIME HERE 
+# Define TRAINING TIME HERE
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
     traintimemax = QtCore.QTime(0,30,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
@@ -75,7 +75,7 @@ class Ui_root(QtWidgets.QMainWindow):
         ###############     RUN TASKS     #################
         
         while self.timecount < self.trainsec:
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(100)
 
         self.complet.run_com(1)
         ###################################################
@@ -125,7 +125,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
             else:
                 pass
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(100)
 
         self.complet.run_com(1)
         ###################################################
@@ -333,7 +333,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #     pass
 
     def counter_reset(self):
-        self.counter = np.array([0,0,0,0,0,0])
+        self.counter = [0,0,0,0,0,0]
         QtTest.QTest.qWait(100)
         self.CntDisplay()
 
@@ -431,12 +431,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def wouttask(self,data):
-        self.timenow = str(np.datetime64('now')).replace(":","")
-        self.taskcomb = np.column_stack([self.timenow, str(data)]) #time, data value
-        try:
-            self.writetask.appendfile(self.taskcomb) #write task data to file
-        except:
-            pass
+        self.taskcomb = np.array([str(time.time()), str(data)]) #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
 
     def parwrite(self,data):
         self.para.parawrite(data)
@@ -456,7 +452,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.timer.stop()
         else: #start video if speed >=pausespd
             self.playVid()
-            self.timer.start(1000)
+            self.timer.start()
 
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
@@ -579,17 +575,17 @@ class Ui_root(QtWidgets.QMainWindow):
         
         if self.speed>30: #acceleration, pressed
             keyboard.press('z')            
-            QtTest.QTest.qWait(1000)                  
+            QtTest.QTest.qWait(100)                  
         elif 30>=self.speed>10: #acceleration, tapping
             keyboard.press('z')
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(100)
             keyboard.release('z')
         elif 10>=self.speed>=0: #deceleration, not pressed
             keyboard.release('z')
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(100)
         elif self.speed<0:
             keyboard.press('a')
-            QtTest.QTest.qWait(1000)
+            QtTest.QTest.qWait(100)
             keyboard.release('a') 
     
 # Initialize Signal Slots for Backend Threads
