@@ -3,7 +3,7 @@ from psychopy import parallel
 
 col = 13
 datatype = 'uint16'
-fname = "testt__2020-10-02T092622_13col_uint16"
+fname = "Test__2020-10-02T132234_13col_uint16"
 
 savepath = "C:\\Data" #data savepath
 fpathin = os.path.join(savepath, fname + ".dat")

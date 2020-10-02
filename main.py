@@ -185,9 +185,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
-        self.timer = QtCore.QTimer(self)
-        self.timer.setTimerType(QtCore.Qt.PreciseTimer)
-        self.timer.timeout.connect(self.TimeDisplay)
         #self.vidFrame.startVid() #Start Video
 
 # Task Stuff
@@ -449,10 +446,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def videoStartPause(self,data): #Play/Pause video if Speed more or less than
         if data < self.pausespd: #Pause video if speed <pausespd
             self.pauseVid()
-            self.timer.stop()
+            self.timer = False
         else: #start video if speed >=pausespd
             self.playVid()
-            self.timer.start()
+            self.timer = True
 
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
@@ -470,15 +467,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.pedalBackend.start()
         self.daqbackend.start()
 
-        #Start Time recording
-        self.timer.start(1000)
-
         if self.dotask == True:
             self.task_run()
         else:
             self.cycle_task()
 
-        self.timer.stop()
         self.TimeReset()
         self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
@@ -535,13 +528,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.daqbackend.start()
 
 # HUD Stuff
-    def TimeDisplay(self):
-        # if self.timer == True:
-        self.timecount += 1
-        self._time.emit(self.timecount)
-        self.timeleft = self.traintime.addSecs(self.timecount).toString()
-        self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
-        # else: pass
+    def TimeDisplay(self,data):
+        if self.timer == True:
+            self.timems = data
+            self.timecount = int(self.timems/1000)
+            self._time.emit(self.timecount)
+            self.timeleft = self.traintime.addSecs(self.timecount).toString()
+            self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
+        else: pass
 
     def TimeReset(self):
         self.timecount = 0
@@ -606,6 +600,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self._time.connect(self.daqbackend.Timercv)     #Pass time for writeout
         self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
         self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
+        self.daqbackend._etime.connect(self.TimeDisplay)
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
         self.pedalBackend._ANTwrtout.connect(self.daqbackend.ANTrcv) #Pass HR, pedal values for writeout

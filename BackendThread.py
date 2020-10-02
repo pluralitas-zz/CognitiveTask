@@ -13,10 +13,11 @@ class EncDAQBackThread(QtCore.QThread):
     DAQ = daq()
     # create signal slots
     _encoderSpeed = QtCore.pyqtSignal(int)
+    _etime = QtCore.pyqtSignal(int)
 
     # Variables for DAQ
     samp_rate = 1000 #for DAQ (Hz)
-    samples = 25 #per acquisition
+    samples = 20 #per acquisition
     inittime = 0
     daqarr = [[0]*samples]*4
 
@@ -45,7 +46,7 @@ class EncDAQBackThread(QtCore.QThread):
         super(EncDAQBackThread,self).__init__()
         self.writefile=wrtbin(data)
         self.inittime = time.time()
-
+        self.counter = 0
     def run(self):
         while True:
             self.t = (time.time() + self.period)*1000
@@ -71,7 +72,6 @@ class EncDAQBackThread(QtCore.QThread):
             self.daqarr = self.DAQ.acqdaq(self.samp_rate,self.samples)
 
             ############################# combine System Time, Elapsed Time, Degree, Speed, EMG output, HR and Pedal output to emit to writeout.py
-
             self.comb.append([(time.time()-self.inittime)*1000] * self.samples)
             self.comb.append([self.timecount]                   * self.samples)
             self.comb.append([self.degnow*10]                   * self.samples)
@@ -82,9 +82,13 @@ class EncDAQBackThread(QtCore.QThread):
                 self.comb.append([self.antwout[i]]              * self.samples)
 
             self.writeout(np.array(self.comb).T.astype('uint16'))
-            
+            if self.counter == 0.5/self.period:
+                self._etime.emit((time.time()-self.inittime)*1000)
+                self.counter = 0
+            else: pass
             ############################# Reset
             self.comb = []
+            self.counter += 1
             QtTest.QTest.qWait(max(0,self.t-time.time()*1000))
 
     def writeout(self,data): #systime, elapsed time, deg, speed, EMG x 4, heartrate, InstPower, AccumPower, InstCadence, pedalBalRight
