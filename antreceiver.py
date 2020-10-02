@@ -67,5 +67,4 @@ if __name__ == "__main__":
     ant = antrcv()
     while True:
         out = ant.antacq()
-        print(out[0])
-        print(out[1][0])
+        print([out[1][0],out[0][0],out[0][1]*2,out[0][2],int(round(out[0][3]))])

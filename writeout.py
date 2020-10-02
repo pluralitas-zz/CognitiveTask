@@ -66,50 +66,27 @@ if __name__ == "__main__":
     import numpy as np
     import time
     t = 23.45
-    out3 =[]
+    out =[]
     test = wrtbin("testt")
     # wans = np.random.rand(4,12)*1000
     samparr = np.ones((1,5))
     wans = np.ones((4,5))
     toos = np.ones((5,6))
     timenow = str(np.datetime64('now')).replace(":","")
-    # out = np.column_stack([np.ones((5,1))*(time.time()-t)*1000, wans])
+
+    samp = 10
+    ant = [90,20,10,5,2]
+    daq = [[0]*samp]*4
+    print(daq)
+    # daq = np.zeros([4,samp],dtype='uint16').tolist()
+    out.append( [t*100] * samp)
+    for i in range(4):
+        out.append(daq[i])
+    for i in range(5):
+        out.append([ant[i]]*samp)
 
 
-    out = np.append(samparr*t*100,samparr*t*1000,axis=0)
-    out2 = np.concatenate((samparr*t*100,samparr*t*1000),axis=0)
-
-    out = np.append(out, np.ones((2,5))*3,axis=0)
-    out2 = np.concatenate((out2,np.ones((2,5))*3),axis=0)    
-
-    # out = np.append(out, np.ones((1,5))*t*10,axis=0)
-    # out2 = np.concatenate((out2,np.ones((1,5))*t*10),axis=0)
-
-    # out = np.append(out, wans,axis=0)
-    # out2 = np.concatenate((out2,wans),axis=0)
-
-    out = np.append(out,toos.T*2,axis=0).T
-    out2 = np.concatenate((out2,toos.T*2),axis=0).T
-
-    print(out.astype(int))
-    print("space")
-    # print(out2.astype(int))
-
-    samparr = np.ones(5)
-
-    a = samparr*t*100
-    out3.append(a.tolist())
-    a = samparr*t*1000
-    out3.append(a.tolist())
-    a = np.ones((2,5))*3
-    for i in range(2):
-        out3.append(a[i].tolist())
-    # out3.append(np.ones((1,5))*t*10.tolist())
-    # out3.append(wans.tolist())
-    a = toos*2
-    for i in range(6):
-        out3.append(a.T[i].tolist())
-    print(np.array(out3).T.astype(int))
+    print(np.array(out).T.astype(int))
 
     # for i in range(100):
     #     test.appendfile(out.astype('int32'))

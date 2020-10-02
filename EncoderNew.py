@@ -1,4 +1,5 @@
-import serial, time
+import serial,time
+from PyQt5 import QtTest
 
 class encoder:
     #for speed calculation
@@ -32,10 +33,9 @@ class encoder:
         self.degtravelled = 0
         self.timecheck = time.time()
         self.newdiff=0
-
+        self.tim = 0
         for i in range(self.samp_rate*self.samp_period):
-            self.timecheck += 1/self.samp_rate
-            time.sleep(max(0,self.timecheck-time.time()))
+            self.timecheck = (time.time() + 1/self.samp_rate)*1000
             self.degnow = self.deg
             if ((self.degold - self.degnow) > 180):
                 self.newdiff = self.degnow - self.degold + 360
@@ -46,7 +46,7 @@ class encoder:
 
             self.degold = self.degnow
             self.degtravelled += self.newdiff
-
+            QtTest.QTest.qWait(max(0,self.timecheck-(time.time()*1000)))
         self.speed = int(self.degtravelled/self.samp_period*60/360) #calculate rpm
         return self.speed
 
