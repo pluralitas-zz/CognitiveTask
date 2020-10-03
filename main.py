@@ -17,6 +17,7 @@ class Ui_root(QtWidgets.QMainWindow):
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
     dotask = True #Put true to do task, else False to just cycle
+    game = True
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
@@ -26,8 +27,7 @@ class Ui_root(QtWidgets.QMainWindow):
     traintimemax = QtCore.QTime(0,30,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
-    tasknum = 0 #Task number sequence
-    timer = True
+    #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
     tasksnum = random.sample(range(0, 5), 4) # randomise tasks
@@ -169,19 +169,25 @@ class Ui_root(QtWidgets.QMainWindow):
     def __init__(self):
         #values    
         super(Ui_root,self).__init__()
-        self.disparr = [] #array to store values for displaying on buttons
-        self.previousBalance=50 #default Force Balance Value
         self.pausespd = 10 #Pause/Play Threshold Speed
         self.ansdict={}
         self.timecount = 0
+        self.timer = False
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         #self.picd = os.path.join(os.getcwd(),self.pictures)
         self.picd = os.path.join(os.path.dirname(__file__),self.pictures)
 
         self.setupUi(self)
         self.StartBtn.clicked.connect(lambda:self.StartBtnPress())
-        self.GameBtn.clicked.connect(lambda:self.DemoBtnPress())
-        #self.GameBtn.clicked.connect(lambda:self.Gamebutton()) #Change 2nd Start button to Game Mode
+        self.DemoBtn.clicked.connect(lambda:self.DemoBtnPress())
+        self.GameBtn.clicked.connect(lambda:self.GameBtnPress())
+
+        if self.game == True:
+            self.dotask = False
+            self.GameBtn.show()
+        else:
+            self.StartBtn.show()
+            self.DemoBtn.show()
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
@@ -428,12 +434,16 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def wouttask(self,data):
-        self.taskcomb = np.array([str(time.time()), str(data)]) #time, data value
-        self.writetask.appendfile(self.taskcomb) #write task data to file
+        try:
+            self.taskcomb = np.array([str(time.time()), str(data)]) #time, data value
+            self.writetask.appendfile(self.taskcomb) #write task data to file
+        except: pass
 
     def parwrite(self,data):
-        self.para.parawrite(data)
-
+        try:
+            self.para.parawrite(data)
+        except:
+            pass
 # Video Playing Stuff
     def pauseVid(self): #Pause video + Show warning "speed too low"
         self.vidFrame.pauseVid()
@@ -454,24 +464,26 @@ class Ui_root(QtWidgets.QMainWindow):
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
         self.StartBtn.hide()
+        self.DemoBtn.hide()
         self.GameBtn.hide()
         self.vidFrame.startVid() #Start video 
+        self.TaskFrame.show()
 
         #start Backend signal slot connection
         self.initBackendThread()
+        self.pedalBackend.start()
+        self.daqbackend.start()
+        self.timer = False
 
         #Initialise and create Writeout file with username
         self.writetask=wrttask(self.UserIDNAME)
-
-        # Start thread(s)
-        self.pedalBackend.start()
-        self.daqbackend.start()
 
         if self.dotask == True:
             self.task_run()
         else:
             self.cycle_task()
 
+        #Reset
         self.TimeReset()
         self.vidFrame.pauseVid()
         if self.pedalBackend.isRunning():
@@ -480,23 +492,30 @@ class Ui_root(QtWidgets.QMainWindow):
         if self.daqbackend.isRunning():
             self.daqbackend.terminate()
             self.daqbackend.wait()
-        self.StartBtn.show()
-        self.GameBtn.show()
 
+        if self.game == True:
+            self.GameBtn.show()
+        else:
+            self.StartBtn.show()
+            self.DemoBtn.show()
+        
     def DemoBtnPress(self): #Start No Hardware Task mode
         self.StartBtn.hide()
+        self.DemoBtn.hide()
         self.GameBtn.hide()
         self.vidFrame.startVid() #Start video 
+        self.TaskFrame.show()
 
         #start Backend signal slot connection
         self.initBackendThread()
- 
-        # Start thread(s)
         self.pedalBackend.start()
         self.EncSpeed(999) #set dummy speed as 999
+        #self.daqbackend.start()
 
+        #do task
         self.demo_run()
 
+        #Reset
         self.TimeReset()
         self.counter_reset()
         self.vidFrame.pauseVid()
@@ -504,28 +523,49 @@ class Ui_root(QtWidgets.QMainWindow):
             self.pedalBackend.terminate()
             self.pedalBackend.wait()
 
-        self.StartBtn.show()
-        self.GameBtn.show()
+        if self.game == True:
+            self.GameBtn.show()
+        else:
+            self.StartBtn.show()
+            self.DemoBtn.show()
 
-    def Gamebutton(self): #Start Game mode
+    def GameBtnPress(self): #Start Game mode
         self.StartBtn.hide()
+        self.DemoBtn.hide()
         self.GameBtn.hide()
 
         #Hide tasks stuff
-        self.Ques_Center.hide()
+        self.vidFrame.hide()
+        self.TaskFrame.hide()
         self.TaskLabCnt.hide()
         self.TaskValCnt.hide()
         self.TaskLabLevel.hide()
         self.TaskValLevel.hide()
-        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint) #make window transparent
 
         #start Backend signal slot connection
         self.initBackendThread()
-        self.daqbackend._encoderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
-
-        # Start thread(s)
         self.pedalBackend.start()
         self.daqbackend.start()
+        #self.daqbackend._encoderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
+
+        #Do Task
+        self.cycle_task()
+
+        #Reset
+        self.TimeReset()
+        self.vidFrame.pauseVid()
+        if self.pedalBackend.isRunning():
+            self.pedalBackend.terminate()
+            self.pedalBackend.wait()
+        if self.daqbackend.isRunning():
+            self.daqbackend.terminate()
+            self.daqbackend.wait()
+
+        if self.game == True:
+            self.GameBtn.show()
+        else:
+            self.StartBtn.show()
+            self.DemoBtn.show()
 
 # HUD Stuff
     def TimeDisplay(self,data):
@@ -551,7 +591,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.speed=data
         self._speed.emit(data,self.pausespd)
         self.HUDValSpd.setText("<font color='White'>"+ str(data)+"</font>")
-        #self.HUDValSpd.setText(_translate("root", ("<font color='White'>"+str(data)+"</font>")))
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
@@ -609,9 +648,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def setupUi(self, root):
         root.setObjectName("MainWindow")
         root.resize(1600, 900)
-        root.setMinimumSize(QtCore.QSize(1600, 900))
-        root.setMaximumSize(QtCore.QSize(1600, 900))
-        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top, for Games only
+        root.setMinimumSize(QtCore.QSize(1900, 1000))
+        root.setMaximumSize(QtCore.QSize(1900, 1000))
+        if self.game == True:
+            self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  #make window transparent/stay always on top, for Games only
         root.setAttribute(QtCore.Qt.WA_TranslucentBackground,on=True)
         root.closeEvent = self.closeEvent
 
@@ -623,19 +663,28 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Define Start Button
         self.StartBtn = QtWidgets.QPushButton(self)
-        self.StartBtn.setGeometry(QtCore.QRect(1250, 800, 100, 40))
+        self.StartBtn.setGeometry(QtCore.QRect(1400, 800, 100, 40))
         self.StartBtn.setFlat(False)
         self.StartBtn.setObjectName("StartBtn")
+        self.StartBtn.hide()
 
+        # Define Demo Button
+        self.DemoBtn = QtWidgets.QPushButton(self)
+        self.DemoBtn.setGeometry(QtCore.QRect(1290, 800, 100, 40))
+        self.DemoBtn.setFlat(False)
+        self.DemoBtn.setObjectName("DemoBtn")
+        self.DemoBtn.hide()
+        
         # Define Game Button
         self.GameBtn = QtWidgets.QPushButton(self)
-        self.GameBtn.setGeometry(QtCore.QRect(1140, 800, 100, 40))
+        self.GameBtn.setGeometry(QtCore.QRect(1290, 800, 100, 40))
         self.GameBtn.setFlat(False)
         self.GameBtn.setObjectName("GameBtn")
+        self.GameBtn.hide()
 
         # Define Warning Frame
         self.WarnFrame = QtWidgets.QLabel(self)
-        self.WarnFrame.setGeometry(QtCore.QRect(300,100,800,100))
+        self.WarnFrame.setGeometry(QtCore.QRect(450,100,800,100))
         self.WarnFrame.setMinimumSize(QtCore.QSize(0, 0))
         self.WarnFrame.setMaximumSize(QtCore.QSize(1000, 800))    
         self.WarnFrame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -647,8 +696,16 @@ class Ui_root(QtWidgets.QMainWindow):
         self.WarnFrame.hide()
 
         # Define Task Frame/Question Frame
-        self.Ques_Center = QtWidgets.QLabel(self)
-        self.Ques_Center.setGeometry(QtCore.QRect(200, 0, 1000, 800))
+        self.TaskFrame = QtWidgets.QWidget(self)
+        self.TaskFrame.setGeometry(QtCore.QRect(150, 50, 1600, 1000))
+        self.TaskFrame.setMaximumSize(QtCore.QSize(1600, 1000))
+        #self.HUDFrame.setAutoFillBackground(False)
+        self.TaskFrame.setObjectName("HUDFrame")
+        self.TaskFrame.setStyleSheet("background-color: rgba(0,0,0,0%)")
+        self.TaskFrame.hide()
+
+        self.Ques_Center = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_Center.setGeometry(QtCore.QRect(300, 0, 1000, 800))
         self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
         self.Ques_Center.setAutoFillBackground(False)
@@ -657,8 +714,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_Center.setObjectName("Ques_Center")
 
-        self.Ques_N = QtWidgets.QLabel(self)
-        self.Ques_N.setGeometry(QtCore.QRect(600, 130, 200, 200))
+        self.Ques_N = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_N.setGeometry(QtCore.QRect(700, 30, 200, 200))
         self.Ques_N.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_N.setMaximumSize(QtCore.QSize(300, 300))
         self.Ques_N.setAutoFillBackground(False)
@@ -667,8 +724,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_N.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_N.setObjectName("Ques_N")
 
-        self.Ques_NW = QtWidgets.QLabel(self)
-        self.Ques_NW.setGeometry(QtCore.QRect(350, 280, 200, 200))
+        self.Ques_NW = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_NW.setGeometry(QtCore.QRect(450, 280, 200, 200))
         self.Ques_NW.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_NW.setMaximumSize(QtCore.QSize(300, 300))
         self.Ques_NW.setAutoFillBackground(False)
@@ -677,8 +734,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_NW.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_NW.setObjectName("Ques_NW")
 
-        self.Ques_NE = QtWidgets.QLabel(self)
-        self.Ques_NE.setGeometry(QtCore.QRect(850, 280, 200, 200))
+        self.Ques_NE = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_NE.setGeometry(QtCore.QRect(950, 280, 200, 200))
         self.Ques_NE.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_NE.setMaximumSize(QtCore.QSize(300, 300))
         self.Ques_NE.setAutoFillBackground(False)
@@ -687,8 +744,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_NE.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_NE.setObjectName("Ques_NE")
 
-        self.Ques_SW = QtWidgets.QLabel(self)
-        self.Ques_SW.setGeometry(QtCore.QRect(480, 480, 200, 200))
+        self.Ques_SW = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_SW.setGeometry(QtCore.QRect(580, 530, 200, 200))
         self.Ques_SW.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_SW.setMaximumSize(QtCore.QSize(300, 300))
         self.Ques_SW.setAutoFillBackground(False)
@@ -697,8 +754,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_SW.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_SW.setObjectName("Ques_NW")
 
-        self.Ques_SE = QtWidgets.QLabel(self)
-        self.Ques_SE.setGeometry(QtCore.QRect(720, 480, 200, 200))
+        self.Ques_SE = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_SE.setGeometry(QtCore.QRect(820, 530, 200, 200))
         self.Ques_SE.setMinimumSize(QtCore.QSize(0, 0))
         self.Ques_SE.setMaximumSize(QtCore.QSize(300, 300))
         self.Ques_SE.setAutoFillBackground(False)
@@ -709,15 +766,16 @@ class Ui_root(QtWidgets.QMainWindow):
 
         font = QtGui.QFont("Gill Sans MT", pointSize = 36, weight = 50)
 
+        # Task Values
         self.TaskValLevel = QtWidgets.QLabel(self)
-        self.TaskValLevel.setGeometry(QtCore.QRect(10, 50, 80, 50))
+        self.TaskValLevel.setGeometry(QtCore.QRect(10, 50, 80, 60))
         self.TaskValLevel.setFont(font)
         self.TaskValLevel.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskValLevel.setObjectName("TaskValLevel")
         self.TaskValLevel.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.TaskValCnt = QtWidgets.QLabel(self)
-        self.TaskValCnt.setGeometry(QtCore.QRect(10, 140, 80, 50))
+        self.TaskValCnt.setGeometry(QtCore.QRect(10, 140, 80, 60))
         self.TaskValCnt.setFont(font)
         self.TaskValCnt.setAlignment(QtCore.Qt.AlignCenter)
         self.TaskValCnt.setObjectName("TaskValCnt")
@@ -725,8 +783,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Define HUD Frame
         self.HUDFrame = QtWidgets.QWidget(self)
-        self.HUDFrame.setGeometry(QtCore.QRect(1400, 0, 200, 900))
-        self.HUDFrame.setMaximumSize(QtCore.QSize(1600, 900))
+        self.HUDFrame.setGeometry(QtCore.QRect(1700, 20, 200, 770))
+        self.HUDFrame.setMaximumSize(QtCore.QSize(1900, 1000))
         #self.HUDFrame.setAutoFillBackground(False)
         self.HUDFrame.setObjectName("HUDFrame")
         self.HUDFrame.setStyleSheet("background-color: rgba(0,0,0,15%)")
@@ -735,49 +793,49 @@ class Ui_root(QtWidgets.QMainWindow):
         font = QtGui.QFont("Gill Sans MT", pointSize = 48, weight = 50)
 
         self.HUDValTime = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValTime.setGeometry(QtCore.QRect(0, 45, 200, 85))
+        self.HUDValTime.setGeometry(QtCore.QRect(0, 25, 200, 85))
         self.HUDValTime.setFont(font)
         self.HUDValTime.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValTime.setObjectName("HUDValTime")
 
         self.HUDValHR = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValHR.setGeometry(QtCore.QRect(0, 155, 200, 85))
+        self.HUDValHR.setGeometry(QtCore.QRect(0, 135, 200, 85))
         self.HUDValHR.setFont(font)
         self.HUDValHR.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValHR.setObjectName("HUDValHR")
 
         self.HUDValSpd = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValSpd.setGeometry(QtCore.QRect(0, 265, 200, 85))
+        self.HUDValSpd.setGeometry(QtCore.QRect(0, 245, 200, 85))
         self.HUDValSpd.setFont(font)
         self.HUDValSpd.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValSpd.setObjectName("HUDValSpd")
 
         self.HUDValInstCad = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValInstCad.setGeometry(QtCore.QRect(0, 375, 200, 85))
+        self.HUDValInstCad.setGeometry(QtCore.QRect(0, 355, 200, 85))
         self.HUDValInstCad.setFont(font)
         self.HUDValInstCad.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValInstCad.setObjectName("HUDValInstCad")
 
         self.HUDValAvgPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValAvgPwr.setGeometry(QtCore.QRect(0, 485, 200, 85))
+        self.HUDValAvgPwr.setGeometry(QtCore.QRect(0, 465, 200, 85))
         self.HUDValAvgPwr.setFont(font)
         self.HUDValAvgPwr.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValAvgPwr.setObjectName("HUDValAvgPwr")
 
         self.HUDValInstPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValInstPwr.setGeometry(QtCore.QRect(0, 595, 200, 85))
+        self.HUDValInstPwr.setGeometry(QtCore.QRect(0, 575, 200, 85))
         self.HUDValInstPwr.setFont(font)
         self.HUDValInstPwr.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValInstPwr.setObjectName("HUDValInstPwr")
 
         self.HUDValPBalR = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValPBalR.setGeometry(QtCore.QRect(100, 705, 100, 85))
+        self.HUDValPBalR.setGeometry(QtCore.QRect(100, 685, 100, 85))
         self.HUDValPBalR.setFont(font)
         self.HUDValPBalR.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValPBalR.setObjectName("HUDValPBalR")
 
         self.HUDValPBalL = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDValPBalL.setGeometry(QtCore.QRect(0, 705, 100, 85))
+        self.HUDValPBalL.setGeometry(QtCore.QRect(0, 685, 100, 85))
         self.HUDValPBalL.setFont(font)
         self.HUDValPBalL.setAlignment(QtCore.Qt.AlignCenter)
         self.HUDValPBalL.setObjectName("HUDValPBalL")
@@ -786,64 +844,64 @@ class Ui_root(QtWidgets.QMainWindow):
         font = QtGui.QFont("Gill Sans MT", pointSize = 14)
 
         self.TaskLabLevel = QtWidgets.QLabel(self)
-        self.TaskLabLevel.setGeometry(QtCore.QRect(10, 20, 80, 25))
+        self.TaskLabLevel.setGeometry(QtCore.QRect(10, 20, 80, 30))
         self.TaskLabLevel.setFont(font)
         self.TaskLabLevel.setScaledContents(False)
         self.TaskLabLevel.setObjectName("TaskLabLevel")
         self.TaskLabLevel.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.TaskLabCnt = QtWidgets.QLabel(self)
-        self.TaskLabCnt.setGeometry(QtCore.QRect(10, 110, 80, 25))
+        self.TaskLabCnt.setGeometry(QtCore.QRect(10, 110, 80, 30))
         self.TaskLabCnt.setFont(font)
         self.TaskLabCnt.setScaledContents(False)
         self.TaskLabCnt.setObjectName("TaskLabCnt")
         self.TaskLabCnt.setStyleSheet("background-color: rgba(0,0,0,30%)")
 
         self.HUDLabPedBal = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabPedBal.setGeometry(QtCore.QRect(10, 680, 200, 25))
+        self.HUDLabPedBal.setGeometry(QtCore.QRect(0, 660, 200, 25))
         self.HUDLabPedBal.setFont(font)
         self.HUDLabPedBal.setScaledContents(False)
         self.HUDLabPedBal.setObjectName("HUDLabPedBal")
 
         self.HUDLabInstPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabInstPwr.setGeometry(QtCore.QRect(10, 570, 200, 25))
+        self.HUDLabInstPwr.setGeometry(QtCore.QRect(0, 550, 200, 25))
         self.HUDLabInstPwr.setFont(font)
         self.HUDLabInstPwr.setScaledContents(False)
         self.HUDLabInstPwr.setObjectName("HUDLabInstPwr")
 
         self.HUDLabInstCad = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabInstCad.setGeometry(QtCore.QRect(10, 350, 200, 25))
+        self.HUDLabInstCad.setGeometry(QtCore.QRect(0, 330, 200, 25))
         self.HUDLabInstCad.setFont(font)
         self.HUDLabInstCad.setScaledContents(False)
         self.HUDLabInstCad.setObjectName("HUDLabInstCad")
 
         self.HUDLabTime = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabTime.setGeometry(QtCore.QRect(10, 20, 200, 25))
+        self.HUDLabTime.setGeometry(QtCore.QRect(0, 0, 200, 25))
         self.HUDLabTime.setFont(font)
         self.HUDLabTime.setScaledContents(False)
         self.HUDLabTime.setObjectName("HUDLabTime")
 
         self.HUDLabHR = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabHR.setGeometry(QtCore.QRect(10, 130, 200, 25))
+        self.HUDLabHR.setGeometry(QtCore.QRect(0, 110, 200, 25))
         self.HUDLabHR.setFont(font)
         self.HUDLabHR.setScaledContents(False)
         self.HUDLabHR.setObjectName("HUDLabHR")
 
         self.HUDLabSpd = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabSpd.setGeometry(QtCore.QRect(10, 240, 200, 25))
+        self.HUDLabSpd.setGeometry(QtCore.QRect(0, 220, 200, 25))
         self.HUDLabSpd.setFont(font)
         self.HUDLabSpd.setScaledContents(False)
         self.HUDLabSpd.setObjectName("HUDLabSpd")
 
         self.HUDLabAvgPwr = QtWidgets.QLabel(self.HUDFrame)
-        self.HUDLabAvgPwr.setGeometry(QtCore.QRect(10, 460, 200, 25))
+        self.HUDLabAvgPwr.setGeometry(QtCore.QRect(0, 440, 200, 25))
         self.HUDLabAvgPwr.setFont(font)
         self.HUDLabAvgPwr.setScaledContents(False)
         self.HUDLabAvgPwr.setObjectName("HUDLabAvgPwr")
 
         # Define Force Balance Separator VLine
         self.HUDLabPedBalSpr = QtWidgets.QFrame(self.HUDFrame)
-        self.HUDLabPedBalSpr.setGeometry(QtCore.QRect(100, 710, 3, 80))
+        self.HUDLabPedBalSpr.setGeometry(QtCore.QRect(100, 690, 3, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -859,32 +917,32 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Define Answer Buttons
         QBtnfont = QtGui.QFont("Gill Sans MT", pointSize = 1)
-        self.AnsBtn_Left = QtWidgets.QPushButton(self)
-        self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 550, 300, 300))
+        self.AnsBtn_Left = QtWidgets.QPushButton(self.TaskFrame)
+        self.AnsBtn_Left.setGeometry(QtCore.QRect(0, 650, 300, 300))
         self.AnsBtn_Left.setFont(QBtnfont)
         self.AnsBtn_Left.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Left.setFlat(True)
         self.AnsBtn_Left.setObjectName("AnsBtn_Left")
         self.AnsBtn_Left.hide()
 
-        self.AnsBtn_Right = QtWidgets.QPushButton(self)
-        self.AnsBtn_Right.setGeometry(QtCore.QRect(350, 550, 300, 300))
+        self.AnsBtn_Right = QtWidgets.QPushButton(self.TaskFrame)
+        self.AnsBtn_Right.setGeometry(QtCore.QRect(400, 650, 300, 300))
         self.AnsBtn_Right.setFont(QBtnfont)
         self.AnsBtn_Right.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Right.setFlat(True)
         self.AnsBtn_Right.setObjectName("AnsBtn_Right")
         self.AnsBtn_Right.hide()
 
-        self.AnsBtn_Sq = QtWidgets.QPushButton(self)
-        self.AnsBtn_Sq.setGeometry(QtCore.QRect(750, 550, 300, 300))
+        self.AnsBtn_Sq = QtWidgets.QPushButton(self.TaskFrame)
+        self.AnsBtn_Sq.setGeometry(QtCore.QRect(900, 650, 300, 300))
         self.AnsBtn_Sq.setFont(QBtnfont)
         self.AnsBtn_Sq.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Sq.setFlat(True)
         self.AnsBtn_Sq.setObjectName("AnsBtn_Sq")
         self.AnsBtn_Sq.hide()
 
-        self.AnsBtn_Cl = QtWidgets.QPushButton(self)
-        self.AnsBtn_Cl.setGeometry(QtCore.QRect(1100, 550, 300, 300))
+        self.AnsBtn_Cl = QtWidgets.QPushButton(self.TaskFrame)
+        self.AnsBtn_Cl.setGeometry(QtCore.QRect(1300, 650, 300, 300))
         self.AnsBtn_Cl.setFont(QBtnfont)
         self.AnsBtn_Cl.setStyleSheet("background-color: rgba(0,0,0,15%)")
         #self.AnsBtn_Cl.setFlat(True)
@@ -898,10 +956,10 @@ class Ui_root(QtWidgets.QMainWindow):
     def retranslateUi(self, root):
         root.setWindowTitle(_translate("root", "Cognitive Cycling"))
         #level
-        self.TaskLabLevel.setText(_translate("root", "<font color='White'>Level</font>"))
+        self.TaskLabLevel.setText(_translate("root", "<font color='White'>&nbsp;Level</font>"))
         self.TaskValLevel.setText(_translate("root", "<font color='White'>0</font>"))
         #counter
-        self.TaskLabCnt.setText(_translate("root", "<font color='White'>Counter</font>"))
+        self.TaskLabCnt.setText(_translate("root", "<font color='White'>&nbsp;Counter</font>"))
         self.TaskValCnt.setText(_translate("root", "<font color='White'>0</font>"))
         #time
         self.HUDValTime.setText(_translate("root", "<font color='White'>0</font>"))
@@ -915,21 +973,23 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValAvgPwr.setText(_translate("root", "<font color='White'>0</font>"))
         #Instanceous Power
         self.HUDValInstPwr.setText(_translate("root", "<font color='White'>0</font>"))
-        self.HUDLabPedBal.setText(_translate("root", "<font color='White'>Pedal Balance L/R (%)</font>"))
+        self.HUDLabPedBal.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Pedal Balance L/R (%)</font>"))
         #BalanceL
         self.HUDValPBalL.setText(_translate("root", "<font color='White'>50</font>"))
-        self.HUDLabInstPwr.setText(_translate("root", "<font color='White'>Inst. Power (W)</font>"))
-        self.HUDLabInstCad.setText(_translate("root", "<font color='White'>Inst. Cadence (RPM)</font>"))
+        self.HUDLabInstPwr.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Inst. Power (W)</font>"))
+        self.HUDLabInstCad.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Inst. Cadence (RPM)</font>"))
         #BalanceR
         self.HUDValPBalR.setText(_translate("root", "<font color='White'>50</font>"))
-        self.HUDLabTime.setText(_translate("root", "<font color='White'>Elapsed Time (s)</font>"))
-        self.HUDLabHR.setText(_translate("root", "<font color='White'>Heart Rate (BPM)</font>"))
-        self.HUDLabSpd.setText(_translate("root", "<font color='White'>Speed (RPM)</font>"))
-        self.HUDLabAvgPwr.setText(_translate("root", "<font color='White'>Avg. Power (W)</font>"))
+        self.HUDLabTime.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Elapsed Time (s)</font>"))
+        self.HUDLabHR.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Heart Rate (BPM)</font>"))
+        self.HUDLabSpd.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Speed (RPM)</font>"))
+        self.HUDLabAvgPwr.setText(_translate("root", "<font color='White'>&nbsp;&nbsp;Avg. Power (W)</font>"))
         #Start Btn
         self.StartBtn.setText(_translate("root", "Cycle Task"))
+        #Demo Btn
+        self.DemoBtn.setText(_translate("root", "Demo"))
         #Game Btn
-        self.GameBtn.setText(_translate("root", "Demo"))
+        self.GameBtn.setText(_translate("root","Start"))
         #Answer Btn
         self.AnsBtn_Left.setText(_translate("root", "L"))
         self.AnsBtn_Right.setText(_translate("root", "R"))

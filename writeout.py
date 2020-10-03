@@ -19,7 +19,6 @@ class wrtout:
 
 class wrtbin:
     savepath = "C:\\Data" #data savepath
-    head = 'Time*1000,ElapsedTime,Deg*10,Speed,QCLeft*1000,HSLeft*1000,QCRight*1000,HSRight*1000,HeartRate,InstPower,AvgPower,InstCad,BalanceR' #header
     init = np.zeros([1,13]).astype("uint16")
 
     def __init__(self,filename):
@@ -49,11 +48,11 @@ class wrttask:
             np.savetxt(filpath, data, delimiter=',',fmt="%s")
 
 class paraout:
-    prtsuccess = True
     def __init__(self):
         #LPT1 = 0x378, LPT2=0x278, LPT3=0x3BC
         try:
             self.prt = parallel.ParallelPort(address=0x0278)
+            self.prtsuccess = True
         except:
             self.prtsuccess = False
 

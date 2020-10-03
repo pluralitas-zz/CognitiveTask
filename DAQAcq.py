@@ -2,7 +2,6 @@ import nidaqmx, numpy as np
 
 class daq:
     def __init__(self):
-        
         self.daqfound = True
         try:
             with nidaqmx.Task() as consttask: # write 2.5V to ao1 for EMG Amplifiers

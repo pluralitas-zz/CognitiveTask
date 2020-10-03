@@ -21,15 +21,6 @@ class antrcv:
         self.raw = self.raw.split(",") #Split into array
         self.raw = [int(i) for i in self.raw] # Change to int
         if len(self.raw) == 5:
-            # if not self.bl.all(): # create initial value for accumPower
-            #     self.bl[0] = self.raw[1]
-            #     self.bl[1] = self.raw[4] - 1
-            #     self.raw[1] = 0 #replace accum power with 0
-            # else:
-            #     self.bl[0] = divmod((self.raw[1] - self.bl[0]),65536)[1] #prevent overflows, take only remainder
-            #     self.bl[1] = divmod((self.raw[1] - self.bl[0]),255)[1] #prevent overflows, take only remainder
-            #     self.raw[1] = int(self.bl[0]/self.bl[1])
-
             self.powermeter = self.raw
         else:
             self.heartrate = self.raw

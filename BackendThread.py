@@ -21,32 +21,32 @@ class EncDAQBackThread(QtCore.QThread):
     inittime = 0
     daqarr = [[0]*samples]*4
 
-    # determines while loop sampling rate
-    period = 1/samp_rate*samples #1/100 = 0.01s
-    t=0
-
-    # Initialize Encoder
-    Encoder=encoder()
+    # determines EncDAQ while loop sampling rate
+    period = 1/samp_rate*samples #1/1000*20 = 0.02
 
     # Variables for encoder
-    sam_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ #100hz
+    acq_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ 100/2 = 50 
     sam_period = 1 #period to collect signals sec 
-    samp = sam_rate*sam_period #100*1 = 100 samples
-    degold = Encoder.deg
+    samp = acq_rate*sam_period*samples #50*1*20 = 1000 samples
     degtravelled = []
     newdiff = 0
     speed = 0
 
-    # Writeout
-    comb = []
+    # Variables for Writeout 
     timecount = 0
     antwout = [0,0,0,0,0]
 
     def __init__(self,data):
         super(EncDAQBackThread,self).__init__()
-        self.writefile=wrtbin(data)
         self.inittime = time.time()
         self.counter = 0
+
+        self.writefile=wrtbin(data) # Initialize writeout data file
+        self.comb = []
+
+        self.Encoder=encoder() # Initialize Encoder
+        self.degold = self.Encoder.deg
+
     def run(self):
         while True:
             self.t = (time.time() + self.period)*1000
@@ -82,7 +82,7 @@ class EncDAQBackThread(QtCore.QThread):
                 self.comb.append([self.antwout[i]]              * self.samples)
 
             self.writeout(np.array(self.comb).T.astype('uint16'))
-            if self.counter == 0.5/self.period:
+            if self.counter == self.acq_rate/2:
                 self._etime.emit((time.time()-self.inittime)*1000)
                 self.counter = 0
             else: pass
@@ -106,21 +106,16 @@ class PedalThread(QtCore.QThread):
     _HeartRate = QtCore.pyqtSignal(int)
     _ANTwrtout = QtCore.pyqtSignal(list)
 
-    #Initialise Pedal
-    antdata = antrcv()
-    # determines while loop sampling rate
-    t = time.time()
-    period = 1
+    def __init__(self):
+        self.antdata = antrcv()
     
     #Run function
     def run(self):
         while True:       
-            #self.t+=self.period
-            self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, evenCount][heartRate]]
-            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
+            self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, eventCount][heartRate]]
+            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
             self._HeartRate.emit(self.pedalRead[1][0])
-            self._ANTwrtout.emit([self.pedalRead[1][0],self.pedalRead[0][0],self.pedalRead[0][1],self.pedalRead[0][2],int(round(self.pedalRead[0][3]))])#HeartRate,InstPower,AccumPower
-            #time.sleep(max(0,self.t-time.time()))
+            self._ANTwrtout.emit([self.pedalRead[1][0],self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],int(round(self.pedalRead[0][3]))])#HeartRate,InstPower,AccumPower
 
 class Window(QDialog):
     def __init__(self):
