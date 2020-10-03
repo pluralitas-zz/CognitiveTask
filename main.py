@@ -1,12 +1,12 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
-import VideoPlayer, cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, trngComplete #custom .py
+import VideoPlayer, BackendThread
+import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete 
+from writeout import wrttask, paraout
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
-from BackendThread import EncDAQBackThread, PedalThread #Encoder=COM5, DAQ=Dev1
-from writeout import wrtout, wrttask, paraout, wrtbin
 
 _translate = QtCore.QCoreApplication.translate
 class Ui_root(QtWidgets.QMainWindow):
@@ -17,7 +17,7 @@ class Ui_root(QtWidgets.QMainWindow):
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
     dotask = True #Put true to do task, else False to just cycle
-    game = True
+    game = False
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
@@ -197,11 +197,11 @@ class Ui_root(QtWidgets.QMainWindow):
     def initTaskSigSlot(self): #Initialise Task Stuff
       
         #connect countdown
-        self.cd = cdown.countdown_main()
+        self.cd = task_cdown.countdown_main()
         self.cd._qnsdisp.connect(self.disp_qns)
 
         #connect training complete screen
-        self.complet = trngComplete.trngCom_main()
+        self.complet = task_trngComplete.trngCom_main()
         self.complet._qnsdisp.connect(self.disp_qns)
 
         #connect divided attention task
@@ -435,15 +435,15 @@ class Ui_root(QtWidgets.QMainWindow):
 # Write out to file Stuff
     def wouttask(self,data):
         try:
-            self.taskcomb = np.array([str(time.time()), str(data)]) #time, data value
+            self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) #time, data value
             self.writetask.appendfile(self.taskcomb) #write task data to file
         except: pass
 
     def parwrite(self,data):
         try:
             self.para.parawrite(data)
-        except:
-            pass
+        except: pass
+
 # Video Playing Stuff
     def pauseVid(self): #Pause video + Show warning "speed too low"
         self.vidFrame.pauseVid()
@@ -508,9 +508,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #start Backend signal slot connection
         self.initBackendThread()
-        self.pedalBackend.start()
+        # self.pedalBackend.start()
         self.EncSpeed(999) #set dummy speed as 999
-        #self.daqbackend.start()
+        # self.daqbackend.start()
 
         #do task
         self.demo_run()
@@ -624,8 +624,8 @@ class Ui_root(QtWidgets.QMainWindow):
 # Initialize Signal Slots for Backend Threads
     def initBackendThread(self): 
         # Create backend Threads
-        self.pedalBackend=PedalThread()
-        self.daqbackend= EncDAQBackThread(self.UserIDNAME)
+        self.pedalBackend=BackendThread.PedalThread()
+        self.daqbackend=BackendThread.EncDAQBackThread(self.UserIDNAME)
 
         #Initialize Controller
         self.controller=self.Controller()        

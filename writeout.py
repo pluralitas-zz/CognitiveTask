@@ -8,7 +8,7 @@ class wrtout:
     comms = "1000Hz sampling rate, 10samples from DAQ for EMG(s)\r\nEncoder angle w.r.t. LEFT crank angle is synchronised to DAQ once every 10 samples(100Hz)\r\nHeart Rate Data, Pedal Data at 1 Hz\r\n" #comments
 
     def __init__(self,filename):
-        self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
+        self.timenow = str(np.datetime64('now')).replace(":","").replace("-","") #create timestamp for file
         self.fname = filename + "_" + self.timenow + ".csv" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
         np.savetxt(self.fpath, self.init, fmt="%d", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
@@ -22,8 +22,8 @@ class wrtbin:
     init = np.zeros([1,13]).astype("uint16")
 
     def __init__(self,filename):
-        self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
-        self.fname = filename + "__" + self.timenow + "_13col_uint16.dat" #join username with timestamp for file name
+        self.timenow = str(np.datetime64('now')).replace(":","").replace("-","") #create timestamp for file
+        self.fname = filename + "_13col_uint16_" + self.timenow + ".dat" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
         self.init.tofile(self.fpath)
 
@@ -33,19 +33,18 @@ class wrtbin:
 
 class wrttask:
     savepath = "C:\\Data"
-    head = 'Time, ID'
-    comms = "Check ID"
-    init = np.zeros([0,2])
+    head = 'Time, ID\r\n'
 
     def __init__(self,filename):
-        self.timenow = str(np.datetime64('now')).replace(":","") #create timestamp for file
-        self.fname = filename + "_task_" + self.timenow + ".csv" #join username with timestamp for file name
+        self.timenow = str(np.datetime64('now')).replace(":","").replace("-","") #create timestamp for file
+        self.fname = filename + "_task_" + self.timenow + ".txt" #join username with timestamp for file name
         self.fpath = os.path.join(self.savepath, self.fname)
-        np.savetxt(self.fpath, self.init, fmt="%s", delimiter=',', header=self.head, comments=self.comms) #fmt = formatting(3 decimal places float), delimiter is comma cause csv
-    
+        with open(self.fpath, 'wb') as filpath:
+            filpath.write(self.head.encode('ascii'))
+
     def appendfile(self, data):
         with open(self.fpath, 'ab') as filpath: #'ab' for append, binary mode
-            np.savetxt(filpath, data, delimiter=',',fmt="%s")
+            filpath.write(data.encode('ascii'))
 
 class paraout:
     def __init__(self):
@@ -85,9 +84,6 @@ if __name__ == "__main__":
         out.append(daq[i])
     for i in range(5):
         out.append([ant[i]]*samp)
-
-
-    print(np.array(out).T.astype(int))
 
     # for i in range(100):
     test.appendfile(np.array(out).T.astype('uint16'))

@@ -69,11 +69,8 @@
 * ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n'```
   * unplug and replug the ANT+ USB stick
 
-* ```unsupported operand type(s) for -: 'str' and 'int'```
-  * yet to solve
-
-* ```TypeError: 'NoneType' object is not callable``` when initialising parallel port
-  * See 9-11. in "Steps to install anaconda and python"
+* Blue Screen of Death (BSOD)
+  * Incompatibility of USB2LPT drivers with Win10, will need replacement possibly with arduino.
 
 ## WARNING
 
