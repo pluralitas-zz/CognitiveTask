@@ -356,8 +356,6 @@ class workmemSpace_main(QtCore.QThread):
         self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
-        print(self.taskarr)
-        print(self.ansarr)
         self.anspadarr = [self.taskarr[len(self.ansarr)-1]] # append right answer into array
         
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers

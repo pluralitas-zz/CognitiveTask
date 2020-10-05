@@ -15,7 +15,7 @@ class Ui_root(QtWidgets.QMainWindow):
     _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "CheukMICT"
+    UserIDNAME = "MarioHIIT"
     dotask = True #Put true to do task, else False to just cycle
     game = False
 
@@ -30,7 +30,7 @@ class Ui_root(QtWidgets.QMainWindow):
     #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    tasksnum = random.sample(range(0, 5), 4) # randomise tasks
+    tasksnum = random.sample(range(0, 5), 5) # randomise tasks
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -88,10 +88,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.firsttasktwo = True
         self.firsttaskthree = True
         self.firsttaskfour = True
-        
+        self.firsttaskfive = True
+
         while self.timecount < self.trainsec:
                         
-            if 420 >= self.timecount > 120: #in seconds
+            if 330 >= self.timecount > 90: #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
                     self.firsttaskone = False
@@ -99,7 +100,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 840 >= self.timecount > 540:
+            elif 500 >= self.timecount > 420 or 650 >= self.timecount > 570:
                 if self.firsttasktwo == True:
                     self.tasknumset(1)
                     self.firsttasktwo = False
@@ -107,7 +108,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 1260 >= self.timecount > 960:                
+            elif 1020 >= self.timecount > 720:                
                 if self.firsttaskthree == True:
                     self.tasknumset(2)
                     self.firsttaskthree = False
@@ -115,7 +116,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 1680 >= self.timecount > 1380:
+            elif 1220 >= self.timecount > 1140 or 1370 >= self.timecount > 1290:
                 if self.firsttaskfour == True:
                     self.tasknumset(3)
                     self.firsttaskfour = False
@@ -123,6 +124,13 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
+            elif 1740 >= self.timecount > 1440:
+                if self.firsttaskfive == True:
+                    self.tasknumset(4)
+                    self.firsttaskfive = False
+                    
+                self.wouttask("Do Task " + str(self.tasknumnow))
+                self.tasks(self.tasknumnow)
             else:
                 pass
             QtTest.QTest.qWait(100)
