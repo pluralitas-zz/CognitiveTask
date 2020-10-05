@@ -29,7 +29,7 @@ class workmemVerb_main(QtCore.QThread):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
-        
+
         # Determine difficulty
         blanktime = 1000
         if count >= 80:
@@ -133,24 +133,14 @@ class workmemVerb_main(QtCore.QThread):
                 break
 
         self.answerworkmemVerb = False
-        # if self.ansarr == self.taskarr: #Check if answered correctly or not
-        #     print("Correct")
-        #     self._counter.emit(1)
-        # else:
-        #     print("Wrong")
-        #     self._counter.emit(0)
 
-        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
         self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
-        print(self.taskarr)
-        print(len(self.ansarr))
-        self.anspadarr = [self.taskarr[len(self.ansarr)-1]] # append right answer into array
-        
+        self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
             if self.ran_disp not in self.anspadarr: #check for recurring values
@@ -210,6 +200,7 @@ class workmemVerb_main(QtCore.QThread):
         else:
             pass
 
+
 class workmemSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -239,7 +230,7 @@ class workmemSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
 
-    # Determine difficulty            
+        # Determine difficulty            
         blanktime = 1000
         if count >= 80:
             self.anscount = 4
@@ -306,31 +297,30 @@ class workmemSpace_main(QtCore.QThread):
         self._paraport.emit(30) #Task 3
         QtTest.QTest.qWait(2000)
 
-    # Show center point
+        # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
         
-    # Delay before questions start showing on screen
+        # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
-    # hold task in while loop while user isnt cycling
+        # hold task in while loop while user isnt cycling
         while self.speed < self.pausespd: 
             QtTest.QTest.qWait(1000)
         
-    # generate correct answers
-        for i in range(self.dispcount):
+        # generate correct answers
+        while len(self.taskarr) < self.dispcount:
             self.disp = random.choice(self.questions)
             if self.disp not in self.taskarr:
                 self.taskarr.append(self.disp)
-                self._qnsdisp.emit(self.disp,600,600)
+                self._qnsdisp.emit(self.disp,500,500)
                 self._paraport.emit(31)
                 self._wouttask.emit("Question Shown")
                 QtTest.QTest.qWait(showtime)
                 self._qnsdisp.emit("Blank.png",800,150)
                 QtTest.QTest.qWait(blanktime)
-
         self._ansshowhide.emit(1) #show the answer buttons
         self.ran_ans() #randomise answer
 
@@ -342,25 +332,18 @@ class workmemSpace_main(QtCore.QThread):
                 break
 
         self.answerworkmemSpace = False
-        # if self.ansarr == self.taskarr: #Check if answered correctly or not
-        #     print("Correct")
-        #     self._counter.emit(1)
-        # else:
-        #     print("Wrong")
-        #     self._counter.emit(0)
 
-        # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
         self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
-        self.anspadarr = [self.taskarr[len(self.ansarr)-1]] # append right answer into array
         
+        self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
-            if self.ran_disp not in self.anspadarr: # check for recurring values
+            if self.ran_disp not in self.anspadarr: #check for recurring values
                 self.anspadarr.append(self.ran_disp)
 
         random.shuffle(self.anspadarr) #shuffle array around
@@ -415,4 +398,4 @@ class workmemSpace_main(QtCore.QThread):
         elif numb is 10:
             self._qnsdisp.emit("cd10.png",800,150)              
         else:
-            pass  
+            pass

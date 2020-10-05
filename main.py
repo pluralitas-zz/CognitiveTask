@@ -15,8 +15,9 @@ class Ui_root(QtWidgets.QMainWindow):
     _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "MarioHIIT"
+    UserIDNAME = "Test"
     dotask = True #Put true to do task, else False to just cycle
+    hiit = False
     game = False
 
 # Define your Counter scores HERE
@@ -70,7 +71,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.tasknameshow(self.tasknumnow)
 
 # Define YOUR CYCLE TASK EVENT HERE
-    def cycle_task(self):
+    def cycle_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
         
@@ -80,8 +81,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.complet.run_com(1)
         ###################################################
 
-# Define YOUR RUN TASK EVENT HERE
-    def task_run(self):
+# Define YOUR HIIT/MCIT RUN TASK EVENT HERE
+    def hiit_run(self):
         ################################################### 
         ###############     RUN TASKS     #################
         self.firsttaskone = True
@@ -92,7 +93,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         while self.timecount < self.trainsec:
                         
-            if 330 >= self.timecount > 90: #in seconds
+            if 330 >= self.timecount > (90-10): #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
                     self.firsttaskone = False
@@ -100,7 +101,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 500 >= self.timecount > 420 or 650 >= self.timecount > 570:
+            elif 500 >= self.timecount > (420-10) or 650 >= self.timecount > (570-10):
                 if self.firsttasktwo == True:
                     self.tasknumset(1)
                     self.firsttasktwo = False
@@ -108,7 +109,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 1020 >= self.timecount > 720:                
+            elif (1020+10) >= self.timecount > 720:                
                 if self.firsttaskthree == True:
                     self.tasknumset(2)
                     self.firsttaskthree = False
@@ -116,19 +117,19 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 1220 >= self.timecount > 1140 or 1370 >= self.timecount > 1290:
+            elif 1220 >= self.timecount > (1140-10) or 1370 >= self.timecount > (1290-10):
                 if self.firsttaskfour == True:
                     self.tasknumset(3)
                     self.firsttaskfour = False
-                    
+
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
-            elif 1740 >= self.timecount > 1440:
+            elif 1740 >= self.timecount > (1440-10):
                 if self.firsttaskfive == True:
                     self.tasknumset(4)
                     self.firsttaskfive = False
-                    
+
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
             else:
@@ -138,29 +139,77 @@ class Ui_root(QtWidgets.QMainWindow):
         self.complet.run_com(1)
         ###################################################
 
+    def mcit_run(self):
+        ################################################### 
+        ###############     RUN TASKS     #################
+        self.firsttaskone = True
+        self.firsttasktwo = True
+        self.firsttaskthree = True
+        self.firsttaskfour = True
+        self.firsttaskfive = True
+
+        while self.timecount < self.trainsec:
+                        
+            if 420 >= self.timecount > (120-10): #in seconds
+                if self.firsttaskone == True:
+                    self.tasknumset(0)
+                    self.firsttaskone = False
+
+                self.wouttask("Do Task " + str(self.tasknumnow))
+                self.tasks(self.tasknumnow)
+
+            elif 840 >= self.timecount > (540-10):
+                if self.firsttasktwo == True:
+                    self.tasknumset(1)
+                    self.firsttasktwo = False
+
+                self.wouttask("Do Task " + str(self.tasknumnow))
+                self.tasks(self.tasknumnow)
+
+            elif 1260 >= self.timecount > (960-10):                
+                if self.firsttaskthree == True:
+                    self.tasknumset(2)
+                    self.firsttaskthree = False
+
+                self.wouttask("Do Task " + str(self.tasknumnow))
+                self.tasks(self.tasknumnow)
+
+            elif 1680 >= self.timecount > (1380-10):
+                if self.firsttaskfour == True:
+                    self.tasknumset(3)
+                    self.firsttaskfour = False
+                    
+                self.wouttask("Do Task " + str(self.tasknumnow))
+                self.tasks(self.tasknumnow)
+
+            QtTest.QTest.qWait(100)
+
+        self.complet.run_com(1)
+        ###################################################
+
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
-        self.tasknameshow(0)
+        self.tasknumset(0)
         for i in range(10):
             self.tasks(0)
 
-        self.tasknameshow(1)
+        self.tasknumset(1)
         for i in range(5):
             self.tasks(1)
 
-        self.tasknameshow(2)
+        self.tasknumset(2)
         for i in range(5):
             self.tasks(2)
 
-        self.tasknameshow(3)
+        self.tasknumset(3)
         for i in range(2):
             self.tasks(3)
 
-        self.tasknameshow(4)
+        self.tasknumset(4)
         for i in range(2):
             self.tasks(4)
 
-        self.tasknameshow(5)
+        self.tasknumset(5)
         for i in range(10):
             self.tasks(5)
 
@@ -487,9 +536,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.writetask=wrttask(self.UserIDNAME)
 
         if self.dotask == True:
-            self.task_run()
+            if self.hiit == False:
+                self.mcit_run()
+            else:
+                self.hiit_run()
         else:
-            self.cycle_task()
+            self.cycle_run()
 
         #Reset
         self.TimeReset()
@@ -500,6 +552,12 @@ class Ui_root(QtWidgets.QMainWindow):
         if self.daqbackend.isRunning():
             self.daqbackend.terminate()
             self.daqbackend.wait()
+
+        self.firsttaskone = True
+        self.firsttasktwo = True
+        self.firsttaskthree = True
+        self.firsttaskfour = True
+        self.firsttaskfive = True
 
         if self.game == True:
             self.GameBtn.show()
@@ -531,6 +589,12 @@ class Ui_root(QtWidgets.QMainWindow):
             self.pedalBackend.terminate()
             self.pedalBackend.wait()
 
+        self.firsttaskone = True
+        self.firsttasktwo = True
+        self.firsttaskthree = True
+        self.firsttaskfour = True
+        self.firsttaskfive = True
+
         if self.game == True:
             self.GameBtn.show()
         else:
@@ -557,7 +621,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #self.daqbackend._encoderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
 
         #Do Task
-        self.cycle_task()
+        self.cycle_run()
 
         #Reset
         self.TimeReset()
