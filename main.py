@@ -15,7 +15,7 @@ class Ui_root(QtWidgets.QMainWindow):
     _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "Test"
+    UserIDNAME = "CheukMICT"
     dotask = True #Put true to do task, else False to just cycle
     game = False
 
@@ -153,7 +153,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.tasks(4)
 
         self.tasknameshow(5)
-        for i in range(5):
+        for i in range(10):
             self.tasks(5)
 
 # Main.py Ui_root Init
@@ -473,7 +473,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
         self.pedalBackend.start()
         self.daqbackend.start()
-        self.timer = False
+        self.timer = True
 
         #Initialise and create Writeout file with username
         self.writetask=wrttask(self.UserIDNAME)

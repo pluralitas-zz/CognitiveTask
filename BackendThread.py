@@ -27,10 +27,11 @@ class EncDAQBackThread(QtCore.QThread):
     # Variables for encoder
     acq_rate = samp_rate/samples #sample rate of Encoder slaved to each acquisition of DAQ 100/2 = 50 
     sam_period = 1 #period to collect signals sec 
-    samp = acq_rate*sam_period*samples #50*1*20 = 1000 samples
+    samp = acq_rate*sam_period #50*1*20 = 1000 samples
     degtravelled = []
     newdiff = 0
     speed = 0
+    counter = 0
 
     # Variables for Writeout 
     timecount = 0

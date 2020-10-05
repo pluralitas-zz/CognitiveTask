@@ -149,7 +149,7 @@ class workmemVerb_main(QtCore.QThread):
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
         print(self.taskarr)
         print(len(self.ansarr))
-        self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
+        self.anspadarr = [self.taskarr[len(self.ansarr)-1]] # append right answer into array
         
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
@@ -356,7 +356,9 @@ class workmemSpace_main(QtCore.QThread):
         self._ansshowhide.emit(0) #hide the answer buttons
 
     def ran_ans(self): # Determine which right answer sequence it is and pad it to difficulty
-        self.anspadarr = [self.taskarr[len(self.ansarr)]] # append right answer into array
+        print(self.taskarr)
+        print(self.ansarr)
+        self.anspadarr = [self.taskarr[len(self.ansarr)-1]] # append right answer into array
         
         while len(self.anspadarr) != self.anscount: # pad array for displaying on answers
             self.ran_disp = random.choice(self.questions)
