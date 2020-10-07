@@ -202,11 +202,11 @@ class Ui_root(QtWidgets.QMainWindow):
             self.tasks(2)
 
         self.tasknumset(3)
-        for i in range(2):
+        for i in range(1):
             self.tasks(3)
 
         self.tasknumset(4)
-        for i in range(2):
+        for i in range(1):
             self.tasks(4)
 
         self.tasknumset(5)
