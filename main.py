@@ -31,7 +31,8 @@ class Ui_root(QtWidgets.QMainWindow):
     #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    tasksnum = random.sample(range(0, 5), 5) # randomise tasks
+    # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
+    tasksnum = [0,1,2,3,4,5]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -189,16 +190,20 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
+
+        while self.timecount < 120:
+            QtTest.QTest.qWait(100)
+
         self.tasknumset(0)
-        for i in range(10):
-            self.tasks(0)
+        for i in range(3):
+            self.tasks(1)
 
         self.tasknumset(1)
-        for i in range(5):
+        for i in range(3):
             self.tasks(1)
 
         self.tasknumset(2)
-        for i in range(5):
+        for i in range(3):
             self.tasks(2)
 
         self.tasknumset(3)
@@ -210,7 +215,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.tasks(4)
 
         self.tasknumset(5)
-        for i in range(10):
+        for i in range(3):
             self.tasks(5)
 
 # Main.py Ui_root Init
@@ -574,9 +579,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #start Backend signal slot connection
         self.initBackendThread()
-        # self.pedalBackend.start()
+        self.pedalBackend.start()
         self.EncSpeed(999) #set dummy speed as 999
-        # self.daqbackend.start()
+        self.daqbackend.start()
 
         #do task
         self.demo_run()
@@ -667,7 +672,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAvgPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
-        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
+        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]*2) + "</font>"))
 
         if data[3] > 0:
             self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(data[3])+"</font>"))
