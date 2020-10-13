@@ -14,6 +14,7 @@ class workmemVerb_main(QtCore.QThread):
         super(workmemVerb_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["VerbAirport.png", "VerbChurch.png","VerbHospital.png","VerbLibrary.png","VerbMarket.png","VerbPharmacy.png","VerbRestaurant.png","VerbSalon.png","VerbSchool.png","VerbStation.png"]
+        self.blankans = ["Blank.png","Blank.png","Blank.png","Blank.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []
@@ -29,6 +30,7 @@ class workmemVerb_main(QtCore.QThread):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
+        self._ansdisp.emit(self.blankans)
 
         # Determine difficulty
         blanktime = 1000
@@ -156,6 +158,7 @@ class workmemVerb_main(QtCore.QThread):
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
         if self.answerworkmemVerb == True:
+            self._ansdisp.emit(self.blankans)
             self.ansarr.append(data)
 
             if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
@@ -229,6 +232,7 @@ class workmemSpace_main(QtCore.QThread):
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self.anspadarr.clear()
+        self._ansdisp.emit(self.blankans)
 
         # Determine difficulty            
         blanktime = 1000
@@ -357,6 +361,7 @@ class workmemSpace_main(QtCore.QThread):
     def append_ans(self,data):
         if self.answerworkmemSpace == True:
             self.ansarr.append(data)
+            self._ansdisp.emit(self.blankans)
 
             if data == self.taskarr[len(self.ansarr)-1]: #Check if answered correctly or not
                 # print("Correct")
