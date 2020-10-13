@@ -45,6 +45,7 @@
     3. `pip install pynput`
     4. `pip install nidaqmx`
     5. `pip install psychopy --no-deps`
+    6. `pip install pywinusb`
 7. install libant at libant-master/libant-master/ with: `python setup.py install`
 8. Ensure that you can import from python: `from PyQt5 import QtMultimediaWidgets`
     1. `pip uninstall PyQt5`
