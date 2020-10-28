@@ -16,7 +16,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
-    game = True #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
+    game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
 
@@ -650,9 +650,9 @@ class Ui_root(QtWidgets.QMainWindow):
 # HUD Stuff
     def TimeDisplay(self,data):
         if self.timer == True:
-            self.timecount = self.timecount + int(data-self.timems) #ms
-            self.timeleft = self.traintime.addSecs(self.timecount/1000).toString() #seconds
-            self._time.emit(self.timecount)
+            self.timecount = self.timecount + int(data-self.timems)/1000 #ms
+            self.timeleft = self.traintime.addSecs(self.timecount).toString() #seconds
+            self._time.emit(self.timecount*1000)
             self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
         else: pass
         self.timems = data
@@ -665,7 +665,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.HUDValTime.setText("<font color='White'>"+ self.timedisp[3:] +"</font>")        
 
     def HRDisplay(self,data):
-        self.HUDValHR.setText("<font color='White'>"+ str(data) +"</font>")
+        if data == 0:
+            self.HUDValHR.setText("<font color='Red'>"+ str("NULL") +"</font>")
+        else:
+            self.HUDValHR.setText("<font color='White'>"+ str(data) +"</font>")
 
     def EncSpeed(self, data): # UI Slot to recieve Encoder Speed Value
         self.speed=data

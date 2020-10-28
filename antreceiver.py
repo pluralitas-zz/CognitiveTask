@@ -24,6 +24,7 @@ class antrcv:
             self.powermeter = self.raw
         else:
             self.heartrate = self.raw
+
         
         # print(self.raw)
 
@@ -33,16 +34,22 @@ class antrcv:
     def antacq(self):
         self.heartrate = []
         self.powermeter = []
+        self.counter = 0
         while True: #while loop to acquire ANT raw data input
             with Node(USBDriver(vid=0x0FCF, pid=0x1008), 'MyNode') as n:
                 f = Factory(self.callback)
                 n.enableRxScanMode() 
                 n.start(f.parseMessage, self.eCallback) #print "USB OPENSTART""USB OPEN SUCCESS" & "USB CLOSE START" & "USB CLOSE END"
                 QtTest.QTest.qWait(1000) # keep Listening for 30sec
+            if self.counter == 2:
+                self.counter = 0
+                self.heartrate = [0] 
 
             if (bool(self.powermeter) and bool(self.heartrate)): #break while loop if filled
-                #print("broken")
+                # print("broken")
                 break
+            else:
+                self.counter +=1
         
         return [self.powermeter, self.heartrate] #return assembled data
 '''
@@ -57,4 +64,5 @@ if __name__ == "__main__":
     ant = antrcv()
     while True:
         out = ant.antacq()
+        print("output")
         print([out[1][0],out[0][0],out[0][1]*2,out[0][2],int(round(out[0][3]))])
