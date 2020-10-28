@@ -16,9 +16,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
+    game = True #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
-    hiit = False
-    game = False
+    hiit = False #True to do HIIT, False to do MICT
+
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
@@ -234,6 +235,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.pausespd = 10 #Pause/Play Threshold Speed
         self.ansdict={}
         self.timecount = 0
+        self.timems = 0 
         self.timer = False
         self.pictures = "Pictures" #location of pictures in folder "Pictures"
         #self.picd = os.path.join(os.getcwd(),self.pictures)
@@ -623,6 +625,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.initBackendThread()
         self.pedalBackend.start()
         self.daqbackend.start()
+        self.timer = True
         #self.daqbackend._encoderSpeed.connect(self.Controller_Game) #Pass Speed to controller slot for pressing buttons with Encoder
 
         #Do Task
@@ -647,13 +650,13 @@ class Ui_root(QtWidgets.QMainWindow):
 # HUD Stuff
     def TimeDisplay(self,data):
         if self.timer == True:
-            self.timems = data
-            self.timecount = int(self.timems/1000)
+            self.timecount = self.timecount + int(data-self.timems) #ms
+            self.timeleft = self.traintime.addSecs(self.timecount/1000).toString() #seconds
             self._time.emit(self.timecount)
-            self.timeleft = self.traintime.addSecs(self.timecount).toString()
             self.HUDValTime.setText("<font color='White'>"+ self.timeleft[3:] +"</font>")
         else: pass
-
+        self.timems = data
+        
     def TimeReset(self):
         self.timecount = 0
         self._time.emit(0)
