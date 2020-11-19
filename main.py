@@ -152,7 +152,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         while self.timecount < self.trainsec:
             
-            if self.timecount < 10:
+            if self.timecount == 10:
                 self.tasknumnow = 6
                 self.purmistask = self.purmis.gen_task(self.counter[6])
 
@@ -165,6 +165,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 470:
+                self.tasknumnow = 6
                 self.purmis.ans_task(1,self.counter[6],self.purmistask)
 
             elif 840 >= self.timecount > (540-10):
@@ -176,6 +177,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 880:
+                self.tasknumnow = 6
                 self.purmis.ans_task(2,self.counter[6],self.purmistask)
 
             elif 1260 >= self.timecount > (960-10):                
@@ -187,6 +189,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.tasks(self.tasknumnow)
             
             elif self.timecount == 1300:
+                self.tasknumnow = 6
                 self.purmis.ans_task(3,self.counter[6],self.purmistask)
             
             elif 1680 >= self.timecount > (1380-10):
@@ -207,6 +210,19 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
+
+        self.tasknumnow = 6
+        self.purmistask = self.purmis.gen_task(self.counter[6])
+        QtTest.QTest.qWait(1000)
+
+        self.purmis.ans_task(1,self.counter[6],self.purmistask)
+        QtTest.QTest.qWait(1000)
+        self.purmis.ans_task(2,self.counter[6],self.purmistask)
+        QtTest.QTest.qWait(1000)
+        self.purmis.ans_task(3,self.counter[6],self.purmistask)
+        QtTest.QTest.qWait(1000)
+        self.purmis.ans_task(4,self.counter[6],self.purmistask)
+        QtTest.QTest.qWait(1000)
 
         while self.timecount < 120:
             QtTest.QTest.qWait(100)
@@ -422,7 +438,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.wouttask("Wrong: "+ str(self.counter))
             QtTest.QTest.qWait(100)
         self.CntDisplay()
-
+        print(self.counter)
         # if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
         #     #self.vidFrame.restartVid()
         #     pass
@@ -609,9 +625,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #start Backend signal slot connection
         self.initBackendThread()
-        self.pedalBackend.start()
+        # self.pedalBackend.start()
         self.EncSpeed(999) #set dummy speed as 999
-        self.daqbackend.start()
+        # self.daqbackend.start()
 
         #do task
         self.demo_run()

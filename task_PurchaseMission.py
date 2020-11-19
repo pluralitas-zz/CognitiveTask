@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtTest
 import random
 
-class PurchaseMission_main(QtCore.Qthread):
+class PurchaseMission_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _qnsmultidisp = QtCore.pyqtSignal(list)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -16,12 +16,12 @@ class PurchaseMission_main(QtCore.Qthread):
         self.questions = ["biscuits.png", "cola.png", "double.png", "drum.png", "eggpulf.png", "fishball.png","flower.png","milktea.png", "pcpudding.png","pineapple.png", "redbean.png","ringcandy.png","teaegg.png","waffle.png"]
         self.blanktask = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.blankans = ["Blank.png","Blank.png","Blank.png","Blank.png"]
-    
-    def gen_task(self,count):
         self.taskarr = []
+        self.ansarr = []
         self.anstimelim = 60000
-        self.purchasemission = False
 
+    def gen_task(self,count):
+        self.purchasemission = False
         self._ansdisp.emit(self.blankans)
 
         # Determine difficulty
@@ -50,25 +50,24 @@ class PurchaseMission_main(QtCore.Qthread):
             self.questwo = self.taskarr[2:4]
             self.questhree = self.taskarr[4:6]
             self.quesfour = self.taskarr[6:8]
-        else 
+        else:
             self.quesone = [self.taskarr[0]]
             self.questwo = [self.taskarr[1]]
             self.questhree = [self.taskarr[2]]
             self.quesfour = [self.taskarr[3]]
 
         while len(self.quesone) < 4:
-            self.quesone.append(self.questions)
+            self.quesone.append(random.choice(self.questions))
         while len(self.questwo) < 4:
-            self.questwo.append(self.questions)
+            self.questwo.append(random.choice(self.questions))
         while len(self.questhree) < 4:
-            self.questhree.append(self.questions)
+            self.questhree.append(random.choice(self.questions))
         while len(self.quesfour) < 4:
-            self.quesfour.append(self.questions)
+            self.quesfour.append(random.choice(self.questions))
 
-    #display for user to remember    
-        
-    #show 4 at one go
+        # display for user to remember    
         if self.taskarr == 8:
+            #show 4 at one go
             self.out = ["HOTITEM.png"]
             self.out.append(self.taskarr[0:4])
             self._qnsmultidisp.emit(self.out)
@@ -92,11 +91,10 @@ class PurchaseMission_main(QtCore.Qthread):
                 QtTest.QTest.qWait(2000)
 
         self.output = [self.taskarr,self.quesone,self.questwo,self.questhree,self.quesfour]
-
         return self.output
 
     def ans_task(self,quesno,count,input):
-        if input[0] >= 8:
+        if input[0] == 8:
             self.answer = input[0][(quesno*2)-2:quesno*2]
             self.quesarr = input[quesno]
         else:
@@ -117,9 +115,9 @@ class PurchaseMission_main(QtCore.Qthread):
 
         if quesno == 4:
             if count > len(self.taskarr)/2:
-                self._qnsdisp.emit("happyending.png")
+                self._qnsdisp.emit("happyending.png",600,600)
             else:
-                self._qnsdisp.emit("sadending.png")
+                self._qnsdisp.emit("sadending.png",600,600)
 
         self.purchasemission = False
 
