@@ -2,7 +2,7 @@
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
 import VideoPlayer, BackendThread
-import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete 
+import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission
 from writeout import wrttask, paraout
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
@@ -22,7 +22,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 
 # Define your Counter scores HERE
-    counter = [0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr
+    counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
 
 # Define TRAINING TIME HERE
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
@@ -151,14 +151,21 @@ class Ui_root(QtWidgets.QMainWindow):
         self.firsttaskfive = True
 
         while self.timecount < self.trainsec:
-                        
-            if 420 >= self.timecount > (120-10): #in seconds
+            
+            if self.timecount < 10:
+                self.tasknumnow = 6
+                self.purmistask = self.purmis.gen_task(self.counter[6])
+
+            elif 420 >= self.timecount > (120-10): #in seconds
                 if self.firsttaskone == True:
                     self.tasknumset(0)
                     self.firsttaskone = False
 
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
+
+            elif self.timecount == 470:
+                self.purmis.ans_task(1,self.counter[6],self.purmistask)
 
             elif 840 >= self.timecount > (540-10):
                 if self.firsttasktwo == True:
@@ -168,6 +175,9 @@ class Ui_root(QtWidgets.QMainWindow):
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
+            elif self.timecount == 880:
+                self.purmis.ans_task(2,self.counter[6],self.purmistask)
+
             elif 1260 >= self.timecount > (960-10):                
                 if self.firsttaskthree == True:
                     self.tasknumset(2)
@@ -175,7 +185,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
-
+            
+            elif self.timecount == 1300:
+                self.purmis.ans_task(3,self.counter[6],self.purmistask)
+            
             elif 1680 >= self.timecount > (1380-10):
                 if self.firsttaskfour == True:
                     self.tasknumset(3)
@@ -183,6 +196,9 @@ class Ui_root(QtWidgets.QMainWindow):
                     
                 self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
+           
+            elif self.timecount == 1700:
+                self.purmis.ans_task(4,self.counter[6],self.purmistask)
 
             QtTest.QTest.qWait(100)
 
@@ -351,6 +367,18 @@ class Ui_root(QtWidgets.QMainWindow):
         self.mjr._wouttask.connect(self.wouttask)
         self._answer.connect(self.mjr.append_ans)
         self._speed.connect(self.mjr.current_speed)
+
+        #connect Purchase Mission tasl
+        self.purmis = task_PurchaseMission.PurchaseMission_main()
+        self.purmis._qnsdisp.connect(self.disp_qns)
+        self.purmis._qnsmultidisp.connect(self.disp_qnsmulti)
+        self.purmis._ansdisp.connect(self.disp_ans)
+        self.purmis._counter.connect(self.counter_add)
+        self.purmis._level.connect(self.LevelDisplay)
+        self.purmis._ansshowhide.connect(self.showhideAnswers)
+        self.purmis._wouttask.connect(self.wouttask)
+        self.purmis._paraport.connect(self.parwrite)
+        self._answer.connect(self.purmis.append_ans)
 
         #create shortcut for buttons
         self.AnsBtn_Cl.setShortcut("v")
