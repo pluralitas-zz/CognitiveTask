@@ -15,11 +15,10 @@ class Ui_root(QtWidgets.QMainWindow):
     _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "Test"
+    UserIDNAME = "Sarah"
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
-
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
@@ -32,8 +31,8 @@ class Ui_root(QtWidgets.QMainWindow):
     #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    tasksnum = [0,1,2,3,4,5]
+    tasksnum = random.sample(range(0, 5), 5) # randomise tasks
+    # tasksnum = [0,1,2,3,4,5]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -210,7 +209,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
-
         self.tasknumnow = 6
         self.purmistask = self.purmis.gen_task(self.counter[6])
         QtTest.QTest.qWait(1000)

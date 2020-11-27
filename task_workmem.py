@@ -217,6 +217,7 @@ class workmemSpace_main(QtCore.QThread):
         super(workmemSpace_main, self).__init__()
         # Array Position to Buttons: A(Bottom),B(Right),X(Left),Y(Top),Up,Down,Left,Right,L1,R1
         self.questions = ["SpaceN.png", "SpaceE.png","SpaceS.png","SpaceW.png","SpaceNE.png","SpaceNW.png","SpaceSE.png","SpaceNW.png"]
+        self.blankans = ["Blank.png","Blank.png","Blank.png","Blank.png"]
         self.dispcount = 0
         self.anscount = 0
         self.taskarr = []

@@ -19,9 +19,9 @@ class PurchaseMission_main(QtCore.QThread):
         self.taskarr = []
         self.ansarr = []
         self.anstimelim = 60000
+        self.purchasemission = False
 
     def gen_task(self,count):
-        self.purchasemission = False
         self._ansdisp.emit(self.blankans)
 
         # Determine difficulty
