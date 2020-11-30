@@ -15,10 +15,11 @@ class Ui_root(QtWidgets.QMainWindow):
     _time = QtCore.pyqtSignal(int)
 
 # Define your USER ID/NAME HERE
-    UserIDNAME = "Sarah"
+    UserIDNAME = "Test"
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
+    cycle = True #Put False if do not want minimal cycling
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
@@ -31,8 +32,8 @@ class Ui_root(QtWidgets.QMainWindow):
     #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
-    tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    # tasksnum = [0,1,2,3,4,5]
+    # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
+    tasksnum = [0,1,2,3,4,5]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -221,13 +222,12 @@ class Ui_root(QtWidgets.QMainWindow):
         QtTest.QTest.qWait(1000)
         self.purmis.ans_task(4,self.counter[6],self.purmistask)
         QtTest.QTest.qWait(1000)
-
-        while self.timecount < 120:
-            QtTest.QTest.qWait(100)
+        
+        QtTest.QTest.qWait(5000)
 
         self.tasknumset(0)
         for i in range(3):
-            self.tasks(1)
+            self.tasks(0)
 
         self.tasknumset(1)
         for i in range(3):
@@ -436,7 +436,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.wouttask("Wrong: "+ str(self.counter))
             QtTest.QTest.qWait(100)
         self.CntDisplay()
-        print(self.counter)
+        # print(self.counter)
         # if self.counter in (3, 5, 7): #change videos if counter reached X value(s)
         #     #self.vidFrame.restartVid()
         #     pass
@@ -762,8 +762,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Signal connect to Slots for Data
         self._time.connect(self.daqbackend.Timercv)     #Pass time for writeout
-        self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
-        self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
+        if self.cycle == True:
+            self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
+            self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.daqbackend._etime.connect(self.TimeDisplay)
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
         self.pedalBackend._pedalValue.connect(self.PedalDisplay)    #Pass all pedal values
