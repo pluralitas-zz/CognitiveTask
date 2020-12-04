@@ -12,7 +12,7 @@ class PowerProfileMessage(ProfileMessage):
     def __str__(self):
         if self.dataPageNumber == 16 :   #Frances
             #return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
-            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.averagePower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
+            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.LeftTorqueEffectiveness) + '{0:.0f}'.format(self.eventCount) 
 
     @lazyproperty
     def dataPageNumber(self):
