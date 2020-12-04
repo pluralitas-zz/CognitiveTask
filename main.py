@@ -717,7 +717,7 @@ class Ui_root(QtWidgets.QMainWindow):
         if self.cycle ==True:
             self._speed.emit(data,self.pausespd)
         else:
-            self._speed.emot(50,self.pausespd)
+            self._speed.emit(50,self.pausespd)
         self.HUDValSpd.setText("<font color='White'>"+ str(data)+"</font>")
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
