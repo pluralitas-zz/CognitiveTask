@@ -19,7 +19,7 @@ class Ui_root(QtWidgets.QMainWindow):
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
-    cycle = True #Put False if do not want minimal cycling
+    cycle = False #Put False if do not want minimal cycling
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
@@ -714,7 +714,10 @@ class Ui_root(QtWidgets.QMainWindow):
 
     def EncSpeed(self, data): # UI Slot to recieve Encoder Speed Value
         self.speed=data
-        self._speed.emit(data,self.pausespd)
+        if self.cycle ==True:
+            self._speed.emit(data,self.pausespd)
+        else:
+            self._speed.emot(50,self.pausespd)
         self.HUDValSpd.setText("<font color='White'>"+ str(data)+"</font>")
 
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
@@ -762,8 +765,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Signal connect to Slots for Data
         self._time.connect(self.daqbackend.Timercv)     #Pass time for writeout
+        self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
         if self.cycle == True:
-            self.daqbackend._encoderSpeed.connect(self.EncSpeed)  #Pass Speed to UI label2 
             self.daqbackend._encoderSpeed.connect(self.videoStartPause) #Encoder Speed control Start/Pause video
         self.daqbackend._etime.connect(self.TimeDisplay)
         self.pedalBackend._HeartRate.connect(self.HRDisplay)       #Pass Heart Rate to UI label 3
