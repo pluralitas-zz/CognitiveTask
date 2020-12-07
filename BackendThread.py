@@ -113,11 +113,11 @@ class PedalThread(QtCore.QThread):
     
     #Run function
     def run(self):
-        while True:       
-            self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, eventCount][heartRate]]
-            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],int(round(self.pedalRead[0][3]))]) 
+        while True:
+            self.pedalRead=self.antdata.antacq()  #[[InstPower, AvgPower, InstCadence, pedalBalRight, eventCount][heartRate]]           
+            self._pedalValue.emit([self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],self.pedalRead[0][3]]) 
             self._HeartRate.emit(self.pedalRead[1][0])
-            self._ANTwrtout.emit([self.pedalRead[1][0],self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],int(round(self.pedalRead[0][3]))])#HeartRate,InstPower,AccumPower
+            self._ANTwrtout.emit([self.pedalRead[1][0],self.pedalRead[0][0],self.pedalRead[0][1]*2,self.pedalRead[0][2],self.pedalRead[0][3]])#HeartRate,InstPower,AccumPower
 
 if __name__ == '__main__':
     pedThread = PedalThread()

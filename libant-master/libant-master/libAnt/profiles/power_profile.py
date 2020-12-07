@@ -12,7 +12,7 @@ class PowerProfileMessage(ProfileMessage):
     def __str__(self):
         if self.dataPageNumber == 16 :   #Frances
             #return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalBalanceValue) + '{0:.0f}'.format(self.eventCount) 
-            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.LeftTorqueEffectiveness) + '{0:.0f}'.format(self.eventCount) 
+            return '{0:.0f},'.format(self.instantaneousPower) + '{0:.0f},'.format(self.accumulatedPower) + '{0:.0f}, '.format(self.instantaneousCadence) + '{0:.0f},'.format(self.pedalPower) + '{0:.0f}'.format(self.eventCount) 
 
     @lazyproperty
     def dataPageNumber(self):
@@ -31,13 +31,15 @@ class PowerProfileMessage(ProfileMessage):
         """
         return self.msg.content[1]
 
-    @lazyproperty   #Frances
-    def LeftPedalSmoothness(self): # 1/2% unit (range: 0-100%) for data page 0X13
-        return self.msg.content[4]
-    
-    @lazyproperty   #Frances
-    def RightPedalSmoothness(self): # 1/2% unit (range: 0-100%) for data page 0X13
-        return self.msg.content[5]
+    @lazyproperty
+    def pedalPower(self):
+        """
+        The pedal power field is used to transmit the pedaling power recorded from the power sensor.
+        The Leftmost bit indicates whether it is the Left or Right pedal: R = 1 , L = 0
+        The other 7 bits indicate what is the % output of that respective pedal. 100% = Right% + Left%
+        """
+        return self.msg.content[2]
+
 
     @lazyproperty
     def instantaneousCadence(self):
@@ -47,6 +49,14 @@ class PowerProfileMessage(ProfileMessage):
         :return: Instantaneous Cadence (W)
         """
         return self.msg.content[3]
+
+    @lazyproperty   #Frances
+    def LeftPedalSmoothness(self): # 1/2% unit (range: 0-100%) for data page 0X13
+        return self.msg.content[4]
+    
+    @lazyproperty   #Frances
+    def RightPedalSmoothness(self): # 1/2% unit (range: 0-100%) for data page 0X13
+        return self.msg.content[5]
 
     @lazyproperty   #Frances
     def LeftTorqueEffectiveness(self): # 1/2% unit (range: 0-100%) for data page 0X13
@@ -60,7 +70,6 @@ class PowerProfileMessage(ProfileMessage):
     @lazyproperty   #Frances
     def pedalBalanceValue(self):
        
-        #return self.msg.content[2]
         int_x = int(self.msg.content[2])
         raw =bin(int_x)
         lastBit=raw[2]

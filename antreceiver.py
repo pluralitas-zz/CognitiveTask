@@ -25,7 +25,7 @@ class antrcv:
         else:
             self.heartrate = self.raw
 
-        print(self.raw)
+        # print(self.raw)
 
     def eCallback(self,e):
         print(e) #print "device is closed""
@@ -63,5 +63,5 @@ if __name__ == "__main__":
     ant = antrcv()
     while True:
         out = ant.antacq()
-        print("output")
-        # print([out[1][0],out[0][0],out[0][1]*2,out[0][2],int(round(out[0][3]))])
+        # print("output")
+        print([out[1][0],out[0][0],out[0][1]*2,out[0][2],int(round(out[0][3]))])
