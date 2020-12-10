@@ -31,48 +31,26 @@ class nbackVerb_main(QtCore.QThread):
         
         # Determine difficulty
         blanktime = 1000
-        if count >= 30:
-            showtime = 500
-            self.nval = -3
-            self.level = 6
-        elif count >= 30:
-            showtime = 700
-            self.nval = -3
-            self.level = 5
-        elif count >= 20:
-            showtime = 500
-            self.nval = -2
-            self.level = 4
-        elif count >= 10:
-            showtime = 700
-            self.nval = -2
-            self.level = 3
-        elif count >= 5:
-            showtime = 700
-            self.nval = -1
-            self.level = 2
-        else:
-            showtime = 1000
-            self.nval = -1  
-            self.level = 1
+        showtime = 1000
+        self.nval = -abs(count)
 
         self._level.emit(self.nval)
         self.diffdisp(self.nval)
-        QtTest.QTest.qWait(2000)
+        # QtTest.QTest.qWait(1000)
 
         # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
+        QtTest.QTest.qWait(1000)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 20 values
-        arraylen = 20
+        # generate 60 values
+        arraylen = 60
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 4
+        correctval = 30
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -85,7 +63,7 @@ class nbackVerb_main(QtCore.QThread):
         self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,3000)
+        task_delay = random.randrange(1000,2000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):
@@ -148,7 +126,6 @@ class nbackVerb_main(QtCore.QThread):
                 else:
                     self._counter.emit(0)
                     # print("Wrong")
-
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
@@ -185,6 +162,7 @@ class nbackVerb_main(QtCore.QThread):
         else:
             pass
 
+
 class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -215,48 +193,26 @@ class nbackSpace_main(QtCore.QThread):
 
         # Determine difficulty
         blanktime = 1000
-        if count >= 30:
-            showtime = 500
-            self.nval = -3
-            self.level = 6
-        elif count >= 30:
-            showtime = 700
-            self.nval = -3
-            self.level = 5
-        elif count >= 20:
-            showtime = 500
-            self.nval = -2
-            self.level = 4
-        elif count >= 10:
-            showtime = 700
-            self.nval = -2
-            self.level = 3
-        elif count >= 5:
-            showtime = 700
-            self.nval = -1
-            self.level = 2
-        else:
-            showtime = 1000
-            self.nval = -1
-            self.level = 1
+        showtime = 1000
+        self.nval = -abs(count)
 
         self._level.emit(self.nval)
         self.diffdisp(self.nval)
-        QtTest.QTest.qWait(2000)
+        # QtTest.QTest.qWait(1000)
 
         # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(500)
+        QtTest.QTest.qWait(1000)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 20 values
-        arraylen = 20
+        # generate 60 values
+        arraylen = 60
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 5
+        correctval = 30
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
@@ -269,7 +225,7 @@ class nbackSpace_main(QtCore.QThread):
         self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,3000)
+        task_delay = random.randrange(1000,2000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):

@@ -28,39 +28,21 @@ class flank_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        if count >= 30:
-            showtime = 100
-            self.level = 5
-            self.cutofftime = 30 #multiplies of 100ms
-        elif count >= 20:
-            showtime = 200
-            self.level = 4
-            self.cutofftime = 30 #multiplies of 100ms
-        elif count >= 10:
-            showtime = 500
-            self.level = 3
-            self.cutofftime = 50 #multiplies of 100ms
-        elif count >=5:
-            showtime = 700 #ms
-            self.level = 2
-            self.cutofftime = 70 #multiplies of 100ms
-        else:
-            showtime = 1000
-            self.level = 1
-            self.cutofftime = 100 #multiplies of 100ms
+        self.level = 1
+        self.cutofftime = 50 #multiplies of 100ms
 
         # Show Difficulty
         #self.diffdisp(self.level)
         self._level.emit(self.level)
-        QtTest.QTest.qWait(2000)
+        # QtTest.QTest.qWait(2000)
         
         # Show center point
         self._qnsdisp.emit("Center.png",800,150)
-        QtTest.QTest.qWait(500)
+        QtTest.QTest.qWait(1000)
         self._qnsdisp.emit("Blank.png",800,150)
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,3000)
+        task_delay = random.randrange(1000,2000)
         QtTest.QTest.qWait(task_delay)
 
         #Hold task in while loop while user isnt cycling
@@ -78,7 +60,14 @@ class flank_main(QtCore.QThread):
         
         #Find relevancy in flankprep and select REAL question
         self.questions2 = [s for s in self.questions if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
-        self.disp = random.choice(self.questions2)
+
+        if count = 1: # Check count for congruent or incongruent
+            self.disp = random.choice(self.questions2[0:2])
+        elif count = 2:
+            self.disp = random.choice(self.questions2[2:4])
+        else:
+            self.disp = random.choice(self.questions2[0:2])
+
         self.taskarr.append(self.disp[-5])
         self._qnsdisp.emit(self.disp,800,150)
         if "Incon" in self.disp:
