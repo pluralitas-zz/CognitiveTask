@@ -30,6 +30,7 @@ class flank_main(QtCore.QThread):
         # Determine difficulty
         self.level = 1
         self.cutofftime = 50 #multiplies of 100ms
+        self.showtime = 700
 
         # Show Difficulty
         #self.diffdisp(self.level)
@@ -59,13 +60,12 @@ class flank_main(QtCore.QThread):
         self.answerflank = True
         
         #Find relevancy in flankprep and select REAL question
-        if count = 2:
+        if count == 2:
             self.questions2 = [s for s in self.questions[2:4] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
-        else
+        else:
             self.questions2 = [s for s in self.questions[0:2] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
 
-            self.disp = self.questions2[0]
-
+        self.disp = self.questions2[0]
         self.taskarr.append(self.disp[-5])
         self._qnsdisp.emit(self.disp,800,150)
         if "Incon" in self.disp:
@@ -75,7 +75,7 @@ class flank_main(QtCore.QThread):
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
 
-        QtTest.QTest.qWait(showtime)
+        QtTest.QTest.qWait(self.showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
         self._ansshowhide.emit(1) #show the answer buttons
 

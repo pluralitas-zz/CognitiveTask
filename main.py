@@ -16,6 +16,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
+    assess = False #Run assessment mode
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = True #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
@@ -33,8 +34,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define ALL YOUR TASKS FUNCTION HERE
     # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    tasksnumone = [0,1,2,3,4,5]
-    tasksnumtwo = 
+    tasksnum = [0,1,2,3,4,5,6]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -56,14 +56,16 @@ class Ui_root(QtWidgets.QMainWindow):
         if numb is 0:
             self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
         elif numb is 1:
-            self.cd.run_cd("NameWrkMemVerb.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
         elif numb is 2:
-            self.cd.run_cd("NameWrkMemVisual.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
         elif numb is 3:
             self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
         elif numb is 4:
-            self.cd.run_cd("NameNbackVisual.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         elif numb is 5:
+            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
+        elif numb is 6:
             self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         else:
             pass
@@ -211,38 +213,35 @@ class Ui_root(QtWidgets.QMainWindow):
     
     def assess_run(self):
 
-        self.tasknumset(0)
-        for i in range(3):
-            self.tasks(0)
-
-        self.tasknumset(1)
-        for i in range(3):
-            self.tasks(1)
-
-        self.tasknumset(2)
-        for i in range(3):
-            self.tasks(2)
-
-        self.tasknumset(3)
-        for i in range(1):
-            self.tasks(3)
-
-        self.tasknumset(4)
-        for i in range(1):
-            self.tasks(4)
-
-        self.tasknumset(5)
-        for i in range(3):
-            self.tasks(5)
-
-
-
-
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
+        self.tasknumset(0)
+        for i in range(60):
+            self.flnk.run_task(1)
+
+        self.tasknumset(1)
+        for i in range(60):
+            self.flnk.run_task(2)
+
+        self.tasknumset(2)
+        self.nbckVerb.run_task(1)
+
+        self.tasknumset(3)
+        self.nbckVerb.run_task(2)
 
         QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
+        self.tasknumset(4)
+        for i in range(60):
+            self.mjr.run_task(5)
+
+        self.tasknumset(5)
+        for i in range(60):
+            self.mjr.run_task(4)
+
+        self.tasknumset(6)
+        for i in range(60):
+            self.mjr.run_task(3)
 
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
@@ -624,13 +623,17 @@ class Ui_root(QtWidgets.QMainWindow):
         #Initialise and create Writeout file with username
         self.writetask=wrttask(self.UserIDNAME)
 
-        if self.dotask == True:
-            if self.hiit == False:
-                self.mcit_run()
-            else:
-                self.hiit_run()
+        if self.assess == True:
+            self.assess_run()
+            self.HUDFrame.hide()
         else:
-            self.cycle_run()
+            if self.dotask == True:
+                if self.hiit == False:
+                    self.mcit_run()
+                else:
+                    self.hiit_run()
+            else:
+                self.cycle_run()
 
         #Reset
         self.TimeReset()
@@ -668,7 +671,9 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.daqbackend.start()
 
         #do task
-        self.demo_run()
+        self.HUDFrame.hide()
+        # self.demo_run()
+        self.assess_run()
 
         #Reset
         self.TimeReset()
