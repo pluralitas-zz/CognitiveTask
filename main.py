@@ -672,8 +672,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #do task
         self.HUDFrame.hide()
-        # self.demo_run()
-        self.assess_run()
+        self.demo_run()
 
         #Reset
         self.TimeReset()

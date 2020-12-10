@@ -30,7 +30,7 @@ class flank_main(QtCore.QThread):
         # Determine difficulty
         self.level = 1
         self.cutofftime = 50 #multiplies of 100ms
-        self.showtime = 700
+        self.showtime = 600
 
         # Show Difficulty
         #self.diffdisp(self.level)

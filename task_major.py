@@ -35,7 +35,7 @@ class major_main(QtCore.QThread):
 
         # Show Difficulty
         self._level.emit(self.level)
-        self._paraport.emit(60) #Task 6
+        self._paraport.emit(60+ self.level) #Task 6
         # QtTest.QTest.qWait(2000)
         
         # Show center point
@@ -71,6 +71,7 @@ class major_main(QtCore.QThread):
         self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
         self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
+        self._paraport.emit(64)
         self._ansshowhide.emit(1) #show the answer buttons
         
         timeCount = 0
@@ -84,9 +85,11 @@ class major_main(QtCore.QThread):
         if self.ansarr == [self.taskcorrect[1]]: #Check if answered correctly or not
             # print("Correct")
             self._counter.emit(1)
+            self._paraport.emit(65)
         else:
             # print("Wrong")
             self._counter.emit(0)
+            self._paraport.emit(66)
 
         # print("finished test")
         self.ansarr.clear()     #clear array
