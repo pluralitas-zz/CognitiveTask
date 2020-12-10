@@ -50,7 +50,7 @@ class nbackVerb_main(QtCore.QThread):
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 30
+        correctval = 20
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -212,7 +212,7 @@ class nbackSpace_main(QtCore.QThread):
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 30
+        correctval = 20
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         

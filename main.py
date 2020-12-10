@@ -33,7 +33,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define ALL YOUR TASKS FUNCTION HERE
     # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    tasksnum = [0,1,2,3,4,5]
+    tasksnumone = [0,1,2,3,4,5]
+    tasksnumtwo = 
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -207,6 +208,45 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.complet.run_com(1)
         ###################################################
+    
+    def assess_run(self):
+
+        self.tasknumset(0)
+        for i in range(3):
+            self.tasks(0)
+
+        self.tasknumset(1)
+        for i in range(3):
+            self.tasks(1)
+
+        self.tasknumset(2)
+        for i in range(3):
+            self.tasks(2)
+
+        self.tasknumset(3)
+        for i in range(1):
+            self.tasks(3)
+
+        self.tasknumset(4)
+        for i in range(1):
+            self.tasks(4)
+
+        self.tasknumset(5)
+        for i in range(3):
+            self.tasks(5)
+
+
+
+
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+
+
+        QtTest.QTest.qWait(180*1000) # Wait 3 minutes
+
+
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+
+        self.complet.run_com(1)
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):

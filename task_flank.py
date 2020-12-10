@@ -59,14 +59,12 @@ class flank_main(QtCore.QThread):
         self.answerflank = True
         
         #Find relevancy in flankprep and select REAL question
-        self.questions2 = [s for s in self.questions if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
+        if count = 2:
+            self.questions2 = [s for s in self.questions[2:4] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
+        else
+            self.questions2 = [s for s in self.questions[0:2] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
 
-        if count = 1: # Check count for congruent or incongruent
-            self.disp = random.choice(self.questions2[0:2])
-        elif count = 2:
-            self.disp = random.choice(self.questions2[2:4])
-        else:
-            self.disp = random.choice(self.questions2[0:2])
+            self.disp = self.questions2[0]
 
         self.taskarr.append(self.disp[-5])
         self._qnsdisp.emit(self.disp,800,150)
