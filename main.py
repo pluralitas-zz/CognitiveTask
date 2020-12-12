@@ -1,8 +1,11 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
+
+# -*- coding: utf-8 -*-
+
 import sys, os, time, threading, numpy as np, random
 import VideoPlayer, BackendThread
-import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission
+import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission, task_stroop
 from writeout import wrttask, paraout
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
@@ -23,7 +26,7 @@ class Ui_root(QtWidgets.QMainWindow):
     cycle = False #Put False if do not want minimal cycling
 
 # Define your Counter scores HERE
-    counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
+    counter = [0,0,0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
 
 # Define TRAINING TIME HERE
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
@@ -49,6 +52,8 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckSpace.run_task(self.counter[4])
         elif numb is 5:
             self.mjr.run_task(self.counter[5])
+        elif numb is 6:
+            self.stroop.run_task(self.count[6])
         else:
             pass
 
@@ -67,6 +72,10 @@ class Ui_root(QtWidgets.QMainWindow):
             self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         elif numb is 6:
             self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
+        elif numb is 7:
+            self.cd.run_cd("NameStroop.png")
+        elif numb is 8:
+            self.cd.run_cd("NameStroop.png")
         else:
             pass
 
@@ -213,7 +222,13 @@ class Ui_root(QtWidgets.QMainWindow):
     
     def assess_run(self):
 
-        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        for i in range(3):
+            self.stroop.run_task(1)
+
+        for i in range(3):
+            self.stroop.run_task(2)
+
+        # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
         self.tasknumset(0)
         for i in range(60):
@@ -242,6 +257,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.tasknumset(6)
         for i in range(60):
             self.mjr.run_task(3)
+
+        self.tasknumset(7)
+        for i in range(60):
+            self.stroop.run_task(1)
+
+        self.tasknumset(8)
+        for i in range(60):
+            self.stroop.run_task(2)
 
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
@@ -420,6 +443,19 @@ class Ui_root(QtWidgets.QMainWindow):
         self.mjr._wouttask.connect(self.wouttask)
         self._answer.connect(self.mjr.append_ans)
         self._speed.connect(self.mjr.current_speed)
+
+        #connect stroop task
+        self.stroop = task_stroop.stroop_main()
+        self.stroop._qnsdisp.connect(self.disp_qns)
+        self.stroop._textdisp.connect(self.disp_text)
+        self.stroop._ansdisp.connect(self.disp_ans)
+        self.stroop._counter.connect(self.counter_add)
+        self.stroop._level.connect(self.LevelDisplay)
+        self.stroop._ansshowhide.connect(self.showhideAnswers)
+        self.stroop._paraport.connect(self.parwrite)
+        self.stroop._wouttask.connect(self.wouttask)
+        self._answer.connect(self.stroop.append_ans)
+        self._speed.connect(self.stroop.current_speed)
 
         #connect Purchase Mission tasl
         self.purmis = task_PurchaseMission.PurchaseMission_main()
@@ -675,7 +711,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #do task
         self.HUDFrame.hide()
-        self.demo_run()
+        # self.demo_run()
+        self.assess_run()
 
         #Reset
         self.TimeReset()
@@ -945,7 +982,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_Center.setObjectName("Ques_Center")
 
-        font = QtGui.QFont("Gill Sans MT", pointSize = 120, weight = 50)
+        font = QtGui.QFont("Gill Sans MT", pointSize = 300, weight = 50)
 
         self.Ques_Text = QtWidgets.QLabel(self.TaskFrame)
         self.Ques_Text.setGeometry(QtCore.QRect(300, 0, 1000, 800))

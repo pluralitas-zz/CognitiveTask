@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from PyQt5 import QtCore, QtTest
 import random
 
@@ -12,9 +14,9 @@ class stroop_main(QtCore.QThread):
     _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
-        super(major_main, self).__init__()
+        super(stroop_main, self).__init__()
         self.questions = ["red.png","yellow.png","green.png","blue.png"]
-        self.questext = ["紅","黃"，"綠","藍"]
+        self.questext = [u"紅", u"黃", u"綠", u"藍"]
         self.quescolour = ["red", "yellow", "green","blue"]
         self.blank = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.taskarr = []
@@ -56,20 +58,20 @@ class stroop_main(QtCore.QThread):
         self.dispnum = list(range(len(self.quescolour)))
         random.shuffle(self.dispnum) 
         if count == 2:
-            self._textdisp.emit(self.questext(self.dispnum[1]),self.quescolour(self.dispnum[0]))
-            self.taskarr.append(self.quescolour(self.dispnum[0]))
+            self._textdisp.emit(self.questext[self.dispnum[1]],self.quescolour[self.dispnum[0]])
+            self.taskarr.append(self.quescolour[self.dispnum[0]])
             self._paraport.emit(12)
             self._wouttask.emit("Question Shown-InCon")
         else:
-            self._textdisp.emit(self.questext(self.dispnum[0]),self.quescolour(self.dispnum[0]))
-            self.taskarr.append(self.quescolour(self.dispnum[0]))
+            self._textdisp.emit(self.questext[self.dispnum[0]],self.quescolour[self.dispnum[0]])
+            self.taskarr.append(self.quescolour[self.dispnum[0]])
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
         
         self.answerstroop = True
         self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(self.showtime)
-        self._textdisp.emit("","white")
+        
 
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
@@ -79,12 +81,13 @@ class stroop_main(QtCore.QThread):
                 break
         
         self.answerstroop = False
+        self._textdisp.emit("","white")
         if self.ansarr == self.taskarr:
-           # print("Correct")
+            print("Correct")
             self._counter.emit(1)
             self._paraport.emit(15)
         else:
-            # print("Wrong")
+            print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(16)
 
@@ -97,8 +100,8 @@ class stroop_main(QtCore.QThread):
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
         if self.answerstroop == True:
-            self.ansarr.append(data[0][:-4])
-            #print(self.ansarr)
+            self.ansarr.append(data[:-4])
+            # print(self.ansarr)
 
     def current_speed(self,data,data2):
         self.speed = data
