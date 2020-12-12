@@ -496,6 +496,9 @@ class Ui_root(QtWidgets.QMainWindow):
             self.wouttask("Question Shown")
         self.Ques_Center.setPixmap(pixmap)
 
+    def disp_text(self,data,col):
+        self.Ques_Text.setText("<font color='" + col + "'>" + data + "</font>")
+
     def disp_qnsmulti(self,data):
         self.wouttask("Question Shown")
         if len(data) < 5:
@@ -882,16 +885,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskFrame.setStyleSheet("background-color: rgba(0,0,0,0%)")
         self.TaskFrame.hide()
 
-        self.Ques_Center = QtWidgets.QLabel(self.TaskFrame)
-        self.Ques_Center.setGeometry(QtCore.QRect(300, 0, 1000, 800))
-        self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
-        self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
-        self.Ques_Center.setAutoFillBackground(False)
-        self.Ques_Center.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.Ques_Center.setText("")
-        self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
-        self.Ques_Center.setObjectName("Ques_Center")
-
         self.Ques_N = QtWidgets.QLabel(self.TaskFrame)
         self.Ques_N.setGeometry(QtCore.QRect(700, 30, 200, 200))
         self.Ques_N.setMinimumSize(QtCore.QSize(0, 0))
@@ -941,6 +934,29 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_SE.setText("")
         self.Ques_SE.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_SE.setObjectName("Ques_NE")
+
+        self.Ques_Center = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_Center.setGeometry(QtCore.QRect(300, 0, 1000, 800))
+        self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
+        self.Ques_Center.setAutoFillBackground(False)
+        self.Ques_Center.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_Center.setText("")
+        self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_Center.setObjectName("Ques_Center")
+
+        font = QtGui.QFont("Gill Sans MT", pointSize = 120, weight = 50)
+
+        self.Ques_Text = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_Text.setGeometry(QtCore.QRect(300, 0, 1000, 800))
+        self.Ques_Text.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_Text.setMaximumSize(QtCore.QSize(1000, 800))
+        self.Ques_Text.setAutoFillBackground(False)
+        self.Ques_Text.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_Text.setFont(font)
+        self.Ques_Text.setText("")
+        self.Ques_Text.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_Text.setObjectName("Ques_Text")
 
         font = QtGui.QFont("Gill Sans MT", pointSize = 36, weight = 50)
 
