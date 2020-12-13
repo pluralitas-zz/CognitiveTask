@@ -33,7 +33,7 @@ class stroop_main(QtCore.QThread):
         # Determine difficulty
         self.level = 1
         self.cutofftime = 50 #multiplies of 100ms
-        self.showtime = 600
+        self.showtime = 500
 
         # Show Difficulty
         self._level.emit(self.level)
@@ -68,10 +68,12 @@ class stroop_main(QtCore.QThread):
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
         
-        self.answerstroop = True
-        self._ansshowhide.emit(1) #show the answer buttons
         QtTest.QTest.qWait(self.showtime)
-        
+        self._textdisp.emit("","white")
+        self.answerstroop = True
+        QtTest.QTest.qWait(500)
+
+        self._ansshowhide.emit(1) #show the answer buttons
 
         timeCount = 0
         while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
@@ -81,7 +83,8 @@ class stroop_main(QtCore.QThread):
                 break
         
         self.answerstroop = False
-        self._textdisp.emit("","white")
+        self._ansshowhide.emit(0) #hide the answer buttons
+
         if self.ansarr == self.taskarr:
             print("Correct")
             self._counter.emit(1)
