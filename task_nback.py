@@ -50,7 +50,7 @@ class nbackVerb_main(QtCore.QThread):
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 20
+        correctval = 12
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -192,8 +192,9 @@ class nbackSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        blanktime = 1000
-        showtime = 1000
+        self.blanktime = 500
+        self.showtime = 600
+        self.cutofftime = 50 #multiplies of 100ms
         self.nval = -abs(count)
 
         self._level.emit(self.nval)
@@ -212,7 +213,7 @@ class nbackSpace_main(QtCore.QThread):
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 20
+        correctval = 12
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
@@ -249,15 +250,15 @@ class nbackSpace_main(QtCore.QThread):
                 self._paraport.emit(58)
             self.answernbackSpace = True
 
-            QtTest.QTest.qWait(showtime)
+            QtTest.QTest.qWait(self.showtime)
             self._qnsdisp.emit("Blank.png",800,150)
-            QtTest.QTest.qWait(blanktime)
+            QtTest.QTest.qWait(self.blanktime)
 
             timeCount = 0
-            while timeCount < (blanktime/100):
+            while timeCount < (self.blanktime/100):
                 QtTest.QTest.qWait(100)
                 timeCount += 1
-                if timeCount == (blanktime/100) or self.answerappended == True:
+                if timeCount == (self.blanktime/100) or self.answerappended == True:
                     break
 
         self.answernbackSpace = False

@@ -31,9 +31,10 @@ class stroop_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.level = 1
+        self.level = count
         self.cutofftime = 50 #multiplies of 100ms
         self.showtime = 500
+        self.blanktime = 500
 
         # Show Difficulty
         self._level.emit(self.level)
@@ -60,18 +61,18 @@ class stroop_main(QtCore.QThread):
         if count == 2:
             self._textdisp.emit(self.questext[self.dispnum[1]],self.quescolour[self.dispnum[0]])
             self.taskarr.append(self.quescolour[self.dispnum[0]])
-            self._paraport.emit(12)
+            self._paraport.emit(72)
             self._wouttask.emit("Question Shown-InCon")
         else:
             self._textdisp.emit(self.questext[self.dispnum[0]],self.quescolour[self.dispnum[0]])
             self.taskarr.append(self.quescolour[self.dispnum[0]])
-            self._paraport.emit(11)
+            self._paraport.emit(71)
             self._wouttask.emit("Question Shown-Con")
         
         QtTest.QTest.qWait(self.showtime)
         self._textdisp.emit("","white")
         self.answerstroop = True
-        QtTest.QTest.qWait(500)
+        QtTest.QTest.qWait(self.blanktime)
 
         self._ansshowhide.emit(1) #show the answer buttons
 
@@ -88,11 +89,11 @@ class stroop_main(QtCore.QThread):
         if self.ansarr == self.taskarr:
             print("Correct")
             self._counter.emit(1)
-            self._paraport.emit(15)
+            self._paraport.emit(75)
         else:
             print("Wrong")
             self._counter.emit(0)
-            self._paraport.emit(16)
+            self._paraport.emit(76)
 
         # print("finished test")
         self.ansarr.clear()     #clear array

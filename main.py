@@ -61,21 +61,11 @@ class Ui_root(QtWidgets.QMainWindow):
         if numb is 0:
             self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
         elif numb is 1:
-            self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameNbackSpace.png") #10 seconds count down, 7 secs show task name
         elif numb is 2:
-            self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         elif numb is 3:
-            self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
-        elif numb is 4:
-            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
-        elif numb is 5:
-            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
-        elif numb is 6:
-            self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
-        elif numb is 7:
-            self.cd.run_cd("NameStroop.png")
-        elif numb is 8:
-            self.cd.run_cd("NameStroop.png")
+            self.cd.run_cd("NameStroop.png") #10 seconds count down, 7 secs show task name
         else:
             pass
 
@@ -221,46 +211,36 @@ class Ui_root(QtWidgets.QMainWindow):
         ###################################################
     
     def assess_run(self):
-        
+
+        self.disp_qns("Center.png",800,150)
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
+        self.taskflow = [1]*60 + [2]*60
+        random.shuffle(self.taskflow)
         self.tasknumset(0)
-        for i in range(10):
-            self.flnk.run_task(1)
+        for i in range(len(self.taskflow)):
+            self.flnk.run_task(self.taskflow[i])
 
+        self.nbckflow = [1,2]
+        random.shuffle(self.nbckflow)
         self.tasknumset(1)
-        for i in range(10):
-            self.flnk.run_task(2)
-
-        self.tasknumset(2)
-        self.nbckSpace.run_task(1)
-
-        self.tasknumset(3)
-        self.nbckSpace.run_task(2)
+        for i in range(len(self.nbckflow))
+            self.nbckSpace.run_task(self.nbckflow[i])
 
         QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
-        self.tasknumset(4)
-        for i in range(10):
-            self.mjr.run_task(5)
+        self.mjrflow = [5]*60 + [4]*60 + [3]*60
+        random.shuffle(self.mjrflow)
+        self.tasknumset(2)
+        for i in range(len(self.mjrflow)):
+            self.mjr.run_task(self.mjrflow[i])
 
-        self.tasknumset(5)
-        for i in range(10):
-            self.mjr.run_task(4)
+        random.shuffle(self.taskflow)
+        self.tasknumset(3)
+        for i in range(len(self.taskflow)):
+            self.stroop.run_task(self.taskflow[i])
 
-        self.tasknumset(6)
-        for i in range(10):
-            self.mjr.run_task(3)
-
-        self.tasknumset(7)
-        for i in range(10):
-            self.stroop.run_task(1)
-
-        self.tasknumset(8)
-        for i in range(60):
-            self.stroop.run_task(2)
-
-        # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
         self.complet.run_com(1)
 
@@ -644,10 +624,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.hide()
         self.DemoBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video
+
         self.TaskFrame.show()
         if self.assess == True:
             self.HUDFrame.hide()
+        else:
+            self.vidFrame.startVid() #Start video
 
         #start Backend signal slot connection
         self.initBackendThread()
@@ -706,8 +688,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #do task
         self.HUDFrame.hide()
-        self.demo_run()
-        # self.assess_run()
+        # self.demo_run()
+        self.assess_run()
 
         #Reset
         self.TimeReset()

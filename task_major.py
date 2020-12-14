@@ -27,15 +27,15 @@ class major_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.showtime = 1000 #ms
+        self.showtime = 600 #ms
         self.level = 5-(abs(count)-1)
         self.showtotal = 5 #total number of questions show
         self.showratio = abs(count) #number of questions in the same side, must be more than half of showtotal
-        self.cutofftime = 100 #multiplies of 100ms
+        self.cutofftime = 50 #multiplies of 100ms
 
         # Show Difficulty
         self._level.emit(self.level)
-        self._paraport.emit(60+ self.level) #Task 6
+        # self._paraport.emit(60) #Task 6
         # QtTest.QTest.qWait(2000)
         
         # Show center point
@@ -71,7 +71,7 @@ class major_main(QtCore.QThread):
         self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
         self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
-        self._paraport.emit(64)
+        self._paraport.emit(60+ self.level)
         self._ansshowhide.emit(1) #show the answer buttons
         
         timeCount = 0
