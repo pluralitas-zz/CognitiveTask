@@ -19,9 +19,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
-    assess = False #Run assessment mode
+    assess = True #Run assessment mode
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
-    dotask = True #Put true to do task, else False to just cycle
+    dotask = False #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
     cycle = False #Put False if do not want minimal cycling
 
@@ -37,7 +37,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define ALL YOUR TASKS FUNCTION HERE
     # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    tasksnum = [0,1,2,3,4,5,6]
+    tasksnum = [0,1,2,3,4,5,6,7,8]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -221,52 +221,46 @@ class Ui_root(QtWidgets.QMainWindow):
         ###################################################
     
     def assess_run(self):
-
-        for i in range(3):
-            self.stroop.run_task(1)
-
-        for i in range(3):
-            self.stroop.run_task(2)
-
-        # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
         self.tasknumset(0)
-        for i in range(60):
+        for i in range(10):
             self.flnk.run_task(1)
 
         self.tasknumset(1)
-        for i in range(60):
+        for i in range(10):
             self.flnk.run_task(2)
 
         self.tasknumset(2)
-        self.nbckVerb.run_task(1)
+        self.nbckSpace.run_task(1)
 
         self.tasknumset(3)
-        self.nbckVerb.run_task(2)
+        self.nbckSpace.run_task(2)
 
         QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
         self.tasknumset(4)
-        for i in range(60):
+        for i in range(10):
             self.mjr.run_task(5)
 
         self.tasknumset(5)
-        for i in range(60):
+        for i in range(10):
             self.mjr.run_task(4)
 
         self.tasknumset(6)
-        for i in range(60):
+        for i in range(10):
             self.mjr.run_task(3)
 
         self.tasknumset(7)
-        for i in range(60):
+        for i in range(10):
             self.stroop.run_task(1)
 
         self.tasknumset(8)
         for i in range(60):
             self.stroop.run_task(2)
 
-        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
         self.complet.run_com(1)
 
@@ -650,8 +644,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.hide()
         self.DemoBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video 
+        self.vidFrame.startVid() #Start video
         self.TaskFrame.show()
+        if self.assess == True:
+            self.HUDFrame.hide()
 
         #start Backend signal slot connection
         self.initBackendThread()
@@ -664,7 +660,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
         if self.assess == True:
             self.assess_run()
-            self.HUDFrame.hide()
         else:
             if self.dotask == True:
                 if self.hiit == False:
@@ -711,8 +706,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #do task
         self.HUDFrame.hide()
-        # self.demo_run()
-        self.assess_run()
+        self.demo_run()
+        # self.assess_run()
 
         #Reset
         self.TimeReset()
