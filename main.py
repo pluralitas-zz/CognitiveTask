@@ -210,6 +210,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.complet.run_com(1)
         ###################################################
     
+# Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
 
         self.disp_qns("Center.png",800,150)
@@ -224,7 +225,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckflow = [1,2]
         random.shuffle(self.nbckflow)
         self.tasknumset(1)
-        for i in range(len(self.nbckflow))
+        for i in range(len(self.nbckflow)):
             self.nbckSpace.run_task(self.nbckflow[i])
 
         QtTest.QTest.qWait(180*1000) # Wait 3 minutes
@@ -628,7 +629,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskFrame.show()
         if self.assess == True:
             self.HUDFrame.hide()
-        else:
+        elif self.dotask == False:
             self.vidFrame.startVid() #Start video
 
         #start Backend signal slot connection
