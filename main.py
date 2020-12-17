@@ -19,7 +19,8 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
-    assess = True #Run assessment mode
+    assess = False #Run assessment mode
+    dual = True
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
     dotask = False #Put true to do task, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
@@ -629,8 +630,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskFrame.show()
         if self.assess == True:
             self.HUDFrame.hide()
-        elif self.dotask == False:
+        elif self.dotask == False and self.dual == False:
             self.vidFrame.startVid() #Start video
+        else:
+            pass
 
         #start Backend signal slot connection
         self.initBackendThread()
@@ -992,7 +995,11 @@ class Ui_root(QtWidgets.QMainWindow):
 
         # Define HUD Frame
         self.HUDFrame = QtWidgets.QWidget(self)
-        self.HUDFrame.setGeometry(QtCore.QRect(1700, 20, 200, 770))
+        if self.dual == True:
+            self.HUDFrame.setGeometry(QtCore.QRect(100, 20, 200, 770))
+        else:
+            self.HUDFrame.setGeometry(QtCore.QRect(1700, 20, 200, 770))
+        
         self.HUDFrame.setMaximumSize(QtCore.QSize(1900, 1000))
         #self.HUDFrame.setAutoFillBackground(False)
         self.HUDFrame.setObjectName("HUDFrame")
