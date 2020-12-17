@@ -22,9 +22,9 @@ class Ui_root(QtWidgets.QMainWindow):
     assess = False #Run assessment mode
     dual = True
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
-    dotask = False #Put true to do task, else False to just cycle
+    dotask = False #Put True to do tasks, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
-    cycle = False #Put False if do not want minimal cycling
+    cycle = False #Put False if do not want minimal cycling speed
 
 # Define your Counter scores HERE
     counter = [0,0,0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
@@ -644,16 +644,13 @@ class Ui_root(QtWidgets.QMainWindow):
         #Initialise and create Writeout file with username
         self.writetask=wrttask(self.UserIDNAME)
 
-        if self.assess == True:
-            self.assess_run()
+        if self.dotask == False:
+            self.cycle_run()
+        elif self.hiit == False:
+            self.mcit_run()
         else:
-            if self.dotask == True:
-                if self.hiit == False:
-                    self.mcit_run()
-                else:
-                    self.hiit_run()
-            else:
-                self.cycle_run()
+            self.hiit_run()
+            
 
         #Reset
         self.TimeReset()
@@ -681,14 +678,15 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.hide()
         self.DemoBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video 
+        # self.vidFrame.startVid() #Start video 
         self.TaskFrame.show()
-
+        
         #start Backend signal slot connection
         self.initBackendThread()
-        # self.pedalBackend.start()
-        self.EncSpeed(999) #set dummy speed as 999
-        # self.daqbackend.start()
+        self.pedalBackend.start()
+        # self.EncSpeed(999) #set dummy speed as 999
+        self.daqbackend.start()
+        self.timer = True
 
         #do task
         self.HUDFrame.hide()
@@ -1203,7 +1201,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #Start Btn
         self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Demo Btn
-        self.DemoBtn.setText(_translate("root", "Demo"))
+        self.DemoBtn.setText(_translate("root", "Assessment"))
         #Game Btn
         self.GameBtn.setText(_translate("root","Start"))
         #Answer Btn
