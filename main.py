@@ -634,7 +634,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.GameBtn.hide()
 
         self.TaskFrame.show()
-        if self.dual == False:
+        if self.dual == True:
             pass
         else:
             self.vidFrame.startVid() #Start video
