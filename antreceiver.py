@@ -3,6 +3,7 @@ from libAnt.drivers.usb import USBDriver
 from libAnt.loggers.pcap import PcapLogger
 from libAnt.node import Node
 from libAnt.profiles.factory import Factory
+from PyQt5 import QtTest
 import numpy as np
 
 class antrcv:
@@ -39,7 +40,8 @@ class antrcv:
                 f = Factory(self.callback)
                 n.enableRxScanMode() 
                 n.start(f.parseMessage, self.eCallback) #print "USB OPENSTART""USB OPEN SUCCESS" & "USB CLOSE START" & "USB CLOSE END"
-                QtTest.QTest.qWait(1000) # keep Listening for 30sec
+                QtTest.QTest.qWait(3000) # keep Listening for 30sec
+
             if self.counter == 2:
                 self.counter = 0
                 self.heartrate = [0] 
@@ -63,5 +65,5 @@ if __name__ == "__main__":
     ant = antrcv()
     while True:
         out = ant.antacq()
-        # print("output")
-        print([out[1][0],out[0][0],out[0][1]*2,out[0][2],int(round(out[0][3]))])
+        print("output........................................")
+        print([out[1][0],out[0][0],out[0][1],out[0][2],int(round(out[0][3]))])

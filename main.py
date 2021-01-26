@@ -789,7 +789,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAvgPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
-        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]*2) + "</font>"))
+        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
 
         if 255 > data[3] > 128:
             self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(data[3]-128)+"</font>"))
