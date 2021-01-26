@@ -30,7 +30,7 @@ class flank_main(QtCore.QThread):
         # Determine difficulty
         self.level = 1
         self.cutofftime = 50 #multiplies of 100ms
-        self.showtime = 600
+        self.showtime = 500
 
         # Show Difficulty
         #self.diffdisp(self.level)
@@ -56,7 +56,7 @@ class flank_main(QtCore.QThread):
         self.disp = random.choice(self.flankprep)
         # self._paraport.emit(10) #Task 1
         self._qnsdisp.emit(self.disp,800,150) #display Flankprep
-        QtTest.QTest.qWait(400)
+        QtTest.QTest.qWait(500)
         self.answerflank = True
         
         #Find relevancy in flankprep and select REAL question
@@ -77,6 +77,7 @@ class flank_main(QtCore.QThread):
 
         QtTest.QTest.qWait(self.showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
+        QtTest.QTest.qWait(1000)
         self._ansshowhide.emit(1) #show the answer buttons
 
         timeCount = 0

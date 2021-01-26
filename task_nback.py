@@ -192,8 +192,8 @@ class nbackSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.blanktime = 500
-        self.showtime = 600
+        self.blanktime = 1000
+        self.showtime = 2000
         self.cutofftime = 50 #multiplies of 100ms
         self.nval = -abs(count)
 
@@ -236,7 +236,7 @@ class nbackSpace_main(QtCore.QThread):
                 QtTest.QTest.qWait(1000)
 
             self.dispcount = i
-            self._qnsdisp.emit(self.taskarr[i],600,600)
+            self._qnsdisp.emit(self.taskarr[i],400,400)
             try:
                 self.dispback = self.taskarr[self.dispcount+self.nval]
             except:

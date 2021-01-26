@@ -27,7 +27,7 @@ class major_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.showtime = 600 #ms
+        self.showtime = 4000 #ms
         self.level = 5-(abs(count)-1)
         self.showtotal = 5 #total number of questions show
         self.showratio = abs(count) #number of questions in the same side, must be more than half of showtotal
@@ -71,6 +71,7 @@ class major_main(QtCore.QThread):
         self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
         self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
+        QtTest.QTest.qWait(1000)
         self._paraport.emit(60+ self.level)
         self._ansshowhide.emit(1) #show the answer buttons
         

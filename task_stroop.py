@@ -34,7 +34,7 @@ class stroop_main(QtCore.QThread):
         self.level = count
         self.cutofftime = 50 #multiplies of 100ms
         self.showtime = 500
-        self.blanktime = 500
+        self.blanktime = 1000
 
         # Show Difficulty
         self._level.emit(self.level)
