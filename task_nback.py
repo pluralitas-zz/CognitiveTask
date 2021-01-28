@@ -283,21 +283,26 @@ class nbackSpace_main(QtCore.QThread):
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
+                    self._paraport.emit(55)
                     # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
+                    self._paraport.emit(56)
                     # print("Wrong")
+        
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
+                    self._paraport.emit(55)
                     # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
+                    self._paraport.emit(56)
                     # print("Wrong")
 
             else:
