@@ -92,7 +92,7 @@ class flank_main(QtCore.QThread):
             # print("Correct")
             self._counter.emit(1)
             self._paraport.emit(15)
-        else:
+        elif bool(self.ansarr) == True:
             # print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(16)

@@ -87,11 +87,11 @@ class stroop_main(QtCore.QThread):
         self._ansshowhide.emit(0) #hide the answer buttons
 
         if self.ansarr == self.taskarr:
-            print("Correct")
+            # print("Correct")
             self._counter.emit(1)
             self._paraport.emit(75)
-        else:
-            print("Wrong")
+        elif bool(self.ansarr) == True::
+            # print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(76)
 
