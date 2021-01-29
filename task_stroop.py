@@ -90,7 +90,7 @@ class stroop_main(QtCore.QThread):
             # print("Correct")
             self._counter.emit(1)
             self._paraport.emit(75)
-        elif bool(self.ansarr) == True::
+        elif bool(self.ansarr) == True:
             # print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(76)

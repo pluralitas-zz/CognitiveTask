@@ -67,7 +67,7 @@ class Ui_root(QtWidgets.QMainWindow):
         if numb is 0:
             self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
         elif numb is 1:
-            self.cd.run_cd("NameNbackSpace.png") #10 seconds count down, 7 secs show task name
+            self.cd.run_cd("NameNbackVisual.png") #10 seconds count down, 7 secs show task name
         elif numb is 2:
             self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
         elif numb is 3:
