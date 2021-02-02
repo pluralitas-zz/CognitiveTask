@@ -234,10 +234,9 @@ class Ui_root(QtWidgets.QMainWindow):
         for i in range(len(self.nbckflow)):
             self.nbckSpace.run_task(self.nbckflow[i])
 
-
         QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
-        self.mjrflow = [5]*60 + [4]*60 + [3]*60
+        self.mjrflow = [5]*40 + [4]*40 + [3]*40
         random.shuffle(self.mjrflow)
         self.tasknumset(2)
         for i in range(len(self.mjrflow)):
