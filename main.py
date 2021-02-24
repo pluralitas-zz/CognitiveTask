@@ -222,7 +222,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.disp_qns("Center.png",800,150)
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
-        self.taskflow = [1]*75 + [2]*75
+        self.taskflow = [1]*90 + [2]*90
 
         random.shuffle(self.taskflow)
         self.tasknumset(0)
