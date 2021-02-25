@@ -77,6 +77,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
     def tasknumset(self,num):
         self.tasknumnow = self.tasksnum[num]
+        self.wouttask("Do Task " + str(num))
         self.CntDisplay()
         self.tasknameshow(self.tasknumnow)
 
@@ -236,7 +237,7 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckSpace.run_task(self.nbckflow[i])
 
         random.shuffle(self.taskflow)
-        self.tasknumset(3)
+        self.tasknumset(2)
         for i in range(len(self.taskflow)):
             self.stroop.run_task(self.taskflow[i])
 
@@ -681,6 +682,9 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.EncSpeed(999) #set dummy speed as 999
         self.daqbackend.start()
         self.timer = True
+
+        #Initialise and create Writeout file with username
+        self.writetask=wrttask(self.UserIDNAME)
 
         #do task
         self.HUDFrame.hide()
