@@ -23,7 +23,7 @@ class Ui_root(QtWidgets.QMainWindow):
     dual = False
 
 # Define assessment here
-    assess = False
+    assess = True
 
 # Define other factors here
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
@@ -219,28 +219,32 @@ class Ui_root(QtWidgets.QMainWindow):
     
 # Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
+        self.taskflow = [1]*90 + [2]*90
 
+        # 2 minutes fixation
         self.disp_qns("Center.png",800,150)
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
-        self.taskflow = [1]*60 + [2]*60
-
+        # Flanker
         random.shuffle(self.taskflow)
         self.tasknumset(0)
         for i in range(len(self.taskflow)):
             self.flnk.run_task(self.taskflow[i])
 
-        self.nbckflow = [1] #2
+        # n-back
+        self.nbckflow = [1] #set 1 for 1-back, 2 for 2-back
         random.shuffle(self.nbckflow)
         self.tasknumset(1)
         for i in range(len(self.nbckflow)):
             self.nbckSpace.run_task(self.nbckflow[i])
 
+        # stroop task
         random.shuffle(self.taskflow)
         self.tasknumset(2)
         for i in range(len(self.taskflow)):
             self.stroop.run_task(self.taskflow[i])
 
+        #complete
         self.complet.run_com(1)
 
 # Define YOUR DEMO TASK EVENT HERE

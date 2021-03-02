@@ -43,14 +43,14 @@ class nbackVerb_main(QtCore.QThread):
         QtTest.QTest.qWait(1000)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 60 values
-        arraylen = 60
+        # generate 90 values
+        arraylen = 90
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 12
+        correctval = 18
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -206,14 +206,14 @@ class nbackSpace_main(QtCore.QThread):
         QtTest.QTest.qWait(1000)
         self._qnsdisp.emit("Blank.png",800,150)
 
-        # generate 60 values
-        arraylen = 60
+        # generate 90 values
+        arraylen = 90
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-        correctval = 12
+        correctval = 18
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
