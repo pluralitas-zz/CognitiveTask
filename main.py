@@ -19,6 +19,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
+
 # Define if it is dual task
     dual = False
 
@@ -219,7 +220,7 @@ class Ui_root(QtWidgets.QMainWindow):
     
 # Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
-        self.taskflow = [1]*90 + [2]*90
+        self.taskflow = [1]*60 + [2]*60
 
         # 2 minutes fixation
         self.disp_qns("Center.png",800,150)
@@ -448,10 +449,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self._answer.connect(self.purmis.append_ans)
 
         #create shortcut for buttons
-        self.AnsBtn_Cl.setShortcut("v")
-        self.AnsBtn_Sq.setShortcut("d")
-        self.AnsBtn_Left.setShortcut(QtCore.Qt.Key_Left)
-        self.AnsBtn_Right.setShortcut(QtCore.Qt.Key_Right)
+        self.AnsBtn_Cl.setShortcut("/")
+        self.AnsBtn_Sq.setShortcut(".")
+        self.AnsBtn_Left.setShortcut("z")
+        self.AnsBtn_Right.setShortcut("x")
 
         #connect the buttons to answering definition
         self.AnsBtn_Cl.clicked.connect(lambda:self.answer())
