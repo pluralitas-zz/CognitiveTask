@@ -31,6 +31,7 @@
 4. n-back Task (Verbal) ``Task 3``
 5. n-back Task (Visuospatial) ``Task 4``
 6. Majority Task ``Task 5``
+7. Stroop Task ``Task 6``
 
 ## Steps to install
 

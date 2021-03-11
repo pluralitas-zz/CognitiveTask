@@ -107,10 +107,6 @@ class workmemVerb_main(QtCore.QThread):
         # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
-
-        # hold task in while loop while user isnt cycling
-        while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(1000)
         
         # generate correct answers
         while len(self.taskarr) < self.dispcount:
@@ -173,10 +169,6 @@ class workmemVerb_main(QtCore.QThread):
             self.answerworkmemVerb = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
-
-    def current_speed(self,data,data2):
-        self.speed = data
-        self.pausespd = data2
 
     def diffdisp(self,numb):
         numb = abs(numb)
@@ -310,10 +302,6 @@ class workmemSpace_main(QtCore.QThread):
         # Delay before questions start showing on screen
         task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
-
-        # hold task in while loop while user isnt cycling
-        while self.speed < self.pausespd: 
-            QtTest.QTest.qWait(1000)
         
         # generate correct answers
         while len(self.taskarr) < self.dispcount:
@@ -376,10 +364,6 @@ class workmemSpace_main(QtCore.QThread):
             self.answerworkmemSpace = False
             if len(self.ansarr) < self.dispcount:
                 self.ran_ans() # Run randomise answer
-
-    def current_speed(self,data,data2):
-        self.speed = data
-        self.pausespd = data2
 
     def diffdisp(self,numb):
         numb = abs(numb)
