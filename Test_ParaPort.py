@@ -3,15 +3,12 @@
 from psychopy import parallel
 import time
 
-# JCCOCC
-port = parallel.ParallelPort(address=0x3EFC) #JCCOCC
+port = parallel.ParallelPort(address=0x0278)
 
 # Should be able to see it in the monitor in device manager.
-for i in range(30):
-    port.setData(69)
-    time.sleep(1)
-    port.setData(0)
-    time.sleep(1)
+port.setData(3)
+time.sleep(1)
+port.setData(0)
 '''
 with parallel.ParallelPort(address=0x0278) as port:
     port.setData(200)

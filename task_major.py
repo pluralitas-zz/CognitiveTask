@@ -27,24 +27,49 @@ class major_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.showtime = 4000 #ms
-        self.level = 5-(abs(count)-1)
-        self.showtotal = 5 #total number of questions show
-        self.showratio = abs(count) #number of questions in the same side, must be more than half of showtotal
-        self.cutofftime = 50 #multiplies of 100ms
+        if count >= 30:
+            self.showtime = 300 #ms
+            self.level = 5
+            self.showtotal = 5 #total number of questions show, must be odd number
+            self.showratio = 3 #number of questions in the same side, must be more than half of showtotal
+            self.cutofftime = 30 #multiplies of 100ms
+        elif count >= 20:
+            self.showtime = 500 #ms
+            self.level = 4
+            self.showtotal = 5 #total number of questions show
+            self.showratio = 3 #number of questions in the same side, must be more than half of showtotal
+            self.cutofftime = 50 #multiplies of 100ms
+        elif count >= 10:
+            self.showtime = 700 #ms
+            self.level = 3
+            self.showtotal = 5 #total number of questions show
+            self.showratio = 4 #number of questions in the same side, must be more than half of showtotal
+            self.cutofftime = 70 #multiplies of 100ms
+        elif count >= 5:
+            self.showtime = 700 #ms
+            self.level = 2
+            self.showtotal = 5 #total number of questions show
+            self.showratio = 4 #number of questions in the same side, must be more than half of showtotal
+            self.cutofftime = 70 #multiplies of 100ms
+        else:
+            self.showtime = 1000 #ms
+            self.level = 1
+            self.showtotal = 5 #total number of questions show
+            self.showratio = 5 #number of questions in the same side, must be more than half of showtotal
+            self.cutofftime = 100 #multiplies of 100ms
 
         # Show Difficulty
         self._level.emit(self.level)
-        # self._paraport.emit(60) #Task 6
-        # QtTest.QTest.qWait(2000)
+        self._paraport.emit(60) #Task 6
+        QtTest.QTest.qWait(2000)
         
         # Show center point
         self._qnsdisp.emit("Center.png",800,150)
-        QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,2000)
+        task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         self._ansdisp.emit(self.questions) #emit answers into buttons
@@ -67,8 +92,6 @@ class major_main(QtCore.QThread):
         self.answermajor = True
         QtTest.QTest.qWait(self.showtime)
         self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
-        QtTest.QTest.qWait(1000)
-        self._paraport.emit(60+ self.level)
         self._ansshowhide.emit(1) #show the answer buttons
         
         timeCount = 0
@@ -82,11 +105,9 @@ class major_main(QtCore.QThread):
         if self.ansarr == [self.taskcorrect[1]]: #Check if answered correctly or not
             # print("Correct")
             self._counter.emit(1)
-            self._paraport.emit(65)
-        elif bool(self.ansarr) == True:
+        else:
             # print("Wrong")
             self._counter.emit(0)
-            self._paraport.emit(66)
 
         # print("finished test")
         self.ansarr.clear()     #clear array

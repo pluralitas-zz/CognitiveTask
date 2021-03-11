@@ -31,26 +31,57 @@ class nbackVerb_main(QtCore.QThread):
         
         # Determine difficulty
         blanktime = 1000
-        showtime = 1000
-        self.nval = -abs(count)
+        if count >= 30:
+            showtime = 500
+            self.nval = -3
+            self.level = 6
+        elif count >= 30:
+            showtime = 700
+            self.nval = -3
+            self.level = 5
+        elif count >= 20:
+            showtime = 500
+            self.nval = -2
+            self.level = 4
+        elif count >= 10:
+            showtime = 700
+            self.nval = -2
+            self.level = 3
+        elif count >= 5:
+            showtime = 700
+            self.nval = -1
+            self.level = 2
+        else:
+            showtime = 1000
+            self.nval = -1  
+            self.level = 1
 
         self._level.emit(self.nval)
         self.diffdisp(self.nval)
-        # QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(2000)
 
         # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
+<<<<<<< Updated upstream
         # generate 60 values
         arraylen = 60
+=======
+        # generate 20 values
+        arraylen = 20
+>>>>>>> Stashed changes
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
+<<<<<<< Updated upstream
         correctval = 12
+=======
+        correctval = 4
+>>>>>>> Stashed changes
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -63,7 +94,7 @@ class nbackVerb_main(QtCore.QThread):
         self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,2000)
+        task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):
@@ -123,6 +154,7 @@ class nbackVerb_main(QtCore.QThread):
                 else:
                     self._counter.emit(0)
                     # print("Wrong")
+
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
@@ -155,7 +187,6 @@ class nbackVerb_main(QtCore.QThread):
         else:
             pass
 
-
 class nbackSpace_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
     _ansdisp = QtCore.pyqtSignal(list)
@@ -185,28 +216,58 @@ class nbackSpace_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.blanktime = 1000
-        self.showtime = 2000
-        self.cutofftime = 50 #multiplies of 100ms
-        self.nval = -abs(count)
+        blanktime = 1000
+        if count >= 30:
+            showtime = 500
+            self.nval = -3
+            self.level = 6
+        elif count >= 30:
+            showtime = 700
+            self.nval = -3
+            self.level = 5
+        elif count >= 20:
+            showtime = 500
+            self.nval = -2
+            self.level = 4
+        elif count >= 10:
+            showtime = 700
+            self.nval = -2
+            self.level = 3
+        elif count >= 5:
+            showtime = 700
+            self.nval = -1
+            self.level = 2
+        else:
+            showtime = 1000
+            self.nval = -1
+            self.level = 1
 
         self._level.emit(self.nval)
         self.diffdisp(self.nval)
-        # QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(2000)
 
         # Show center point
         self._qnsdisp.emit("Center.png",800,150) 
-        QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
+<<<<<<< Updated upstream
         # generate 60 values
         arraylen = 60
+=======
+        # generate 20 values
+        arraylen = 20
+>>>>>>> Stashed changes
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
+<<<<<<< Updated upstream
         correctval = 12
+=======
+        correctval = 5
+>>>>>>> Stashed changes
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
@@ -219,14 +280,14 @@ class nbackSpace_main(QtCore.QThread):
         self._ansshowhide.emit(1) #show the answer buttons
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,2000)
+        task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         for i in range(len(self.taskarr)):
             self.answerappended = False
 
             self.dispcount = i
-            self._qnsdisp.emit(self.taskarr[i],400,400)
+            self._qnsdisp.emit(self.taskarr[i],600,600)
             try:
                 self.dispback = self.taskarr[self.dispcount+self.nval]
             except:
@@ -240,15 +301,15 @@ class nbackSpace_main(QtCore.QThread):
                 self._paraport.emit(58)
             self.answernbackSpace = True
 
-            QtTest.QTest.qWait(self.showtime)
+            QtTest.QTest.qWait(showtime)
             self._qnsdisp.emit("Blank.png",800,150)
-            QtTest.QTest.qWait(self.blanktime)
+            QtTest.QTest.qWait(blanktime)
 
             timeCount = 0
-            while timeCount < (self.blanktime/100):
+            while timeCount < (blanktime/100):
                 QtTest.QTest.qWait(100)
                 timeCount += 1
-                if timeCount == (self.blanktime/100) or self.answerappended == True:
+                if timeCount == (blanktime/100) or self.answerappended == True:
                     break
 
         self.answernbackSpace = False
@@ -273,26 +334,21 @@ class nbackSpace_main(QtCore.QThread):
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    self._paraport.emit(55)
                     # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    self._paraport.emit(56)
                     # print("Wrong")
-        
             elif data == "VerbCross.png":
                 if self.taskarr[self.dispcount] != self.dispback and self.dispcount != 0: #Check if answered correctly or not
                     self.anscount +=1
                     #if self.anscount in (3,6,9,12):
                     #    self.anscount = 0
                     self._counter.emit(1)
-                    self._paraport.emit(55)
                     # print("Correct: " + str(self.anscount))
                     
                 else:
                     self._counter.emit(0)
-                    self._paraport.emit(56)
                     # print("Wrong")
 
             else:

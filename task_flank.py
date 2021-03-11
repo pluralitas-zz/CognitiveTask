@@ -28,40 +28,53 @@ class flank_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.level = 1
-        self.cutofftime = 50 #multiplies of 100ms
-        self.showtime = 500
+        if count >= 30:
+            showtime = 100
+            self.level = 5
+            self.cutofftime = 30 #multiplies of 100ms
+        elif count >= 20:
+            showtime = 200
+            self.level = 4
+            self.cutofftime = 30 #multiplies of 100ms
+        elif count >= 10:
+            showtime = 500
+            self.level = 3
+            self.cutofftime = 50 #multiplies of 100ms
+        elif count >=5:
+            showtime = 700 #ms
+            self.level = 2
+            self.cutofftime = 70 #multiplies of 100ms
+        else:
+            showtime = 1000
+            self.level = 1
+            self.cutofftime = 100 #multiplies of 100ms
 
         # Show Difficulty
         #self.diffdisp(self.level)
         self._level.emit(self.level)
-        # QtTest.QTest.qWait(2000)
+        QtTest.QTest.qWait(2000)
         
         # Show center point
         self._qnsdisp.emit("Center.png",800,150)
-        QtTest.QTest.qWait(1000)
+        QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
         #Delay before questions start showing on screen
-        task_delay = random.randrange(1000,2000)
+        task_delay = random.randrange(1000,3000)
         QtTest.QTest.qWait(task_delay)
 
         self._ansdisp.emit(self.answers) #emit answers into buttons
 
         #Randomise and display the flankprep
         self.disp = random.choice(self.flankprep)
-        # self._paraport.emit(10) #Task 1
+        self._paraport.emit(10) #Task 1
         self._qnsdisp.emit(self.disp,800,150) #display Flankprep
-        QtTest.QTest.qWait(500)
+        QtTest.QTest.qWait(400)
         self.answerflank = True
         
         #Find relevancy in flankprep and select REAL question
-        if count == 2:
-            self.questions2 = [s for s in self.questions[2:4] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
-        else:
-            self.questions2 = [s for s in self.questions[0:2] if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
-
-        self.disp = self.questions2[0]
+        self.questions2 = [s for s in self.questions if self.disp[:6] in s] #find elements in self.questions containing self.disp[:6]
+        self.disp = random.choice(self.questions2)
         self.taskarr.append(self.disp[-5])
         self._qnsdisp.emit(self.disp,800,150)
         if "Incon" in self.disp:
@@ -71,9 +84,8 @@ class flank_main(QtCore.QThread):
             self._paraport.emit(11)
             self._wouttask.emit("Question Shown-Con")
 
-        QtTest.QTest.qWait(self.showtime)
+        QtTest.QTest.qWait(showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer
-        QtTest.QTest.qWait(1000)
         self._ansshowhide.emit(1) #show the answer buttons
 
         timeCount = 0
@@ -88,7 +100,7 @@ class flank_main(QtCore.QThread):
             # print("Correct")
             self._counter.emit(1)
             self._paraport.emit(15)
-        elif bool(self.ansarr) == True:
+        else:
             # print("Wrong")
             self._counter.emit(0)
             self._paraport.emit(16)
