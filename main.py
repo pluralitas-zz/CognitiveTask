@@ -37,7 +37,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define TRAINING TIME HERE
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
-    traintimemax = QtCore.QTime(0,30,0)
+    traintimemax = QtCore.QTime(0,45,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
     #tasknum = 0 #Task number sequence
@@ -220,30 +220,30 @@ class Ui_root(QtWidgets.QMainWindow):
     
 # Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
-        self.taskflow = [1]*60 + [2]*60
+        self.taskflow = [1]*90 + [2]*90
 
         # 2 minutes fixation
         self.disp_qns("Center.png",800,150)
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
-        # Flanker
-        random.shuffle(self.taskflow)
-        self.tasknumset(0)
-        for i in range(len(self.taskflow)):
-            self.flnk.run_task(self.taskflow[i])
+        # # Flanker
+        # random.shuffle(self.taskflow)
+        # self.tasknumset(0)
+        # for i in range(len(self.taskflow)):
+        #     self.flnk.run_task(self.taskflow[i])
 
-        # n-back
-        self.nbckflow = [1] #set 1 for 1-back, 2 for 2-back
-        random.shuffle(self.nbckflow)
-        self.tasknumset(1)
-        for i in range(len(self.nbckflow)):
-            self.nbckSpace.run_task(self.nbckflow[i])
+        # # n-back
+        # self.nbckflow = [1] #set 1 for 1-back, 2 for 2-back
+        # random.shuffle(self.nbckflow)
+        # self.tasknumset(1)
+        # for i in range(len(self.nbckflow)):
+        #     self.nbckSpace.run_task(self.nbckflow[i])
 
-        # stroop task
-        random.shuffle(self.taskflow)
-        self.tasknumset(2)
-        for i in range(len(self.taskflow)):
-            self.stroop.run_task(self.taskflow[i])
+        # # stroop task
+        # random.shuffle(self.taskflow)
+        # self.tasknumset(2)
+        # for i in range(len(self.taskflow)):
+        #     self.stroop.run_task(self.taskflow[i])
 
         #complete
         self.complet.run_com(1)
