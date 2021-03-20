@@ -8,7 +8,6 @@ class nbackVerb_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(nbackVerb_main, self).__init__()
@@ -80,10 +79,8 @@ class nbackVerb_main(QtCore.QThread):
                 self.dispback = self.taskarr[self.dispcount]
 
             if self.taskarr[self.dispcount] == self.dispback and self.dispcount !=0:
-                self._wouttask.emit("Question Shown-True")
                 self._paraport.emit(49)
             else:
-                self._wouttask.emit("Question Shown-False")
                 self._paraport.emit(48)
             self.answernbackVerb = True
             
@@ -150,15 +147,12 @@ class nbackVerb_main(QtCore.QThread):
         if numb is -1:
             self._qnsdisp.emit("neg1.png",800,150)
             self._paraport.emit(41)
-            self._wouttask.emit("Task n-1")
         elif numb is -2:
             self._qnsdisp.emit("neg2.png",800,150)
             self._paraport.emit(42)
-            self._wouttask.emit("Task n-2")
         elif numb is -3:
             self._qnsdisp.emit("neg3.png",800,150)
             self._paraport.emit(43)
-            self._wouttask.emit("Task n-3")
         else:
             pass
 
@@ -170,7 +164,6 @@ class nbackSpace_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(nbackSpace_main, self).__init__()
@@ -243,10 +236,8 @@ class nbackSpace_main(QtCore.QThread):
                 self.dispback = self.taskarr[self.dispcount]
 
             if self.taskarr[self.dispcount] == self.dispback and self.dispcount !=0:
-                self._wouttask.emit("Question Shown-True")
                 self._paraport.emit(59)
             else:
-                self._wouttask.emit("Question Shown-False")
                 self._paraport.emit(58)
             self.answernbackSpace = True
 
@@ -317,14 +308,11 @@ class nbackSpace_main(QtCore.QThread):
         if numb is -1:
             self._qnsdisp.emit("neg1.png",800,150)
             self._paraport.emit(51)
-            self._wouttask.emit("Task n-1")
         elif numb is -2:
             self._qnsdisp.emit("neg2.png",800,150)
             self._paraport.emit(52)
-            self._wouttask.emit("Task n-2")
         elif numb is -3:
             self._qnsdisp.emit("neg3.png",800,150)
             self._paraport.emit(53)
-            self._wouttask.emit("Task n-3")
         else:
             pass

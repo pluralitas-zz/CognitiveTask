@@ -8,7 +8,6 @@ class major_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
     _qnsmultidisp = QtCore.pyqtSignal(list)
 
     def __init__(self):
@@ -65,7 +64,6 @@ class major_main(QtCore.QThread):
         for i in range(len(self.taskchange)): #change correct to wrong answers
             self.taskarr[self.taskchange[i]] = self.taskcorrect[0]
 
-        self._wouttask.emit("Question Shown")
         self._qnsmultidisp.emit(self.taskarr) #emit taskarr into buttons
 
         self.answermajor = True

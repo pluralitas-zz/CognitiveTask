@@ -11,7 +11,6 @@ class stroop_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(stroop_main, self).__init__()
@@ -62,12 +61,10 @@ class stroop_main(QtCore.QThread):
             self._textdisp.emit(self.questext[self.dispnum[1]],self.quescolour[self.dispnum[0]])
             self.taskarr.append(self.quescolour[self.dispnum[0]])
             self._paraport.emit(72)
-            self._wouttask.emit("Question Shown-InCon")
         else:
             self._textdisp.emit(self.questext[self.dispnum[0]],self.quescolour[self.dispnum[0]])
             self.taskarr.append(self.quescolour[self.dispnum[0]])
             self._paraport.emit(71)
-            self._wouttask.emit("Question Shown-Con")
         
         QtTest.QTest.qWait(self.showtime)
         self._textdisp.emit("","white")

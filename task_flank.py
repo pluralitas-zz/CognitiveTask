@@ -8,7 +8,6 @@ class flank_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
     
     def __init__(self):
         super(flank_main, self).__init__()
@@ -54,7 +53,6 @@ class flank_main(QtCore.QThread):
 
         #Randomise and display the flankprep
         self.disp = random.choice(self.flankprep)
-        # self._paraport.emit(10) #Task 1
         self._qnsdisp.emit(self.disp,800,150) #display Flankprep
         QtTest.QTest.qWait(500)
         self.answerflank = True
@@ -70,10 +68,8 @@ class flank_main(QtCore.QThread):
         self._qnsdisp.emit(self.disp,800,150)
         if "Incon" in self.disp:
             self._paraport.emit(12)
-            self._wouttask.emit("Question Shown-InCon")
         else:
             self._paraport.emit(11)
-            self._wouttask.emit("Question Shown-Con")
 
         QtTest.QTest.qWait(self.showtime)
         self._qnsdisp.emit("Blank.png",800,150) #wait time from displaying the answers to actually able to answer

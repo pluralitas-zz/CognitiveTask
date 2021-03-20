@@ -11,7 +11,6 @@ class divattn_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     blankanswer = ["Blank.png","Blank.png","Blank.png","Blank.png",  "Blank.png","Blank.png","Blank.png","Blank.png"  ,"Blank.png","Blank.png"]
     qns_flank = ["FlankLCon.png", "FlankRCon.png"]

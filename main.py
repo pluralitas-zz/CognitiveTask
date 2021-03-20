@@ -78,7 +78,6 @@ class Ui_root(QtWidgets.QMainWindow):
 
     def tasknumset(self,num):
         self.tasknumnow = self.tasksnum[num]
-        self.wouttask("Do Task " + str(num))
         self.CntDisplay()
         self.tasknameshow(self.tasknumnow)
 
@@ -110,7 +109,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(0)
                     self.firsttaskone = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 500 >= self.timecount > (420-10) or 650 >= self.timecount > (570-10):
@@ -118,7 +116,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(1)
                     self.firsttasktwo = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif (1020+10) >= self.timecount > 720:                
@@ -126,7 +123,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(2)
                     self.firsttaskthree = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 1220 >= self.timecount > (1140-10) or 1370 >= self.timecount > (1290-10):
@@ -134,7 +130,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(3)
                     self.firsttaskfour = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 1740 >= self.timecount > (1440-10):
@@ -142,7 +137,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(4)
                     self.firsttaskfive = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
             else:
                 pass
@@ -171,7 +165,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(0)
                     self.firsttaskone = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 470:
@@ -183,7 +176,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(1)
                     self.firsttasktwo = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 880:
@@ -195,7 +187,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(2)
                     self.firsttaskthree = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
             
             elif self.timecount == 1300:
@@ -206,8 +197,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 if self.firsttaskfour == True:
                     self.tasknumset(3)
                     self.firsttaskfour = False
-                    
-                self.wouttask("Do Task " + str(self.tasknumnow))
+
                 self.tasks(self.tasknumnow)
            
             elif self.timecount == 1700:
@@ -346,7 +336,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.divattn._counter.connect(self.counter_add)
         self.divattn._ansshowhide.connect(self.showhideAnswers)
         self.divattn._paraport.connect(self.parwrite)
-        self.divattn._wouttask.connect(self.wouttask)
         self._answer.connect(self.divattn.append_ans)
         self._speed.connect(self.divattn.current_speed)
 
@@ -358,7 +347,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._level.connect(self.LevelDisplay)
         self.flnk._ansshowhide.connect(self.showhideAnswers)
         self.flnk._paraport.connect(self.parwrite)
-        self.flnk._wouttask.connect(self.wouttask)
         self._answer.connect(self.flnk.append_ans)
         self._speed.connect(self.flnk.current_speed)
 
@@ -370,7 +358,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._level.connect(self.LevelDisplay)
         self.wrkVerb._ansshowhide.connect(self.showhideAnswers)
         self.wrkVerb._paraport.connect(self.parwrite)
-        self.wrkVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkVerb.append_ans)
         self._speed.connect(self.wrkVerb.current_speed)
 
@@ -382,7 +369,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._level.connect(self.LevelDisplay)
         self.nbckVerb._ansshowhide.connect(self.showhideAnswers)
         self.nbckVerb._paraport.connect(self.parwrite)
-        self.nbckVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckVerb.append_ans)
         self._speed.connect(self.nbckVerb.current_speed)
 
@@ -394,7 +380,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._level.connect(self.LevelDisplay)
         self.nbckSpace._ansshowhide.connect(self.showhideAnswers)
         self.nbckSpace._paraport.connect(self.parwrite)
-        self.nbckSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckSpace.append_ans)
         self._speed.connect(self.nbckSpace.current_speed)
 
@@ -406,7 +391,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._level.connect(self.LevelDisplay)
         self.wrkSpace._ansshowhide.connect(self.showhideAnswers)
         self.wrkSpace._paraport.connect(self.parwrite)
-        self.wrkSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkSpace.append_ans)
         self._speed.connect(self.wrkSpace.current_speed)
 
@@ -419,7 +403,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.mjr._level.connect(self.LevelDisplay)
         self.mjr._ansshowhide.connect(self.showhideAnswers)
         self.mjr._paraport.connect(self.parwrite)
-        self.mjr._wouttask.connect(self.wouttask)
         self._answer.connect(self.mjr.append_ans)
         self._speed.connect(self.mjr.current_speed)
 
@@ -432,7 +415,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.stroop._level.connect(self.LevelDisplay)
         self.stroop._ansshowhide.connect(self.showhideAnswers)
         self.stroop._paraport.connect(self.parwrite)
-        self.stroop._wouttask.connect(self.wouttask)
         self._answer.connect(self.stroop.append_ans)
         self._speed.connect(self.stroop.current_speed)
 
@@ -444,7 +426,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.purmis._counter.connect(self.counter_add)
         self.purmis._level.connect(self.LevelDisplay)
         self.purmis._ansshowhide.connect(self.showhideAnswers)
-        self.purmis._wouttask.connect(self.wouttask)
         self.purmis._paraport.connect(self.parwrite)
         self._answer.connect(self.purmis.append_ans)
 
@@ -475,19 +456,16 @@ class Ui_root(QtWidgets.QMainWindow):
             self.AnsBtn_Cl.show()
 
             QtTest.QTest.qWait(100)
-            self.wouttask("Answers Shown")
         else:
             pass
 
     def counter_add(self,boo): #Add/minus to counter
         if boo == 1:
             self.counter[self.tasknumnow] += 1
-            self.wouttask("Correct: " + str(self.counter))
             QtTest.QTest.qWait(100)
         else:
             if self.counter[self.tasknumnow] > 0:
                 self.counter[self.tasknumnow] -=1
-            self.wouttask("Wrong: "+ str(self.counter))
             QtTest.QTest.qWait(100)
         self.CntDisplay()
         # print(self.counter)
@@ -508,14 +486,12 @@ class Ui_root(QtWidgets.QMainWindow):
         if data == "Blank.png" or data =="Center.png" or data == "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
-            self.wouttask("Question Shown")
         self.Ques_Center.setPixmap(pixmap)
 
     def disp_text(self,data,col):
         self.Ques_Text.setText("<font color='" + col + "'>" + data + "</font>")
 
     def disp_qnsmulti(self,data):
-        self.wouttask("Question Shown")
         if len(data) < 5:
             [data.append('Blank.png') for i in range(5 - len(data))] #append to 5 data with 'Blank.png'
 
@@ -586,7 +562,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def answer(self): #emit answer to task subpy
         sender = self.sender()
         ans = self.ansdict[sender.text()] #check dict in disp_ans for correct value
-        self.wouttask("User Answered")
+
         self._answer.emit(ans)
 
     def LevelDisplay(self, data):
@@ -596,13 +572,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter[self.tasknumnow]) +"</font>")
 
 # Write out to file Stuff
-    def wouttask(self,data):
-        try:
-            self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) #time, data value
-            self.writetask.appendfile(self.taskcomb) #write task data to file
-        except: pass
 
     def parwrite(self,data):
+        self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data)+ ";" #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
         try:
             self.para.parawrite(data)
         except: pass
