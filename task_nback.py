@@ -65,23 +65,14 @@ class nbackVerb_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-<<<<<<< Updated upstream
         # generate 60 values
         arraylen = 60
-=======
-        # generate 20 values
-        arraylen = 20
->>>>>>> Stashed changes
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-<<<<<<< Updated upstream
         correctval = 12
-=======
-        correctval = 4
->>>>>>> Stashed changes
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
 
@@ -251,23 +242,14 @@ class nbackSpace_main(QtCore.QThread):
         QtTest.QTest.qWait(500)
         self._qnsdisp.emit("Blank.png",800,150)
 
-<<<<<<< Updated upstream
         # generate 60 values
         arraylen = 60
-=======
-        # generate 20 values
-        arraylen = 20
->>>>>>> Stashed changes
         for i in range(arraylen):
             self.disp = random.choice(self.questions)
             self.taskarr.append(self.disp)
 
         # Generate values to have X amount of correct answer
-<<<<<<< Updated upstream
         correctval = 12
-=======
-        correctval = 5
->>>>>>> Stashed changes
         for i in range(correctval):
             self.correctarr.append(random.randint(arraylen/correctval*i , arraylen/correctval*(i+1)-2))
         
