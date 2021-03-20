@@ -2,7 +2,7 @@
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
 import sys, os, time, threading, numpy as np, random
 import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission, task_stroop
-from writeout import paraout
+from writeout import paraout, wrttask
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
 from pynput.keyboard import Key, Controller
@@ -190,6 +190,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.Ques_Center.setPixmap(pixmap)
 
+    def disp_text(self,data,col):
+        self.Ques_Text.setText("<font color='" + col + "'>" + data + "</font>")
+
     def disp_qnsmulti(self,data):
         if len(data) < 5:
             [data.append('Blank.png') for i in range(5 - len(data))] #append to 5 data with 'Blank.png'
@@ -265,6 +268,9 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def parwrite(self,data):
+        
+        self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) + ";" #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
         try:
             self.para.parawrite(data)
         except: pass
@@ -275,6 +281,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.DemoBtn.hide()
         self.TaskFrame.show()
 
+        #Initialise and create Writeout file with username
+        self.writetask=wrttask(self.UserIDNAME)
         #Initialise and start Parallel port write to LPT
         self.para = paraout()
         
@@ -289,6 +297,8 @@ class Ui_root(QtWidgets.QMainWindow):
         self.DemoBtn.hide()
         self.TaskFrame.show()
         
+        #Initialise and create Writeout file with username
+        self.writetask=wrttask(self.UserIDNAME)
         #Initialise and start Parallel port write to LPT
         self.para = paraout()
         
