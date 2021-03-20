@@ -22,17 +22,17 @@ class Ui_root(QtWidgets.QMainWindow):
         # self.disp_qns("Center.png",800,150)
         # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
-        for i in range(len(self.taskflow)):
-            self.flnk.run_task(self.taskflow[i])
+        # for i in range(len(self.taskflow)):
+        #     self.flnk.run_task(self.taskflow[i])
 
         # self.nbckflow = [1] #2
         # random.shuffle(self.nbckflow)
         # for i in range(len(self.nbckflow)):
         #     self.nbckSpace.run_task(self.nbckflow[i])
 
-        # random.shuffle(self.taskflow)
-        # for i in range(len(self.taskflow)):
-        #     self.stroop.run_task(self.taskflow[i])
+        random.shuffle(self.taskflow)
+        for i in range(len(self.taskflow)):
+            self.stroop.run_task(self.taskflow[i])
 
         self.complet.run_com(1)
 
@@ -154,10 +154,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.purmis._paraport.connect(self.parwrite)
 
         #create shortcut for buttons
-        self.AnsBtn_Cl.setShortcut("v")
-        self.AnsBtn_Sq.setShortcut("d")
-        self.AnsBtn_Left.setShortcut(QtCore.Qt.Key_Left)
-        self.AnsBtn_Right.setShortcut(QtCore.Qt.Key_Right)
+        self.AnsBtn_Left.setShortcut("v")
+        self.AnsBtn_Right.setShortcut("b")
+        self.AnsBtn_Sq.setShortcut("n")
+        self.AnsBtn_Cl.setShortcut("m")
 
         #connect the buttons to answering definition
         self.AnsBtn_Cl.clicked.connect(lambda:self.answer())
