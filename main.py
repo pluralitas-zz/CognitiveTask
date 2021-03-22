@@ -16,20 +16,23 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
-        self.taskflow = [1]*60 + [2]*60
+        self.taskflow = [1]*90 + [2]*90
         random.shuffle(self.taskflow)
 
-        # self.disp_qns("Center.png",800,150)
-        # QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        self.disp_qns("Center.png",800,150)
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
+        # #Flanker
         # for i in range(len(self.taskflow)):
         #     self.flnk.run_task(self.taskflow[i])
 
+        # #n-back
         # self.nbckflow = [1] #2
         # random.shuffle(self.nbckflow)
         # for i in range(len(self.nbckflow)):
         #     self.nbckSpace.run_task(self.nbckflow[i])
 
+        #Stroop
         random.shuffle(self.taskflow)
         for i in range(len(self.taskflow)):
             self.stroop.run_task(self.taskflow[i])
@@ -268,12 +271,11 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Write out to file Stuff
     def parwrite(self,data):
-        
-        self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) + ";" #time, data value
-        self.writetask.appendfile(self.taskcomb) #write task data to file
         try:
             self.para.parawrite(data)
         except: pass
+        self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) + ";" #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
 
 # Start Task Button, Demo Button & Game Start Button Stuff
     def StartBtnPress(self): #Start Video/Task Mode
