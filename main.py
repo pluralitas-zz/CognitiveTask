@@ -87,6 +87,7 @@ class Ui_root(QtWidgets.QMainWindow):
         ###############     RUN TASKS     #################
         
         while self.timecount < self.trainsec:
+            self.playVid()
             QtTest.QTest.qWait(100)
 
         self.complet.run_com(1)
@@ -486,7 +487,7 @@ class Ui_root(QtWidgets.QMainWindow):
         if data == "Blank.png" or data =="Center.png" or data == "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
-        self.Ques_Center.setPixmap(pixmap)
+            self.Ques_Center.setPixmap(pixmap)
 
     def disp_text(self,data,col):
         self.Ques_Text.setText("<font color='" + col + "'>" + data + "</font>")
