@@ -26,8 +26,10 @@ class paraout:
             self.prtsuccess = False
 
     def parawrite(self,data):
+
         if self.prtsuccess == True:
             self.prt.setData(data)
+            QtTest.QTest.qWait(50)
             self.prt.setData(0)
 
 if __name__ == "__main__":

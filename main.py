@@ -19,10 +19,11 @@ class Ui_root(QtWidgets.QMainWindow):
         self.taskflow = [1]*90 + [2]*90
         random.shuffle(self.taskflow)
 
+        # Fixation
         self.disp_qns("Center.png",800,150)
         QtTest.QTest.qWait(120*1000) # Wait 2 minutes
 
-        # #Flanker
+        #Flanker
         # for i in range(len(self.taskflow)):
         #     self.flnk.run_task(self.taskflow[i])
 
@@ -33,9 +34,9 @@ class Ui_root(QtWidgets.QMainWindow):
         #     self.nbckSpace.run_task(self.nbckflow[i])
 
         #Stroop
-        random.shuffle(self.taskflow)
-        for i in range(len(self.taskflow)):
-            self.stroop.run_task(self.taskflow[i])
+        # random.shuffle(self.taskflow)
+        # for i in range(len(self.taskflow)):
+        #     self.stroop.run_task(self.taskflow[i])
 
         self.complet.run_com(1)
 
@@ -66,7 +67,7 @@ class Ui_root(QtWidgets.QMainWindow):
         self.DemoBtn.clicked.connect(lambda:self.DemoBtnPress())
 
         self.StartBtn.show()
-        self.DemoBtn.show()
+        # self.DemoBtn.show()
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
@@ -292,7 +293,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #Reset
         self.StartBtn.show()
-        self.DemoBtn.show()
+        # self.DemoBtn.show()
         
     def DemoBtnPress(self): #Start No Hardware Task mode
         self.StartBtn.hide()
@@ -308,7 +309,7 @@ class Ui_root(QtWidgets.QMainWindow):
 
         #Reset
         self.StartBtn.show()
-        self.DemoBtn.show()
+        # self.DemoBtn.show()
 
 # Setup UI Stuff
     def setupUi(self, root):
