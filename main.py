@@ -16,16 +16,16 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define YOUR ASSESSMENT RUN TASK EVENT HERE
     def assess_run(self):
-        self.taskflow = [1]*90 + [2]*90
+        self.taskflow = [1]*60 + [2]*60
         random.shuffle(self.taskflow)
 
-        # Fixation
-        self.disp_qns("Center.png",800,150)
-        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+        # # Fixation
+        # self.disp_qns("Center.png",800,150)
+        # QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
-        #Flanker
-        # for i in range(len(self.taskflow)):
-        #     self.flnk.run_task(self.taskflow[i])
+        # Flanker
+        for i in range(len(self.taskflow)):
+            self.flnk.run_task(self.taskflow[i])
 
         # #n-back
         # self.nbckflow = [1] #2
