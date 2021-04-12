@@ -1,5 +1,6 @@
 import os, numpy as np
 from psychopy import parallel
+from PyQt5 import QtTest
 
 class wrttask:
     savepath = "C:\\Data"
@@ -26,7 +27,6 @@ class paraout:
             self.prtsuccess = False
 
     def parawrite(self,data):
-
         if self.prtsuccess == True:
             self.prt.setData(data)
             QtTest.QTest.qWait(50)
@@ -35,3 +35,9 @@ class paraout:
 if __name__ == "__main__":
     import numpy as np
     import time
+
+    para = paraout()
+    for i in range(10):
+        para.parawrite(20)
+        time.sleep(1)
+    
