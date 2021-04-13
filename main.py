@@ -19,19 +19,19 @@ class Ui_root(QtWidgets.QMainWindow):
         self.taskflow = [1]*60 + [2]*60
         random.shuffle(self.taskflow)
 
-        # #Fixation
-        self.disp_qns("Center.png",800,150)
-        QtTest.QTest.qWait(180*1000) # Wait 3 minutes
+        # # #Fixation
+        # self.disp_qns("Center.png",800,150)
+        # QtTest.QTest.qWait(180*1000) # Wait 3 minutes
 
         # #Flanker
         # for i in range(len(self.taskflow)):
         #     self.flnk.run_task(self.taskflow[i])
 
-        # #n-back
-        # self.nbckflow = [1] #2
-        # random.shuffle(self.nbckflow)
-        # for i in range(len(self.nbckflow)):
-        #     self.nbckSpace.run_task(self.nbckflow[i])
+        #n-back
+        self.nbckflow = [2] #2
+        random.shuffle(self.nbckflow)
+        for i in range(len(self.nbckflow)):
+            self.nbckSpace.run_task(self.nbckflow[i])
 
         # #Stroop
         # random.shuffle(self.taskflow)
