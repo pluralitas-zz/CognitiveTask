@@ -96,7 +96,6 @@ class stroop_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
         self._ansshowhide.emit(0) #hide the answer buttons
 
-
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
         if self.answerstroop == True:
