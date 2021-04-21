@@ -24,12 +24,12 @@ class nbackVerb_main(QtCore.QThread):
         self.level = 0
         self.pausespd = 10
         
-    def run_task(self,count):
+    def run_task(self,count,shwtime):
         self.taskarr.clear()    #clear array
         
         # Determine difficulty
         blanktime = 1000
-        showtime = 1000
+        showtime = shwtime
         self.nval = -abs(count)
 
         self._level.emit(self.nval)
@@ -164,12 +164,12 @@ class nbackSpace_main(QtCore.QThread):
         self.level = 0
         self.pausespd = 10
 
-    def run_task(self,count):
+    def run_task(self,count,shwtime):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
         self.blanktime = 1000
-        self.showtime = 1000
+        self.showtime = shwtime
         self.cutofftime = 50 #multiplies of 100ms
         self.nval = -abs(count)
 
@@ -240,6 +240,7 @@ class nbackSpace_main(QtCore.QThread):
     #Append answers from main.py by user to determine if values are correct + randomise next answer
     def append_ans(self,data):
         if self.answernbackSpace == True:
+            self._ansshowhide.emit(0) #hide the answer buttons
             self.answerappended = True
             self.answernbackSpace = False
 
@@ -275,6 +276,8 @@ class nbackSpace_main(QtCore.QThread):
                 self._counter.emit(0)
                 # print("Wrong")
 
+            self._ansshowhide.emit(1) #show the answer buttons
+            
     def diffdisp(self,numb):
         if numb is -1:
             self._qnsdisp.emit("neg1.png",800,150)
