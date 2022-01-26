@@ -8,7 +8,6 @@ class workmemVerb_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(workmemVerb_main, self).__init__()
@@ -119,7 +118,6 @@ class workmemVerb_main(QtCore.QThread):
                 self.taskarr.append(self.disp)
                 self._qnsdisp.emit(self.disp,800,150)
                 self._paraport.emit(21)
-                self._wouttask.emit("Question Shown")
                 QtTest.QTest.qWait(showtime)
                 self._qnsdisp.emit("Blank.png",800,150)
                 QtTest.QTest.qWait(blanktime)
@@ -211,7 +209,6 @@ class workmemSpace_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(workmemSpace_main, self).__init__()
@@ -322,7 +319,6 @@ class workmemSpace_main(QtCore.QThread):
                 self.taskarr.append(self.disp)
                 self._qnsdisp.emit(self.disp,500,500)
                 self._paraport.emit(31)
-                self._wouttask.emit("Question Shown")
                 QtTest.QTest.qWait(showtime)
                 self._qnsdisp.emit("Blank.png",800,150)
                 QtTest.QTest.qWait(blanktime)

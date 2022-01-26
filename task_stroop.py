@@ -1,22 +1,26 @@
+# -*- coding: utf-8 -*-
+
 from PyQt5 import QtCore, QtTest
 import random
 
-class major_main(QtCore.QThread):
+class stroop_main(QtCore.QThread):
     _qnsdisp = QtCore.pyqtSignal(str,int,int)
+    _textdisp = QtCore.pyqtSignal(str,str)
     _ansdisp = QtCore.pyqtSignal(list)
     _counter = QtCore.pyqtSignal(int)
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _qnsmultidisp = QtCore.pyqtSignal(list)
 
     def __init__(self):
-        super(major_main, self).__init__()
-        self.questions = ["Right.png","Left.png"]
-        self.blanktask = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
+        super(stroop_main, self).__init__()
+        self.questions = ["red.png","yellow.png","green.png","blue.png"]
+        self.questext = [u"紅", u"黃", u"綠", u"藍"]
+        self.quescolour = ["red", "yellow", "green","blue"]
+        self.blank = ["Blank.png","Blank.png","Blank.png","Blank.png","Blank.png"]
         self.taskarr = []
         self.ansarr = []
-        self.answermajor = False
+        self.answerstroop = False
         self.level = 0
         self.speed = 0
         self.pausespd = 10
@@ -26,17 +30,15 @@ class major_main(QtCore.QThread):
         self.taskarr.clear()    #clear array
 
         # Determine difficulty
-        self.showtime = 4000 #ms
-        self.level = 5-(abs(count)-1)
-        self.showtotal = 5 #total number of questions show
-        self.showratio = abs(count) #number of questions in the same side, must be more than half of showtotal
+        self.level = count
         self.cutofftime = 50 #multiplies of 100ms
+        self.showtime = 500
+        self.blanktime = 1000
 
         # Show Difficulty
         self._level.emit(self.level)
-        # self._paraport.emit(60) #Task 6
         # QtTest.QTest.qWait(2000)
-        
+
         # Show center point
         self._qnsdisp.emit("Center.png",800,150)
         QtTest.QTest.qWait(1000)
@@ -52,53 +54,55 @@ class major_main(QtCore.QThread):
 
         self._ansdisp.emit(self.questions) #emit answers into buttons
 
-        # generate correct answers
-        self.showoppo = self.showtotal - self.showratio # Number of questions showing opposite
-        self.taskchange = random.sample(range(0,4),self.showoppo) #array values to change to wrong
-        self.taskcorrect = random.sample(self.questions,2) #First is wrong, 2nd is correct
-        self.taskarr = self.blanktask.copy() #create taskarr all blank tasks
-
-        for i in range(self.showtotal): #append correct answers to taskarr
-            self.taskarr[i] = self.taskcorrect[1]
-
-        for i in range(len(self.taskchange)): #change correct to wrong answers
-            self.taskarr[self.taskchange[i]] = self.taskcorrect[0]
-
-        self._qnsmultidisp.emit(self.taskarr) #emit taskarr into buttons
-
-        self.answermajor = True
-        QtTest.QTest.qWait(self.showtime)
-        self._qnsmultidisp.emit(self.blanktask) #hide the answers buttons
-        QtTest.QTest.qWait(1000)
-        self._paraport.emit(60+ self.level)
-        self._ansshowhide.emit(1) #show the answer buttons
+        #Randomly select word to display
+        self.dispnum = list(range(len(self.quescolour)))
+        random.shuffle(self.dispnum) 
+        if count == 2:
+            self._textdisp.emit(self.questext[self.dispnum[1]],self.quescolour[self.dispnum[0]])
+            self.taskarr.append(self.quescolour[self.dispnum[0]])
+            self._paraport.emit(72)
+        else:
+            self._textdisp.emit(self.questext[self.dispnum[0]],self.quescolour[self.dispnum[0]])
+            self.taskarr.append(self.quescolour[self.dispnum[0]])
+            self._paraport.emit(71)
         
+        QtTest.QTest.qWait(self.showtime)
+        self._textdisp.emit("","white")
+        self.answerstroop = True
+        QtTest.QTest.qWait(self.blanktime)
+
+        self._ansshowhide.emit(1) #show the answer buttons
+
         timeCount = 0
-        while len(self.ansarr) < 1: #While loop to hold code till answered or time passes
+        while len(self.ansarr) < len(self.taskarr): #While loop to hold code till answered or time passes
             QtTest.QTest.qWait(100)
             timeCount += 1
             if timeCount == self.cutofftime:
                 break
         
-        self.answermajor = False
-        if self.ansarr == [self.taskcorrect[1]]: #Check if answered correctly or not
+        self.answerstroop = False
+        self._ansshowhide.emit(0) #hide the answer buttons
+
+        if self.ansarr == self.taskarr:
             # print("Correct")
             self._counter.emit(1)
-            self._paraport.emit(65)
+            self._paraport.emit(75)
         elif bool(self.ansarr) == True:
             # print("Wrong")
             self._counter.emit(0)
-            self._paraport.emit(66)
+            self._paraport.emit(76)
 
         # print("finished test")
         self.ansarr.clear()     #clear array
         self.taskarr.clear()    #clear array
         self._ansshowhide.emit(0) #hide the answer buttons
 
+
     #Append answers from main.py by user to determine if values are correct
     def append_ans(self,data):
-        if self.answermajor == True:
-            self.ansarr.append(data)
+        if self.answerstroop == True:
+            self.ansarr.append(data[:-4])
+            # print(self.ansarr)
 
     def current_speed(self,data,data2):
         self.speed = data

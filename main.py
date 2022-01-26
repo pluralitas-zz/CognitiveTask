@@ -1,8 +1,11 @@
 # Created by: PyQt5 UI code generator 5.6, Form implementation generated from reading ui file 'task.ui'
 # Run on Anaconda3-4.3.0-Windows-x86_64, Python Version 3.6.10
+
+# -*- coding: utf-8 -*-
+
 import sys, os, time, threading, numpy as np, random
 import VideoPlayer, BackendThread
-import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission
+import task_cdown, task_flank, task_workmem, task_nback, task_divAttn, task_major, task_trngComplete, task_PurchaseMission, task_stroop
 from writeout import wrttask, paraout
 from xinput3_KeyboardControll_NES_Shooter_addGameTask import sample_first_joystick
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, QtTest
@@ -16,24 +19,32 @@ class Ui_root(QtWidgets.QMainWindow):
 
 # Define your USER ID/NAME HERE
     UserIDNAME = "Test"
+
+# Define if it is dual task
+    dual = False
+
+# Define assessment here
+    assess = True
+
+# Define other factors here
     game = False #True for Game, False for Tasks, ignore self.dotask and self.hiit if True.
-    dotask = True #Put true to do task, else False to just cycle
+    dotask = False #Put True to do tasks, else False to just cycle
     hiit = False #True to do HIIT, False to do MICT
-    cycle = False #Put False if do not want minimal cycling
+    cycle = False #Put False if do not want minimal cycling speed
 
 # Define your Counter scores HERE
-    counter = [0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
+    counter = [0,0,0,0,0,0,0,0,0] #Flank, WrkMemVerb, WrkMemSpace, nBckVerb, nBackSpace, mjr, purchaseMission
 
 # Define TRAINING TIME HERE
     traintime = QtCore.QTime(0,0,0) #(hours, minutes, seconds)
-    traintimemax = QtCore.QTime(0,30,0)
+    traintimemax = QtCore.QTime(0,45,0)
     trainsec = QtCore.QTime(0,0,0).secsTo(traintimemax) #change to seconds
     tasknumnow = 0 #Task number now
     #tasknum = 0 #Task number sequence
 
 # Define ALL YOUR TASKS FUNCTION HERE
     # tasksnum = random.sample(range(0, 5), 5) # randomise tasks
-    tasksnum = [0,1,2,3,4,5]
+    tasksnum = [0,1,2,3,4,5,6,7,8]
     #tasksnum = [5, 5, 5, 5]
     def tasks(self,numb):
         if numb is 0:
@@ -48,6 +59,8 @@ class Ui_root(QtWidgets.QMainWindow):
             self.nbckSpace.run_task(self.counter[4])
         elif numb is 5:
             self.mjr.run_task(self.counter[5])
+        elif numb is 6:
+            self.stroop.run_task(self.count[6])
         else:
             pass
 
@@ -55,15 +68,11 @@ class Ui_root(QtWidgets.QMainWindow):
         if numb is 0:
             self.cd.run_cd("NameFlank.png") #10 seconds count down, 7 secs show task name
         elif numb is 1:
-            self.cd.run_cd("NameWrkMemVerb.png") #10 seconds count down, 7 secs show task name
-        elif numb is 2:
-            self.cd.run_cd("NameWrkMemVisual.png") #10 seconds count down, 7 secs show task name
-        elif numb is 3:
-            self.cd.run_cd("NameNbackVerb.png") #10 seconds count down, 7 secs show task name
-        elif numb is 4:
             self.cd.run_cd("NameNbackVisual.png") #10 seconds count down, 7 secs show task name
-        elif numb is 5:
+        elif numb is 2:
             self.cd.run_cd("NameMajor.png") #10 seconds count down, 7 secs show task name
+        elif numb is 3:
+            self.cd.run_cd("NameStroop.png") #10 seconds count down, 7 secs show task name
         else:
             pass
 
@@ -78,6 +87,7 @@ class Ui_root(QtWidgets.QMainWindow):
         ###############     RUN TASKS     #################
         
         while self.timecount < self.trainsec:
+            self.playVid()
             QtTest.QTest.qWait(100)
 
         self.complet.run_com(1)
@@ -100,7 +110,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(0)
                     self.firsttaskone = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 500 >= self.timecount > (420-10) or 650 >= self.timecount > (570-10):
@@ -108,7 +117,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(1)
                     self.firsttasktwo = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif (1020+10) >= self.timecount > 720:                
@@ -116,7 +124,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(2)
                     self.firsttaskthree = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 1220 >= self.timecount > (1140-10) or 1370 >= self.timecount > (1290-10):
@@ -124,7 +131,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(3)
                     self.firsttaskfour = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif 1740 >= self.timecount > (1440-10):
@@ -132,7 +138,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(4)
                     self.firsttaskfive = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
             else:
                 pass
@@ -161,7 +166,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(0)
                     self.firsttaskone = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 470:
@@ -173,7 +177,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(1)
                     self.firsttasktwo = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
 
             elif self.timecount == 880:
@@ -185,7 +188,6 @@ class Ui_root(QtWidgets.QMainWindow):
                     self.tasknumset(2)
                     self.firsttaskthree = False
 
-                self.wouttask("Do Task " + str(self.tasknumnow))
                 self.tasks(self.tasknumnow)
             
             elif self.timecount == 1300:
@@ -196,8 +198,7 @@ class Ui_root(QtWidgets.QMainWindow):
                 if self.firsttaskfour == True:
                     self.tasknumset(3)
                     self.firsttaskfour = False
-                    
-                self.wouttask("Do Task " + str(self.tasknumnow))
+
                 self.tasks(self.tasknumnow)
            
             elif self.timecount == 1700:
@@ -207,6 +208,36 @@ class Ui_root(QtWidgets.QMainWindow):
 
         self.complet.run_com(1)
         ###################################################
+    
+# Define YOUR ASSESSMENT RUN TASK EVENT HERE
+    def assess_run(self):
+        self.taskflow = [1]*90 + [2]*90
+
+        # 2 minutes fixation
+        self.disp_qns("Center.png",800,150)
+        QtTest.QTest.qWait(120*1000) # Wait 2 minutes
+
+        # # Flanker
+        # random.shuffle(self.taskflow)
+        # self.tasknumset(0)
+        # for i in range(len(self.taskflow)):
+        #     self.flnk.run_task(self.taskflow[i])
+
+        # # n-back
+        # self.nbckflow = [1] #set 1 for 1-back, 2 for 2-back
+        # random.shuffle(self.nbckflow)
+        # self.tasknumset(1)
+        # for i in range(len(self.nbckflow)):
+        #     self.nbckSpace.run_task(self.nbckflow[i])
+
+        # # stroop task
+        # random.shuffle(self.taskflow)
+        # self.tasknumset(2)
+        # for i in range(len(self.taskflow)):
+        #     self.stroop.run_task(self.taskflow[i])
+
+        #complete
+        self.complet.run_com(1)
 
 # Define YOUR DEMO TASK EVENT HERE
     def demo_run(self):
@@ -281,7 +312,8 @@ class Ui_root(QtWidgets.QMainWindow):
             self.GameBtn.show()
         else:
             self.StartBtn.show()
-            self.DemoBtn.show()
+            if self.assess == True:
+                self.DemoBtn.show()
 
         self.initTaskSigSlot() #Connect signal slots used for Tasks
 
@@ -305,7 +337,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.divattn._counter.connect(self.counter_add)
         self.divattn._ansshowhide.connect(self.showhideAnswers)
         self.divattn._paraport.connect(self.parwrite)
-        self.divattn._wouttask.connect(self.wouttask)
         self._answer.connect(self.divattn.append_ans)
         self._speed.connect(self.divattn.current_speed)
 
@@ -317,7 +348,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.flnk._level.connect(self.LevelDisplay)
         self.flnk._ansshowhide.connect(self.showhideAnswers)
         self.flnk._paraport.connect(self.parwrite)
-        self.flnk._wouttask.connect(self.wouttask)
         self._answer.connect(self.flnk.append_ans)
         self._speed.connect(self.flnk.current_speed)
 
@@ -329,7 +359,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkVerb._level.connect(self.LevelDisplay)
         self.wrkVerb._ansshowhide.connect(self.showhideAnswers)
         self.wrkVerb._paraport.connect(self.parwrite)
-        self.wrkVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkVerb.append_ans)
         self._speed.connect(self.wrkVerb.current_speed)
 
@@ -341,7 +370,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckVerb._level.connect(self.LevelDisplay)
         self.nbckVerb._ansshowhide.connect(self.showhideAnswers)
         self.nbckVerb._paraport.connect(self.parwrite)
-        self.nbckVerb._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckVerb.append_ans)
         self._speed.connect(self.nbckVerb.current_speed)
 
@@ -353,7 +381,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.nbckSpace._level.connect(self.LevelDisplay)
         self.nbckSpace._ansshowhide.connect(self.showhideAnswers)
         self.nbckSpace._paraport.connect(self.parwrite)
-        self.nbckSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.nbckSpace.append_ans)
         self._speed.connect(self.nbckSpace.current_speed)
 
@@ -365,7 +392,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.wrkSpace._level.connect(self.LevelDisplay)
         self.wrkSpace._ansshowhide.connect(self.showhideAnswers)
         self.wrkSpace._paraport.connect(self.parwrite)
-        self.wrkSpace._wouttask.connect(self.wouttask)
         self._answer.connect(self.wrkSpace.append_ans)
         self._speed.connect(self.wrkSpace.current_speed)
 
@@ -378,9 +404,20 @@ class Ui_root(QtWidgets.QMainWindow):
         self.mjr._level.connect(self.LevelDisplay)
         self.mjr._ansshowhide.connect(self.showhideAnswers)
         self.mjr._paraport.connect(self.parwrite)
-        self.mjr._wouttask.connect(self.wouttask)
         self._answer.connect(self.mjr.append_ans)
         self._speed.connect(self.mjr.current_speed)
+
+        #connect stroop task
+        self.stroop = task_stroop.stroop_main()
+        self.stroop._qnsdisp.connect(self.disp_qns)
+        self.stroop._textdisp.connect(self.disp_text)
+        self.stroop._ansdisp.connect(self.disp_ans)
+        self.stroop._counter.connect(self.counter_add)
+        self.stroop._level.connect(self.LevelDisplay)
+        self.stroop._ansshowhide.connect(self.showhideAnswers)
+        self.stroop._paraport.connect(self.parwrite)
+        self._answer.connect(self.stroop.append_ans)
+        self._speed.connect(self.stroop.current_speed)
 
         #connect Purchase Mission tasl
         self.purmis = task_PurchaseMission.PurchaseMission_main()
@@ -390,15 +427,14 @@ class Ui_root(QtWidgets.QMainWindow):
         self.purmis._counter.connect(self.counter_add)
         self.purmis._level.connect(self.LevelDisplay)
         self.purmis._ansshowhide.connect(self.showhideAnswers)
-        self.purmis._wouttask.connect(self.wouttask)
         self.purmis._paraport.connect(self.parwrite)
         self._answer.connect(self.purmis.append_ans)
 
         #create shortcut for buttons
-        self.AnsBtn_Cl.setShortcut("v")
-        self.AnsBtn_Sq.setShortcut("d")
-        self.AnsBtn_Left.setShortcut(QtCore.Qt.Key_Left)
-        self.AnsBtn_Right.setShortcut(QtCore.Qt.Key_Right)
+        self.AnsBtn_Cl.setShortcut("/")
+        self.AnsBtn_Sq.setShortcut(".")
+        self.AnsBtn_Left.setShortcut("z")
+        self.AnsBtn_Right.setShortcut("x")
 
         #connect the buttons to answering definition
         self.AnsBtn_Cl.clicked.connect(lambda:self.answer())
@@ -421,19 +457,16 @@ class Ui_root(QtWidgets.QMainWindow):
             self.AnsBtn_Cl.show()
 
             QtTest.QTest.qWait(100)
-            self.wouttask("Answers Shown")
         else:
             pass
 
     def counter_add(self,boo): #Add/minus to counter
         if boo == 1:
             self.counter[self.tasknumnow] += 1
-            self.wouttask("Correct: " + str(self.counter))
             QtTest.QTest.qWait(100)
         else:
             if self.counter[self.tasknumnow] > 0:
                 self.counter[self.tasknumnow] -=1
-            self.wouttask("Wrong: "+ str(self.counter))
             QtTest.QTest.qWait(100)
         self.CntDisplay()
         # print(self.counter)
@@ -454,11 +487,12 @@ class Ui_root(QtWidgets.QMainWindow):
         if data == "Blank.png" or data =="Center.png" or data == "Complete.png" or "neg" in data or "Name" in data or "Inst" in data or "cd" in data:
             pass
         else:
-            self.wouttask("Question Shown")
-        self.Ques_Center.setPixmap(pixmap)
+            self.Ques_Center.setPixmap(pixmap)
+
+    def disp_text(self,data,col):
+        self.Ques_Text.setText("<font color='" + col + "'>" + data + "</font>")
 
     def disp_qnsmulti(self,data):
-        self.wouttask("Question Shown")
         if len(data) < 5:
             [data.append('Blank.png') for i in range(5 - len(data))] #append to 5 data with 'Blank.png'
 
@@ -529,7 +563,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def answer(self): #emit answer to task subpy
         sender = self.sender()
         ans = self.ansdict[sender.text()] #check dict in disp_ans for correct value
-        self.wouttask("User Answered")
+
         self._answer.emit(ans)
 
     def LevelDisplay(self, data):
@@ -539,13 +573,10 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskValCnt.setText("<font color='White'>"+ str(self.counter[self.tasknumnow]) +"</font>")
 
 # Write out to file Stuff
-    def wouttask(self,data):
-        try:
-            self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data) #time, data value
-            self.writetask.appendfile(self.taskcomb) #write task data to file
-        except: pass
 
     def parwrite(self,data):
+        self.taskcomb = str(np.round(time.time(),decimals=2)) + ',' + str(data)+ ";" #time, data value
+        self.writetask.appendfile(self.taskcomb) #write task data to file
         try:
             self.para.parawrite(data)
         except: pass
@@ -572,8 +603,12 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.hide()
         self.DemoBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video 
+
         self.TaskFrame.show()
+        if self.dual == True:
+            pass
+        else:
+            self.vidFrame.startVid() #Start video
 
         #start Backend signal slot connection
         self.initBackendThread()
@@ -584,14 +619,13 @@ class Ui_root(QtWidgets.QMainWindow):
         #Initialise and create Writeout file with username
         self.writetask=wrttask(self.UserIDNAME)
 
-        if self.dotask == True:
-            if self.hiit == False:
-                self.mcit_run()
-            else:
-                self.hiit_run()
-        else:
+        if self.dotask == False:
             self.cycle_run()
-
+        elif self.hiit == False:
+            self.mcit_run()
+        else:
+            self.hiit_run()
+            
         #Reset
         self.TimeReset()
         self.vidFrame.pauseVid()
@@ -618,17 +652,23 @@ class Ui_root(QtWidgets.QMainWindow):
         self.StartBtn.hide()
         self.DemoBtn.hide()
         self.GameBtn.hide()
-        self.vidFrame.startVid() #Start video 
+        # self.vidFrame.startVid() #Start video 
         self.TaskFrame.show()
-
+        
         #start Backend signal slot connection
         self.initBackendThread()
-        # self.pedalBackend.start()
-        self.EncSpeed(999) #set dummy speed as 999
-        # self.daqbackend.start()
+        self.pedalBackend.start()
+        # self.EncSpeed(999) #set dummy speed as 999
+        self.daqbackend.start()
+        self.timer = True
+
+        #Initialise and create Writeout file with username
+        self.writetask=wrttask(self.UserIDNAME)
 
         #do task
-        self.demo_run()
+        self.HUDFrame.hide()
+        # self.demo_run()
+        self.assess_run()
 
         #Reset
         self.TimeReset()
@@ -723,7 +763,7 @@ class Ui_root(QtWidgets.QMainWindow):
     def PedalDisplay(self,data): #InstPower, AccumPower, InstCadence, pedalBalRight
         self.HUDValInstPwr.setText(_translate("root","<font color='White'>" + str(data[0]) + "</font>"))
         self.HUDValAvgPwr.setText(_translate("root","<font color='White'>" + str(data[1]) + "</font>"))
-        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]*2) + "</font>"))
+        self.HUDValInstCad.setText(_translate("root","<font color='White'>"+ str(data[2]) + "</font>"))
 
         if 255 > data[3] > 128:
             self.HUDValPBalR.setText(_translate("root","<font color='White'>"+ str(data[3]-128)+"</font>"))
@@ -838,16 +878,6 @@ class Ui_root(QtWidgets.QMainWindow):
         self.TaskFrame.setStyleSheet("background-color: rgba(0,0,0,0%)")
         self.TaskFrame.hide()
 
-        self.Ques_Center = QtWidgets.QLabel(self.TaskFrame)
-        self.Ques_Center.setGeometry(QtCore.QRect(300, 0, 1000, 800))
-        self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
-        self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
-        self.Ques_Center.setAutoFillBackground(False)
-        self.Ques_Center.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.Ques_Center.setText("")
-        self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
-        self.Ques_Center.setObjectName("Ques_Center")
-
         self.Ques_N = QtWidgets.QLabel(self.TaskFrame)
         self.Ques_N.setGeometry(QtCore.QRect(700, 30, 200, 200))
         self.Ques_N.setMinimumSize(QtCore.QSize(0, 0))
@@ -897,6 +927,29 @@ class Ui_root(QtWidgets.QMainWindow):
         self.Ques_SE.setText("")
         self.Ques_SE.setAlignment(QtCore.Qt.AlignCenter)
         self.Ques_SE.setObjectName("Ques_NE")
+
+        self.Ques_Center = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_Center.setGeometry(QtCore.QRect(300, 0, 1000, 800))
+        self.Ques_Center.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_Center.setMaximumSize(QtCore.QSize(1000, 800))
+        self.Ques_Center.setAutoFillBackground(False)
+        self.Ques_Center.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_Center.setText("")
+        self.Ques_Center.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_Center.setObjectName("Ques_Center")
+
+        font = QtGui.QFont("Gill Sans MT", pointSize = 300, weight = 50)
+
+        self.Ques_Text = QtWidgets.QLabel(self.TaskFrame)
+        self.Ques_Text.setGeometry(QtCore.QRect(300, 0, 1000, 800))
+        self.Ques_Text.setMinimumSize(QtCore.QSize(0, 0))
+        self.Ques_Text.setMaximumSize(QtCore.QSize(1000, 800))
+        self.Ques_Text.setAutoFillBackground(False)
+        self.Ques_Text.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.Ques_Text.setFont(font)
+        self.Ques_Text.setText("")
+        self.Ques_Text.setAlignment(QtCore.Qt.AlignCenter)
+        self.Ques_Text.setObjectName("Ques_Text")
 
         font = QtGui.QFont("Gill Sans MT", pointSize = 36, weight = 50)
 
@@ -1121,7 +1174,7 @@ class Ui_root(QtWidgets.QMainWindow):
         #Start Btn
         self.StartBtn.setText(_translate("root", "Cycle Task"))
         #Demo Btn
-        self.DemoBtn.setText(_translate("root", "Demo"))
+        self.DemoBtn.setText(_translate("root", "Assessment"))
         #Game Btn
         self.GameBtn.setText(_translate("root","Start"))
         #Answer Btn

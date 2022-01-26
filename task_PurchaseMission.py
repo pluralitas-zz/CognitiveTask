@@ -9,7 +9,6 @@ class PurchaseMission_main(QtCore.QThread):
     _ansshowhide = QtCore.pyqtSignal(int)
     _level = QtCore.pyqtSignal(int)
     _paraport = QtCore.pyqtSignal(int)
-    _wouttask = QtCore.pyqtSignal(str)
 
     def __init__(self):
         super(PurchaseMission_main, self).__init__()
@@ -85,7 +84,6 @@ class PurchaseMission_main(QtCore.QThread):
             #show one at a time
             for i in range(len(self.taskarr)):
                 self._qnsdisp.emit(self.taskarr[i-1],600,600)
-                self._wouttask.emit("Mission Shown")
                 QtTest.QTest.qWait(showtime)
                 self._qnsdisp.emit("Blank.png",800,150)
                 QtTest.QTest.qWait(2000)
