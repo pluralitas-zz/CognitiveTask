@@ -1,10 +1,10 @@
 import os, numpy as np
-from psychopy import parallel
+# from psychopy import parallel
 
 
 col = 13
 datatype = 'uint16'
-savepath = "C:\\Users\\CheukYan\\Desktop\\C" #data savepath
+savepath = "C:\\Users\\CyclingSystem\\OneDrive - The Chinese University of Hong Kong\\MCI Cycling\\Data Evaluation\\D\\DTC062" #data savepath
 
 files=[]
 for root, dirnames, filenames in os.walk(savepath, topdown=True):

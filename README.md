@@ -2,17 +2,13 @@
 
 ## Cognitive Cycling ITF project
 
-* Uses Python 3.6.10 (Anaconda 3 4.4.0) on Windows 10 64-bit
-* Needs video codec to play videos; recommends [K-Lite Codec Pack Basic](https://codecguide.com/download_k-lite_codec_pack_basic.htm)
-* Requires installation of libant-master/libant-master/setup.py, go to folder and type `python setup.py install` into anaconda prompt with admin permissions
-* Other bits and bobs to install see error when running it; `pyserial`, `pyglet`, `pynput`, `nidaqmx`, `psychopy --no-deps`
-* Videos not included in commit, in .mp4 format under the \Videos folder or C:\Data\Videos; change it in VideoPlayer.py
+* Uses Python 3.6.9 (Anaconda 3 2019.10) on Windows 10 64-bit
 * Usage with controller/keyboard/touchscreen/mouse; controller recommended
 * DAQ, Encoder and Pedal data saves out to C:\Data folder as .csv file.[DAQ at 1000Hz for 100 samples, Encoder slaved to DAQ at 10Hz, and Pedal Data at 1Hz]
 
 ## Hardware
 
-1. Dell Optiplex 7060
+1. Dell Optiplex 7060 running Windows 10 64-bit
 2. TP-Link UH700 USB 3.0 7-Port USB Hub
 3. USB Gaming Controller (optional but recommended)
 4. Absolute Optical Encoder connected using RS232 Serial port (COM5)
@@ -20,8 +16,52 @@
 6. Polar H10 heart rate sensor band using also ANT+ USB stick
 7. EMG on ai0-3 on USB-6001 DAQ (Dev1)
 8. PPG on ai4 on USB-6001 DAQ (Dev1)
-9. Ability to connect to EEG PC using DB25 USB2LPT Parallel Port converter using psychopy. [Taobao Link](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.595a2e8d7JkFOT&id=19835544254&_u=e2n4hf9r63a1)
-    * Using "Debug register trap" will cause BSOD 0x109 on Windows 10.
+9. Ability to connect to EEG PC using [PCIe Parallel Port with card](https://hken.rs-online.com/web/p/serial-boards/1383754)
+
+## Prerequistes for operation
+1. Install "FESCycling" installer for NI MAX and DAQ drivers.
+2. Set DAQ to "Dev1" in NI MAX
+3. Check that "ANT USBstick2" does not have error(Yellow Exclamation) in Device Manager, else direct Windows to the drivers in the zip package.
+4. Install [Visual Studio Code](https://code.visualstudio.com/download) with [Code Runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner) extension for display and editing the codes
+5. Install video codec to play videos; recommends [K-Lite Codec Pack Basic](https://codecguide.com/download_k-lite_codec_pack_basic.htm)
+
+## Steps to install for experiment
+
+1. Download the code as zip package. REMEMBER to check that the branch is `master` for experiment. Unzip the package into a folder
+2. Install [Anaconda 3 2019.10 64-bit](https://repo.anaconda.com/archive/Anaconda3-2019.10-Windows-x86_64.exe)
+3. Ensure Python version is 3.6.9: `python -V`
+4. Use pip to install packages needed to run program by typing this in `Anaconda Prompt`: 
+    * `pip install pyserial pyglet pynput nidaqmx pywinusb psychopy --no-deps`
+5. Install libant by accessing `"code folder"/libant-master/libant-master/` using `Anaconda Prompt` with: `python setup.py install`
+6. Ensure that you can import from python: `from PyQt5 import QtMultimediaWidgets`, else:
+    1. `pip uninstall PyQt5`
+    2. `pip uninstall PyQt5-sip`
+    3. `pip install PyQt5-sip`
+    4. `pip install PyQt5`
+7. Add the relevant videos into `C:/Data/Videos` folder for background videos
+
+## Install for EEG
+
+1. Download the code as zip. REMEMBER to check that the branch is `EEGOnly` for experiment.
+2. Install as per steps for experiment
+3. Access `writeout.py` and change the parallel port address to your hardware, you may use the parallel port tester included in the zip package.
+
+## Running the program
+
+1. Open the folder in Visual Studio Code.
+2. Ensure that the VS Code detects the python version installed on the bottom left corner.
+3. Open `main.py`
+4. Change the `UserIDNAME` to the subject's ID
+5. Run by clicking on the Play button on the top right and selecting "Run in Terminal"
+
+## Troubleshooting
+
+* ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n'```
+  * unplug and replug the ANT+ USB stick
+
+## Others
+
+* Modify xinput3_KeyboardControll_NES_Shooter_addGameTask.py for xinput vesion when changing between Win10, Win 8/7 and WinVista
 
 ## Currently 5 tasks are implemented
 
@@ -32,51 +72,6 @@
 5. n-back Task (Visuospatial) ``Task 4``
 6. Majority Task ``Task 5``
 7. Stroop Task ``Task 6``
-
-## Steps to install
-
-1. Install [Anaconda 3 4.4.0 64-bit](https://repo.anaconda.com/archive/Anaconda3-4.4.0-Windows-x86_64.exe)
-2. `conda update conda -y`
-3. `conda install tqdm=4.19 -y`
-4. `conda update anaconda -y`
-5. Ensure Python version is 3.6.10: `python -V`
-6. use pip to install packages needed to run program: 
-    1. `pip install pyserial`
-    2. `pip install pyglet`
-    3. `pip install pynput`
-    4. `pip install nidaqmx`
-    5. `pip install psychopy --no-deps`
-    6. `pip install pywinusb`
-7. install libant at libant-master/libant-master/ with: `python setup.py install`
-8. Ensure that you can import from python: `from PyQt5 import QtMultimediaWidgets`
-    1. `pip uninstall PyQt5`
-    2. `pip uninstall PyQt5-sip`
-    3. `pip install PyQt5-sip`
-    4. `pip install PyQt5`
-9. Download the [USB2LPT converter driver](https://www-user.tu-chemnitz.de/~heha/basteln/PC/USB2LPT/index.en.htm), direct the unknown device in device manager to the downloaded file and under the `/en` folder
-10. In order to use Parallel port to communicate, you require the `inpout**.dll(Windows version dependent)` files in the same folder as your .py files. Link to .dll binaries [here](http://www.highrez.co.uk/downloads/inpout32/)
-11. Find `h#s USB to LPT converter` in Device Manager. Ensure that the `h#s USB to LPT converter` in Device Manager is `LPT2`:
-
-    * Emulation Tab:
-        * Emulated port address: `278h(632,LPT2)`
-        * LPT enchancement mode: `SPP`
-        * Select `Debug register trap`
-    * Port Settings Tab:
-        * Select `Never use an interrupt`
-        * Select `Enable legacy Plug and Play dection`
-        * LPT Port Number: `LPT2`
-
-## Troubleshooting
-
-* ```[Errno None] b'libusb0-dll:err [_usb_reap_async] reaping request failed, win error: A device attached to the system is not functioning.\r\n\n'```
-  * unplug and replug the ANT+ USB stick
-
-* Blue Screen of Death (BSOD)
-  * Incompatibility of USB2LPT drivers with Win10, will need replacement possibly with arduino.
-
-## WARNING
-
-* Modify xinput3_KeyboardControll_NES_Shooter_addGameTask.py for xinput vesion when changing between Win10, Win 8/7 and WinVista
 
 ## Parallel Port output command legend (0-255)
 

@@ -1,5 +1,5 @@
 import os, numpy as np
-from psychopy import parallel
+#from psychopy import parallel
 from PyQt5 import QtTest
 
 class wrtout:
